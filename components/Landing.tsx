@@ -3,7 +3,6 @@
 import { useState, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import Hero from './Hero'
-import Testimonials from './Testimonials'
 import ConnectSection from './ConnectSection'
 import CompeteSection from './CompeteSection'
 import { LiveStats } from '@/utils/stats'
@@ -43,7 +42,6 @@ export default function Landing({ onScrollTo, stats }: LandingProps = {}) {
   return (
     <div id="landing">
       <Hero onScrollTo={scrollToCenter} stats={stats} />
-      <Testimonials />
       <ConnectSection />
       <CompeteSection />
       

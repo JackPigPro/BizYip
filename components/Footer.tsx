@@ -45,23 +45,7 @@ export default function Footer({ onScrollTo, stats: serverStats }: FooterProps) 
           <div className="sf-brand-desc">
             Share your idea. Build your rank. Find your co-founder. Compete and win — free.
           </div>
-          {((stats?.totalUsers && stats.totalUsers > 10) || (stats?.acceptedMatches && stats.acceptedMatches > 10) || (stats?.totalIdeas && stats.totalIdeas > 10)) && (
-            <div className="sf-stats-row">
-              <div className="sf-stat">
-                <div className="sf-stat-num g">{stats?.totalUsers?.toLocaleString() || '48k+'}</div>
-                <div className="sf-stat-label">Founders</div>
-              </div>
-              <div className="sf-stat">
-                <div className="sf-stat-num b">{stats?.acceptedMatches?.toLocaleString() || '2.4M'}</div>
-                <div className="sf-stat-label">Matches</div>
-              </div>
-              <div className="sf-stat">
-                <div className="sf-stat-num p">{stats?.totalIdeas?.toLocaleString() || '18k+'}</div>
-                <div className="sf-stat-label">Ideas posted</div>
-              </div>
-            </div>
-          )}
-        </div>
+                  </div>
 
         {/* Explore column */}
         <div>

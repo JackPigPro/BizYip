@@ -33,10 +33,10 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
       </div>
 
       <div className="hero-deco-card hdc-3">
-        <div className="hdc-badge p">📚 Learn</div>
-        <div className="hdc-val p">Lesson 3</div>
-        <div className="hdc-text">How to Market With No Money</div>
-        <div className="hdc-meta">35% complete · 22 min left</div>
+        <div className="hdc-badge p">� Daily Bellringer</div>
+        <div className="hdc-val p">Day 3</div>
+        <div className="hdc-text">Market Without Money</div>
+        <div className="hdc-meta">Streak: 3 days · 2h left</div>
       </div>
 
       <div className="hero-deco-card hdc-4">
@@ -77,20 +77,10 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
         </Link>
       </div>
 
-      {/* Social proof */}
-      {((stats?.totalUsers && stats.totalUsers > 10) || (stats?.acceptedMatches && stats.acceptedMatches > 10) || (stats?.totalIdeas && stats.totalIdeas > 10)) && (
-        <div className="hero-proof">
-          <span><strong>{stats?.totalUsers?.toLocaleString() || '48,200'}</strong> founders</span>
-          <span className="proof-dot"></span>
-          <span><strong>{stats?.acceptedMatches?.toLocaleString() || '2.4M'}</strong> founder matches</span>
-          <span className="proof-dot"></span>
-          <span className="live"><strong>{stats?.totalIdeas?.toLocaleString() || '18k+'}</strong> ideas posted</span>
-        </div>
-      )}
-
+      
       {/* Pillar cards */}
-      <div className="pillar-wrapper">
-        <div className="pillar-header">
+      <div className="pillar-wrapper" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div className="pillar-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
           <div
             className="pillar-header-item connect"
             onClick={() => onScrollTo('connect')}
@@ -108,7 +98,7 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
           </div>
         </div>
 
-        <div className="pillar-row">
+        <div className="pillar-row" style={{ display: 'flex', justifyContent: 'center', gap: '24px', maxWidth: '800px', margin: '0 auto' }}>
           {/* CONNECT pillar card */}
           <div className="pc connect" onClick={() => onScrollTo('connect')}>
             <div className="pc-top">
@@ -123,7 +113,7 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
               className="pc-cta connect"
               onClick={(e) => { e.stopPropagation(); onScrollTo('connect') }}
             >
-              Learn more →
+              Explore more →
             </button>
             <div className="pc-preview">
               <div className="pc-cf">
@@ -158,7 +148,7 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
               className="pc-cta compete"
               onClick={(e) => { e.stopPropagation(); onScrollTo('compete') }}
             >
-              Learn more →
+              Explore more →
             </button>
             <div className="pc-preview">
               <div className="pc-lb">

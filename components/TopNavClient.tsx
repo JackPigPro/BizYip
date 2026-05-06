@@ -117,20 +117,7 @@ export default function TopNavClient({
     window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' })
   }
 
-  useEffect(() => {
-    if (!isOnLanding || typeof window === 'undefined') return
-    if (window.location.hash !== '#learn') return
-    const timer = window.setTimeout(() => {
-      const el = document.getElementById('learn')
-      if (!el) return
-      const rect = el.getBoundingClientRect()
-      const targetTop =
-        rect.top + window.scrollY - (window.innerHeight / 2 - rect.height / 2)
-      window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' })
-    }, 30)
-    return () => window.clearTimeout(timer)
-  }, [isOnLanding, pathname])
-
+  
   const hoverZoneStyle: React.CSSProperties = {
     position: 'relative',
     display: 'inline-flex',

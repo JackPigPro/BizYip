@@ -44,7 +44,7 @@ export default function AboutPage() {
                 </p>
                 <div className="mission-statement">
                   <p className="mission-text">
-                    BizYip is where you compete to sharpen your thinking, connect with other founders your age, and learn what it actually takes to build something real. All in one place. All for free.
+                    BizYip is where you compete to sharpen your thinking, connect with other founders your age, and join the daily bellringer to build something real. All in one place. All for free.
                   </p>
                 </div>
               </div>
@@ -68,10 +68,10 @@ export default function AboutPage() {
                 </p>
               </div>
               <div className="value-card">
-                <div className="value-icon">📚</div>
-                <h3 className="value-title">Learn</h3>
+                <div className="value-icon">�</div>
+                <h3 className="value-title">Daily Bellringer</h3>
                 <p className="value-description">
-                  Discover what it actually takes to build something real through hands-on experience.
+                  Join daily challenges and build streaks while developing real-world skills.
                 </p>
               </div>
             </div>
