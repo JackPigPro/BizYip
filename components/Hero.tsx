@@ -88,7 +88,7 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
           >
             🤝 Connect
           </div>
-          <div className="pillar-header-arrow"></div>
+          <span style={{ fontSize: '20px', color: 'var(--text2)', margin: '0 8px' }}>—</span>
           <div
             className="pillar-header-item compete"
             onClick={() => onScrollTo('compete')}
@@ -98,15 +98,15 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
           </div>
         </div>
 
-        <div className="pillar-row" style={{ display: 'flex', justifyContent: 'center', gap: '24px', maxWidth: '800px', margin: '0 auto' }}>
+        <div className="pillar-row" style={{ display: 'flex', justifyContent: 'center', gap: '0px', maxWidth: '1000px', margin: '0 auto' }}>
           {/* CONNECT pillar card */}
-          <div className="pc connect" onClick={() => onScrollTo('connect')}>
+          <div className="pc connect" onClick={() => onScrollTo('connect')} style={{ flex: 1, minWidth: '360px', maxWidth: '400px', borderTop: '3px solid var(--blue)' }}>
             <div className="pc-top">
               <span className="pc-icon">🤝</span>
               <span className="pc-label connect">Connect</span>
             </div>
             <div className="pc-title">Post Ideas &amp; Find Co-Founders</div>
-            <p className="pc-desc">
+            <p className="pc-desc" style={{ maxWidth: '280px', margin: '0 auto 12px' }}>
               Post your startup idea, get real feedback from other builders, and find someone to build it with.
             </p>
             <button
@@ -115,8 +115,8 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
             >
               Explore more →
             </button>
-            <div className="pc-preview">
-              <div className="pc-cf">
+            <div className="pc-preview" style={{ margin: '0 -16px', display: 'flex', justifyContent: 'center' }}>
+              <div className="pc-cf" style={{ transform: 'scale(0.85)', transformOrigin: 'top center' }}>
                 <div className="pc-cf-title">Co-Founder Match</div>
                 <div className="pc-cf-card">
                   <div className="pc-cf-top">
@@ -135,14 +135,14 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
           </div>
 
           {/* COMPETE pillar card */}
-          <div className="pc compete" onClick={() => onScrollTo('compete')}>
+          <div className="pc compete" onClick={() => onScrollTo('compete')} style={{ flex: 1, minWidth: '360px', maxWidth: '400px' }}>
             <div className="pc-top">
               <span className="pc-icon">⚔️</span>
               <span className="pc-label compete">Compete</span>
             </div>
             <div className="pc-title">Daily Duels &amp; Weekly Competitions</div>
-            <p className="pc-desc">
-              Daily head-to-head battles and weekly tournaments. Compete, climb the ELO ladder, and prove your thinking.
+            <p className="pc-desc" style={{ maxWidth: '280px', margin: '0 auto 12px' }}>
+              Daily battles and weekly tournaments. Compete, climb the ELO ladder, and prove your thinking.
             </p>
             <button
               className="pc-cta compete"
@@ -150,8 +150,8 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
             >
               Explore more →
             </button>
-            <div className="pc-preview">
-              <div className="pc-lb">
+            <div className="pc-preview" style={{ margin: '0 -16px', display: 'flex', justifyContent: 'center' }}>
+              <div className="pc-lb" style={{ transform: 'scale(0.85)', transformOrigin: 'top center' }}>
                 <div className="pc-lb-title">
                   Weekly Leaderboard
                   <div className="pc-lb-live">

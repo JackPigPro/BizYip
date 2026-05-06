@@ -77,7 +77,7 @@ export default function PrivacyPage() {
             <div className="legal-section">
               <h3>7. Your Rights</h3>
               <p>
-                You may update or delete your profile information at any time through your account settings. You may request deletion of your account by contacting us at <a href="mailto:jackpigpro@gmail.com" className="contact-email">jackpigpro@gmail.com</a>. We will respond to account deletion requests within 30 days.
+                You may update or delete your profile information at any time through your account settings. You may request deletion of your account by contacting us at <a href="mailto:thejacksegal@gmail.com" className="contact-email">thejacksegal@gmail.com</a>. We will respond to account deletion requests within 30 days.
               </p>
             </div>
 
@@ -107,7 +107,7 @@ export default function PrivacyPage() {
             <div className="legal-section">
               <h3>10. Contact</h3>
               <p>
-                If you have questions about this Privacy Policy or want to request deletion of your data, contact us at <a href="mailto:jackpigpro@gmail.com" className="contact-email">jackpigpro@gmail.com</a>.
+                If you have questions about this Privacy Policy or want to request deletion of your data, contact us at <a href="mailto:thejacksegal@gmail.com" className="contact-email">thejacksegal@gmail.com</a>.
               </p>
             </div>
           </div>

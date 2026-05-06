@@ -105,7 +105,7 @@ export default function TermsPage() {
             <div className="legal-section">
               <h3>12. Contact</h3>
               <p>
-                If you have questions about these Terms of Service, contact us at <a href="mailto:jackpigpro@gmail.com" className="contact-email">jackpigpro@gmail.com</a>.
+                If you have questions about these Terms of Service, contact us at <a href="mailto:thejacksegal@gmail.com" className="contact-email">thejacksegal@gmail.com</a>.
               </p>
             </div>
           </div>
