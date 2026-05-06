@@ -95,7 +95,7 @@ export default function AboutPage() {
 
         </div>
       </main>
-      <Footer onComingSoon={() => {}} onScrollTo={(id) => {}} />
+      <Footer onScrollTo={(id) => {}} />
     </>
   )
 }

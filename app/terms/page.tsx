@@ -115,7 +115,7 @@ export default function TermsPage() {
           </div>
         </div>
       </main>
-      <Footer onComingSoon={() => {}} onScrollTo={(id) => {}} />
+      <Footer onScrollTo={(id) => {}} />
     </>
   )
 }

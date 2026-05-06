@@ -3,11 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
-interface CompeteSectionProps {
-  onComingSoon: () => void
-}
-
-export default function CompeteSection({ onComingSoon }: CompeteSectionProps) {
+export default function CompeteSection() {
   const [seconds, setSeconds] = useState(47)
 
   useEffect(() => {

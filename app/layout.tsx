@@ -9,7 +9,7 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 export const metadata: Metadata = {
   title: 'BizYip — Where founders get good.',
   description:
-    'Share your idea. Build your rank. Find your co-founder. Learn how to do it all — free.',
+    'Share your idea. Build your rank. Find your co-founder. Compete and win — free.',
   icons: {
     icon: '/favicon.ico',
   },

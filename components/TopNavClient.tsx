@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
-import NotificationsBell from '@/components/NotificationsBell'
 import { signOut } from '@/app/actions/auth'
 import { useTheme } from '@/components/ThemeProvider'
 
@@ -226,25 +225,7 @@ export default function TopNavClient({
               >
                 Co-founder Match
               </Link>
-              <Link 
-                href="/connect/messages" 
-                prefetch={true}
-                style={{
-                  ...dropdownLinkStyle,
-                  display: 'block',
-                  marginBottom: '8px',
-                  ...(hoveredItem === 'messages' ? dropdownLinkHoverStyle : {})
-                }} 
-                onClick={() => {
-                  handleNavPageClick()
-                  setMobileMenuOpen(false)
-                }}
-                onMouseEnter={() => setHoveredItem('messages')}
-                onMouseLeave={() => setHoveredItem(null)}
-              >
-                Messages
-              </Link>
-              <Link 
+                            <Link 
                 href="/connect/ideas" 
                 prefetch={true}
                 style={{
@@ -377,72 +358,7 @@ export default function TopNavClient({
           )}
         </div>
 
-        {/* Mobile Learn & Schools Section */}
-        <div style={{ padding: '16px' }}>
-          {isLoggedIn ? (
-            <>
-              <Link 
-                href="/learn" 
-                prefetch={true}
-                style={{
-                  ...dropdownLinkStyle,
-                  display: 'block',
-                  marginBottom: '8px'
-                }} 
-                onClick={() => {
-                  handleNavPageClick()
-                  setMobileMenuOpen(false)
-                }}
-              >
-                Learn
-              </Link>
-              <Link 
-                href="/schools" 
-                prefetch={true}
-                style={{
-                  ...dropdownLinkStyle,
-                  display: 'block'
-                }} 
-                onClick={() => {
-                  handleNavPageClick()
-                  setMobileMenuOpen(false)
-                }}
-              >
-                Schools
-              </Link>
-            </>
-          ) : (
-            <>
-              <a
-                href="/#learn"
-                onClick={(e) => {
-                  e.preventDefault()
-                  scrollToLandingSection('learn', 'center')
-                  setMobileMenuOpen(false)
-                }}
-                style={{
-                  ...dropdownLinkStyle,
-                  display: 'block',
-                  marginBottom: '8px'
-                }}
-              >
-                Learn
-              </a>
-              <a
-                href="/#schools"
-                onClick={(e) => {
-                  e.preventDefault()
-                  scrollToLandingSection('schools', 'top')
-                  setMobileMenuOpen(false)
-                }}
-                style={dropdownLinkStyle}
-              >
-                Schools
-              </a>
-            </>
-          )}
-        </div>
-
+        
         {/* Mobile Login/Signup Section */}
         <div style={{ padding: '16px' }}>
           {user ? (
@@ -603,21 +519,7 @@ export default function TopNavClient({
             >
               Co-founder Match
             </Link>
-            <Link 
-              href={isLoggedIn ? "/connect/messages" : "/login?mode=signup"} 
-              prefetch={isLoggedIn ? true : false}
-              className="topnav-dropdown-link" 
-              style={getActiveStyle('/connect/messages', {
-                ...dropdownLinkStyle, 
-                ...(hoveredItem === 'messages' ? dropdownLinkHoverStyle : {})
-              })} 
-              onClick={handleNavPageClick}
-              onMouseEnter={() => setHoveredItem('messages')}
-              onMouseLeave={() => setHoveredItem(null)}
-            >
-              Messages
-            </Link>
-            <Link 
+                        <Link 
               href={isLoggedIn ? "/connect/ideas" : "/login?mode=signup"} 
               prefetch={isLoggedIn ? true : false}
               className="topnav-dropdown-link" 
@@ -741,99 +643,12 @@ export default function TopNavClient({
           </div>
         </div>
 
-        <>
-          {isLoggedIn ? (
-            <Link 
-              href="/learn" 
-              prefetch={true}
-              className="topnav-link" 
-              style={getActiveStyle('/learn', {
-                ...menuItemStyle,
-                ...(hoveredItem === 'learn' ? menuItemHoverStyle : {})
-              })}
-              onMouseEnter={() => setHoveredItem('learn')}
-              onMouseLeave={() => setHoveredItem(null)}
-            >
-              Learn
-            </Link>
-          ) : (
-            <a
-              className="topnav-link"
-              href="/#learn"
-              onClick={(e) => {
-                e.preventDefault()
-                scrollToLandingSection('learn', 'center')
-              }}
-              style={{
-                ...menuItemStyle,
-                ...(hoveredItem === 'learn' ? menuItemHoverStyle : {})
-              }}
-              onMouseEnter={() => setHoveredItem('learn')}
-              onMouseLeave={() => setHoveredItem(null)}
-            >
-              Learn
-            </a>
-          )}
-          {isLoggedIn ? (
-            <Link 
-              href="/schools" 
-              prefetch={true}
-              className="topnav-link" 
-              style={getActiveStyle('/schools', {
-                ...menuItemStyle,
-                ...(hoveredItem === 'schools' ? menuItemHoverStyle : {})
-              })}
-              onMouseEnter={() => setHoveredItem('schools')}
-              onMouseLeave={() => setHoveredItem(null)}
-            >
-              Schools
-            </Link>
-          ) : (
-            <a
-              className="topnav-link"
-              href="/#schools"
-              onClick={(e) => {
-                e.preventDefault()
-                scrollToLandingSection('schools', 'top')
-              }}
-              style={{
-                ...menuItemStyle,
-                ...(hoveredItem === 'schools' ? menuItemHoverStyle : {})
-              }}
-              onMouseEnter={() => setHoveredItem('schools')}
-              onMouseLeave={() => setHoveredItem(null)}
-            >
-              Schools
-            </a>
-          )}
-        </>
-      </div>
+              </div>
 
       <div className="nav-right" style={{ position: 'relative' }}>
         {user ? (
           <>
-            <Link
-              href="/connect/messages"
-              prefetch={true}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '40px',
-                height: '40px',
-                borderRadius: '8px',
-                textDecoration: 'none',
-                color: 'var(--text2)',
-                fontSize: '18px',
-                transition: 'all 0.2s ease',
-                marginRight: '2px'
-              }}
-              title="Messages"
-            >
-              💬
-            </Link>
-            <NotificationsBell />
-            <span style={{ fontSize: '13px', color: 'var(--text2)', fontWeight: 700 }}>
+                        <span style={{ fontSize: '13px', color: 'var(--text2)', fontWeight: 700 }}>
               {user.name ?? user.email ?? 'Account'}
             </span>
             <Link

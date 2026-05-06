@@ -3,13 +3,9 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
-interface ConnectSectionProps {
-  onComingSoon: () => void
-}
+const TABS = ['💡 Idea Feed', '🤝 Co-Founders'] as const
 
-const TABS = ['💡 Idea Feed', '🤝 Co-Founders', '💬 Chat'] as const
-
-export default function ConnectSection({ onComingSoon }: ConnectSectionProps) {
+export default function ConnectSection() {
   const [activeTab, setActiveTab] = useState<string>('💡 Idea Feed')
 
   return (

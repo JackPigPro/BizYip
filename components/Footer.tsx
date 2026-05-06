@@ -6,12 +6,11 @@ import { LiveStats } from '@/utils/stats'
 import { useLiveStats } from '@/hooks/useLiveStats'
 
 interface FooterProps {
-  onComingSoon: () => void
   onScrollTo: (id: string) => void
   stats?: LiveStats
 }
 
-export default function Footer({ onComingSoon, onScrollTo, stats: serverStats }: FooterProps) {
+export default function Footer({ onScrollTo, stats: serverStats }: FooterProps) {
   const router = useRouter()
   const pathname = usePathname()
   const { stats: clientStats } = useLiveStats()
@@ -25,11 +24,6 @@ export default function Footer({ onComingSoon, onScrollTo, stats: serverStats }:
       const el = document.getElementById(sectionId)
       if (!el) return
       const elRect = el.getBoundingClientRect()
-      const navOffset = 76
-      if (sectionId === 'schools') {
-        window.scrollTo({ top: Math.max(0, elRect.top + window.scrollY - navOffset), behavior: 'smooth' })
-        return
-      }
       const elCenter = elRect.top + window.scrollY + elRect.height / 2
       const viewportCenter = window.innerHeight / 2
       window.scrollTo({ top: elCenter - viewportCenter, behavior: 'smooth' })
@@ -49,22 +43,24 @@ export default function Footer({ onComingSoon, onScrollTo, stats: serverStats }:
             <span className="sf-brand-name">BizYip</span>
           </div>
           <div className="sf-brand-desc">
-            Share your idea. Build your rank. Find your co-founder. Learn how to do it all — free.
+            Share your idea. Build your rank. Find your co-founder. Compete and win — free.
           </div>
-          <div className="sf-stats-row">
-            <div className="sf-stat">
-              <div className="sf-stat-num g">{stats?.totalUsers.toLocaleString() || '48k+'}</div>
-              <div className="sf-stat-label">Founders</div>
+          {((stats?.totalUsers && stats.totalUsers > 10) || (stats?.acceptedMatches && stats.acceptedMatches > 10) || (stats?.totalIdeas && stats.totalIdeas > 10)) && (
+            <div className="sf-stats-row">
+              <div className="sf-stat">
+                <div className="sf-stat-num g">{stats?.totalUsers?.toLocaleString() || '48k+'}</div>
+                <div className="sf-stat-label">Founders</div>
+              </div>
+              <div className="sf-stat">
+                <div className="sf-stat-num b">{stats?.acceptedMatches?.toLocaleString() || '2.4M'}</div>
+                <div className="sf-stat-label">Matches</div>
+              </div>
+              <div className="sf-stat">
+                <div className="sf-stat-num p">{stats?.totalIdeas?.toLocaleString() || '18k+'}</div>
+                <div className="sf-stat-label">Ideas posted</div>
+              </div>
             </div>
-            <div className="sf-stat">
-              <div className="sf-stat-num b">{stats?.acceptedMatches.toLocaleString() || '2.4M'}</div>
-              <div className="sf-stat-label">Matches</div>
-            </div>
-            <div className="sf-stat">
-              <div className="sf-stat-num p">{stats?.totalIdeas.toLocaleString() || '18k+'}</div>
-              <div className="sf-stat-label">Ideas posted</div>
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Explore column */}
@@ -73,8 +69,6 @@ export default function Footer({ onComingSoon, onScrollTo, stats: serverStats }:
           <div className="sf-col-links">
             <a href="#connect" onClick={(e) => { e.preventDefault(); handleLandingNavigation('connect') }}>Connect</a>
             <a href="#compete" onClick={(e) => { e.preventDefault(); handleLandingNavigation('compete') }}>Compete</a>
-            <a href="#learn" onClick={(e) => { e.preventDefault(); handleLandingNavigation('learn') }}>Learn</a>
-            <a href="#schools" onClick={(e) => { e.preventDefault(); handleLandingNavigation('schools') }}>Schools</a>
           </div>
         </div>
 

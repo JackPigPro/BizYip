@@ -78,13 +78,15 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
       </div>
 
       {/* Social proof */}
-      <div className="hero-proof">
-        <span><strong>{stats?.totalUsers.toLocaleString() || '48,200'}</strong> founders</span>
-        <span className="proof-dot"></span>
-        <span><strong>{stats?.acceptedMatches.toLocaleString() || '2.4M'}</strong> founder matches</span>
-        <span className="proof-dot"></span>
-        <span className="live"><strong>{stats?.totalIdeas.toLocaleString() || '18k+'}</strong> ideas posted</span>
-      </div>
+      {((stats?.totalUsers && stats.totalUsers > 10) || (stats?.acceptedMatches && stats.acceptedMatches > 10) || (stats?.totalIdeas && stats.totalIdeas > 10)) && (
+        <div className="hero-proof">
+          <span><strong>{stats?.totalUsers?.toLocaleString() || '48,200'}</strong> founders</span>
+          <span className="proof-dot"></span>
+          <span><strong>{stats?.acceptedMatches?.toLocaleString() || '2.4M'}</strong> founder matches</span>
+          <span className="proof-dot"></span>
+          <span className="live"><strong>{stats?.totalIdeas?.toLocaleString() || '18k+'}</strong> ideas posted</span>
+        </div>
+      )}
 
       {/* Pillar cards */}
       <div className="pillar-wrapper">
@@ -103,14 +105,6 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
             style={{ cursor: 'pointer' }}
           >
             ⚔️ Compete
-          </div>
-          <div className="pillar-header-arrow"></div>
-          <div
-            className="pillar-header-item learn"
-            onClick={() => onScrollTo('learn')}
-            style={{ cursor: 'pointer' }}
-          >
-            📚 Learn
           </div>
         </div>
 
@@ -199,50 +193,7 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
             </div>
           </div>
 
-          {/* LEARN pillar card */}
-          <div className="pc learn" onClick={() => onScrollTo('learn')}>
-            <div className="pc-top">
-              <span className="pc-icon">📚</span>
-              <span className="pc-label learn">Learn</span>
-            </div>
-            <div className="pc-title">Free Startup Courses</div>
-            <div className="coming-soon-badge">Coming Soon</div>
-            <p className="pc-desc">
-              Structured startup courses built for first-time founders.
-            </p>
-            <button
-              className="pc-cta learn"
-              onClick={(e) => { e.stopPropagation(); onScrollTo('learn') }}
-            >
-              Learn more →
-            </button>
-            <div className="pc-preview">
-              <div className="pc-learn">
-                <div className="pc-learn-title">Current Course</div>
-                <div className="pc-learn-course">
-                  <div className="pc-learn-cn">How to Market With No Money</div>
-                  <div className="pc-learn-bar"><div className="pc-learn-fill"></div></div>
-                  <div className="pc-learn-pct">35% complete · Lesson 3 of 9</div>
-                </div>
-                <div className="pc-ll">
-                  <div className="pc-ll-check done">✓</div>
-                  <div className="pc-ll-name">Why paid ads don&apos;t work first</div>
-                  <div className="pc-ll-meta">Done</div>
-                </div>
-                <div className="pc-ll">
-                  <div className="pc-ll-check active">▶</div>
-                  <div className="pc-ll-name" style={{ color: 'var(--purple)', fontWeight: 600 }}>Content that gets shared</div>
-                  <div className="pc-ll-meta" style={{ color: 'var(--purple)' }}>Now</div>
-                </div>
-                <div className="pc-ll">
-                  <div className="pc-ll-check lock">🔒</div>
-                  <div className="pc-ll-name">Community-led growth</div>
-                  <div className="pc-ll-meta">Locked</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+                  </div>
       </div>
     </section>
   )

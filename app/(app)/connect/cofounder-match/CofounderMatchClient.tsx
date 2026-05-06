@@ -451,26 +451,6 @@ export default function CofounderMatchClient({
         >
           View Profile
         </a>
-        <a
-          href={`/connect/messages?user=${profile.id}`}
-          style={{
-            padding: '8px 16px',
-            background: 'var(--green)',
-            color: 'white',
-            textDecoration: 'none',
-            borderRadius: '6px',
-            fontSize: '12px',
-            fontWeight: 600,
-            fontFamily: 'var(--font-display)',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-            whiteSpace: 'nowrap',
-            textAlign: 'center',
-            display: 'block'
-          }}
-        >
-          Message
-        </a>
       </div>
     </div>
   )

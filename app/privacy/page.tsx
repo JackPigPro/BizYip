@@ -117,7 +117,7 @@ export default function PrivacyPage() {
           </div>
         </div>
       </main>
-      <Footer onComingSoon={() => {}} onScrollTo={(id) => {}} />
+      <Footer onScrollTo={(id) => {}} />
     </>
   )
 }

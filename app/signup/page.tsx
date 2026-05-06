@@ -67,7 +67,7 @@ export default function SignupPage() {
           </div>
         </div>
       </main>
-      <Footer onComingSoon={() => {}} onScrollTo={(id) => {}} />
+      <Footer onScrollTo={(id) => {}} />
     </>
   )
 }

@@ -58,7 +58,7 @@ export default function ContactPage() {
           </div>
         </div>
       </main>
-      <Footer onComingSoon={() => {}} onScrollTo={(id) => {}} />
+      <Footer onScrollTo={(id) => {}} />
     </>
   )
 }
