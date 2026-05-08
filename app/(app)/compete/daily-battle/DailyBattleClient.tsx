@@ -297,7 +297,7 @@ export default function DailyBattleClient({ battle, userSubmission, userStreak, 
       }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <h1 style={{ fontSize: '48px', fontWeight: 800, letterSpacing: '-2px', fontFamily: 'var(--font-display)', color: 'var(--text)', margin: 0 }}>
-            Daily Battle
+            Daily Bellringer
           </h1>
         </div>
       </div>

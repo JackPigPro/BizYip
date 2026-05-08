@@ -47,18 +47,33 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         savedTheme = localStorage.getItem('bizyip-theme') as Theme | null
       }
 
-      // Default to light if no theme found
-      const finalTheme = savedTheme || 'light'
+      // If no saved theme, detect system preference
+      let finalTheme: Theme
+      if (savedTheme) {
+        finalTheme = savedTheme
+      } else {
+        // Check system preference
+        const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        finalTheme = systemPrefersDark ? 'dark' : 'light'
+      }
+
+      // Special case: if saved theme is light but system prefers dark, and user hasn't explicitly set it, use system preference
+      if (savedTheme === 'light' && !localStorage.getItem('bizyip-theme-explicit')) {
+        const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (systemPrefersDark) {
+          finalTheme = 'dark'
+        }
+      }
       
       setThemeState(finalTheme)
       localStorage.setItem('bizyip-theme', finalTheme)
       document.body.setAttribute('data-theme', finalTheme)
     } catch (error) {
       console.error('Error initializing theme:', error)
-      // Fallback to light theme
-      setThemeState('light')
-      localStorage.setItem('bizyip-theme', 'light')
-      document.body.setAttribute('data-theme', 'light')
+      // Fallback to dark theme as default
+      setThemeState('dark')
+      localStorage.setItem('bizyip-theme', 'dark')
+      document.body.setAttribute('data-theme', 'dark')
     } finally {
       setIsLoading(false)
     }
@@ -67,6 +82,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const setTheme = async (newTheme: Theme) => {
     setThemeState(newTheme)
     localStorage.setItem('bizyip-theme', newTheme)
+    localStorage.setItem('bizyip-theme-explicit', 'true')
     document.body.setAttribute('data-theme', newTheme)
 
     // Save to Supabase if user is logged in
@@ -80,7 +96,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           body: JSON.stringify({ theme_preference: newTheme }),
         })
       } catch (error) {
-        console.error('Error saving theme to Supabase:', error)
+        console.error('Error saving saving theme to Supabase:', error)
       }
     }
   }

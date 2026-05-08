@@ -421,7 +421,7 @@ export default function OneVOnePage() {
               margin: 0,
               marginBottom: '8px'
             }}>
-              1v1 Battles
+              Live 1v1
             </h1>
             <div style={{ 
               fontSize: '18px', 

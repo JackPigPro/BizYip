@@ -231,7 +231,7 @@ export default function TopNavClient({
                 onMouseEnter={() => setHoveredItem('1v1')}
                 onMouseLeave={() => setHoveredItem(null)}
               >
-                1v1 Battles
+                Live 1v1
               </Link>
               <Link 
                 href="/compete/daily-battle" 
@@ -249,7 +249,7 @@ export default function TopNavClient({
                 onMouseEnter={() => setHoveredItem('daily-battle')}
                 onMouseLeave={() => setHoveredItem(null)}
               >
-                Daily Battle
+                Daily
               </Link>
               <Link 
                 href="/compete/weekly-duel" 
@@ -513,7 +513,7 @@ export default function TopNavClient({
               onMouseEnter={() => setHoveredItem('1v1')}
               onMouseLeave={() => setHoveredItem(null)}
             >
-              1v1 Battles
+              Live 1v1
             </Link>
             <Link 
               href={isLoggedIn ? "/compete/daily-battle" : "/login?mode=signup"} 
@@ -527,7 +527,7 @@ export default function TopNavClient({
               onMouseEnter={() => setHoveredItem('daily-battle')}
               onMouseLeave={() => setHoveredItem(null)}
             >
-              Daily Battle
+              Daily
             </Link>
             <Link 
               href={isLoggedIn ? "/compete/weekly-duel" : "/login?mode=signup"} 
@@ -617,7 +617,15 @@ export default function TopNavClient({
               href={user.username ? `/profile/${user.username}` : "/profile"}
               prefetch={true}
               className="nav-login"
-              style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
+              style={{ 
+                textDecoration: 'none', 
+                display: 'inline-flex', 
+                alignItems: 'center',
+                transition: 'all .15s',
+                ...(hoveredItem === 'profile' ? menuItemHoverStyle : {})
+              }}
+              onMouseEnter={() => setHoveredItem('profile')}
+              onMouseLeave={() => setHoveredItem(null)}
             >
               Profile
             </Link>
@@ -671,6 +679,9 @@ export default function TopNavClient({
             <button
               onClick={toggleTheme}
               className="nav-login"
+              title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              onMouseEnter={() => setHoveredItem('theme-toggle')}
+              onMouseLeave={() => setHoveredItem(null)}
               style={{ 
                 textDecoration: 'none', 
                 display: 'inline-flex', 
@@ -679,23 +690,59 @@ export default function TopNavClient({
                 marginRight: '8px',
                 background: 'transparent',
                 border: '1px solid var(--border)',
-                fontSize: '16px'
+                fontSize: '16px',
+                transition: 'all .15s',
+                ...(hoveredItem === 'theme-toggle' ? menuItemHoverStyle : {})
               }}
-              title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
             >
               {theme === 'light' ? '🌙' : '☀️'}
             </button>
             <Link
               href="/login?mode=login"
-              className="nav-login"
-              style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
+              style={{ 
+                background: 'none', 
+                border: '1.5px solid var(--border2)', 
+                color: 'var(--text)',
+                padding: '9px 24px', 
+                borderRadius: '8px', 
+                fontSize: '14px', 
+                fontWeight: '700',
+                cursor: 'pointer', 
+                fontFamily: 'var(--font-display)', 
+                transition: 'all .15s',
+                letterSpacing: '-.1px',
+                textDecoration: 'none', 
+                display: 'inline-flex', 
+                alignItems: 'center',
+                ...(hoveredItem === 'login' ? menuItemHoverStyle : {})
+              }}
+              onMouseEnter={() => setHoveredItem('login')}
+              onMouseLeave={() => setHoveredItem(null)}
             >
               Log In
             </Link>
             <Link
               href="/login?mode=signup"
-              className="nav-signup"
-              style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
+              style={{ 
+                background: 'linear-gradient(135deg, #16a34a, #22c55e)', 
+                border: 'none', 
+                color: '#fff',
+                padding: '10px 26px', 
+                borderRadius: '8px', 
+                fontSize: '14px', 
+                fontWeight: '700',
+                cursor: 'pointer', 
+                fontFamily: 'var(--font-display)', 
+                transition: 'all .15s',
+                boxShadow: '0 2px 10px rgba(21,128,61,.3)', 
+                letterSpacing: '-.1px',
+                textDecoration: 'none', 
+                display: 'inline-flex', 
+                alignItems: 'center',
+                ...(hoveredItem === 'signup' ? menuItemHoverStyle : {})
+              }}
+              onMouseEnter={() => setHoveredItem('signup')}
+              onMouseLeave={() => setHoveredItem(null)}
             >
               Sign Up
             </Link>

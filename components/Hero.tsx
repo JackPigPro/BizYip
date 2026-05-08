@@ -20,43 +20,42 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
 
       {/* Floating decoration cards */}
       <div className="hero-deco-card hdc-1">
-        <div className="hdc-badge b">🤝 Connect</div>
-        <div className="hdc-text">Marcus T. — Co-founder match</div>
-        <div className="hdc-chip b">Full-stack Dev</div>
+        <div className="hdc-badge g">⚔️ Compete</div>
+        <div className="hdc-val g">+5 ELO</div>
+        <div className="hdc-text">Live 1v1 Win</div>
+        <div className="hdc-chip g">Now: Creator rank 🏅</div>
       </div>
 
       <div className="hero-deco-card hdc-2">
-        <div className="hdc-badge g">⚔️ Compete</div>
-        <div className="hdc-val g">+18</div>
-        <div className="hdc-text">Won Weekly Competition</div>
-        <div className="hdc-chip g">Now: Founder rank 🏅</div>
+        <div className="hdc-badge o">💡 Create</div>
+        <div className="hdc-val o">7 comments</div>
+        <div className="hdc-text">&ldquo;ParkShare – Airbnb for driveways&rdquo;</div>
       </div>
 
       <div className="hero-deco-card hdc-3">
-        <div className="hdc-badge p">� Daily Bellringer</div>
-        <div className="hdc-val p">Day 3</div>
-        <div className="hdc-text">Market Without Money</div>
-        <div className="hdc-meta">Streak: 3 days · 2h left</div>
+        <div className="hdc-badge b">🤝 Connect</div>
+        <div className="hdc-val b">Marcus T. – Co-founder match</div>
+        <div className="hdc-text">2 co-founder requests received</div>
+        <div className="hdc-chip b">Finance · Design · Sales</div>
       </div>
 
       <div className="hero-deco-card hdc-4">
-        <div className="hdc-badge o">💡 Idea</div>
-        <div className="hdc-val o">7 replies</div>
-        <div className="hdc-text">&ldquo;ParkShare — Airbnb for driveways&rdquo;</div>
-        <div className="hdc-meta">2 co-founder requests received</div>
+        <div className="hdc-badge p">📚 Learn – Coming September</div>
+        <div className="hdc-val p">Mr. Zell's class · 24 students</div>
+        <div className="hdc-text">Daily Bellringer live now</div>
       </div>
 
       {/* Main headline */}
       <div style={{ marginBottom: '10px', fontSize: '13px', letterSpacing: '2.4px', textTransform: 'uppercase', color: 'var(--text3)', fontFamily: 'var(--font-display)', fontWeight: 700 }}>
-        Built by founders, for founders
+        For teen founders, ages 13–18
       </div>
       <h1 className="hero-h1">
-        Stop watching,<br /><em>start building.</em>
+        Prove you're the<br /><em>best teen founder.</em>
       </h1>
 
       {/* Subtitle */}
       <p className="hero-sub">
-        Share your idea, get real feedback, match and meet aspiring founders, and compete in weekly founder competitions.
+        Daily challenges, weekly duels, live 1v1s. Build your ELO. Climb the leaderboard.
       </p>
 
       {/* CTA buttons - UPDATED TO USE LINK */}
@@ -66,14 +65,14 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
           className="btn-cta-primary" 
           style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
         >
-          ⚡ Get Started Free
+          Play a live duel
         </Link>
         <Link 
           href="/login?mode=login" 
           className="btn-cta-ghost" 
           style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
         >
-          Sign In →
+          Sign in
         </Link>
       </div>
 
