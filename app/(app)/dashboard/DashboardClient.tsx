@@ -59,7 +59,7 @@ const getNotificationIcon = (type: Notification['type']) => {
     case 'idea_liked': return '❤️'
     case 'idea_commented': return '💬'
     case 'comment_replied': return '↩️'
-    case 'cofounder_request_received': return '🤝'
+    case 'cofounder_request_received': return '👋'
     case 'cofounder_request_accepted': return '🎉'
     case 'new_message': return '✉️'
     default: return '🔔'
@@ -794,7 +794,7 @@ export default function DashboardClient({ initialProfile, initialStats, todayBat
                   e.currentTarget.style.transform = 'translateY(0)'
                 }}
               >
-                🤝 Find Co-founders
+                👋 Find Co-founders
               </Link>
             </div>
           </div>

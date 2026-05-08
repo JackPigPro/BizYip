@@ -3,18 +3,18 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
-const TABS = ['💡 Idea Feed', '🤝 Co-Founders'] as const
+const TABS = ['💡 Idea Feed', '👋 Co-Founders'] as const
 
 export default function ConnectSection() {
   const [activeTab, setActiveTab] = useState<string>('💡 Idea Feed')
 
   return (
     <div id="connect" className="feature-section fs-connect">
-      <div className="fs-label b">🤝 Connect</div>
+      <div className="fs-label b">👋 Connect</div>
 
       {/* Text side */}
       <div className="feature-text">
-        <div className="ft-label b">🤝 Connect</div>
+        <div className="ft-label b">👋 Connect</div>
         <h2 className="ft-h2">Share your idea.<br />Find your people.</h2>
         <p className="ft-desc">
           Post your startup idea, get real feedback from other builders, and find someone to build it with.
@@ -37,7 +37,7 @@ export default function ConnectSection() {
             <span>DM builders, form teams, go from idea to building partner in days</span>
           </div>
         </div>
-        <Link href="/login?mode=signup" className="ft-cta b" style={{ textDecoration: 'none' }}>🤝 Start Connecting</Link>
+        <Link href="/login?mode=signup" className="ft-cta b" style={{ textDecoration: 'none' }}>👋 Start Connecting</Link>
       </div>
 
       {/* Interactive visual side */}
@@ -85,13 +85,13 @@ export default function ConnectSection() {
               </div>
             </>
           )}
-          {activeTab === '🤝 Co-Founders' && (
+          {activeTab === '👋 Co-Founders' && (
             <div className="cf-match-card">
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <div>
                   <div className="cf-match-label">Co-founder match</div>
                 </div>
-                <div style={{ fontSize: '22px' }}>🤝</div>
+                <div style={{ fontSize: '22px' }}>👋</div>
               </div>
               <div className="cf-match-profile">
                 <div className="cf-match-av">M</div>

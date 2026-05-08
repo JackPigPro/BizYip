@@ -802,7 +802,7 @@ export default function CofounderMatchClient({
                     fontFamily: 'var(--font-body)'
                   }}>
                     <div style={{ fontSize: '48px', fontWeight: 800, fontFamily: 'var(--font-display)', color: 'var(--text)', marginBottom: '16px' }}>
-                      🤝
+                      👋
                     </div>
                     <div style={{ fontSize: '20px', fontWeight: 700, fontFamily: 'var(--font-display)', color: 'var(--text)', marginBottom: '8px' }}>
                       No cofounders yet

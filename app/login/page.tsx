@@ -47,7 +47,7 @@ export default async function LoginPage({
           <div className="hdc-text">Builder rank</div>
         </div>
         <div className="auth-deco auth-deco-4 hero-deco-card">
-          <div className="hdc-badge o">🤝 Co-founder Match</div>
+          <div className="hdc-badge o">👋 Co-founder Match</div>
           <div className="hdc-text">3 new requests</div>
         </div>
         <div className="auth-deco auth-deco-5 hero-deco-card">

@@ -40,7 +40,7 @@ export default function ContactPage() {
             </div>
 
             <div className="contact-card">
-              <h3>🤝 Press & Partnerships</h3>
+              <h3>👋 Press & Partnerships</h3>
               <p>
                 Interested in working with BizYip? Whether you're from the press, a school, or an organization, we'd love to explore collaboration opportunities.
               </p>

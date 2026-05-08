@@ -61,7 +61,7 @@ export default function AboutPage() {
                 </p>
               </div>
               <div className="value-card">
-                <div className="value-icon">🤝</div>
+                <div className="value-icon">👋</div>
                 <h3 className="value-title">Connect</h3>
                 <p className="value-description">
                   Find other founders your age who share your passion and complementary skills.

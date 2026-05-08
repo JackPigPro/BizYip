@@ -33,8 +33,8 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
       </div>
 
       <div className="hero-deco-card hdc-3">
-        <div className="hdc-badge b">🤝 Connect</div>
-        <div className="hdc-val b">Marcus T. – Co-founder match</div>
+        <div className="hdc-badge b">👋 Connect</div>
+        <div className="hdc-val b">Marcus T.</div>
         <div className="hdc-text">2 co-founder requests received</div>
         <div className="hdc-chip b">Finance · Design · Sales</div>
       </div>
@@ -76,72 +76,19 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
         </Link>
       </div>
 
-      
       {/* Pillar cards */}
-      <div className="pillar-wrapper" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div className="pillar-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
-          <div
-            className="pillar-header-item connect"
-            onClick={() => onScrollTo('connect')}
-            style={{ cursor: 'pointer' }}
-          >
-            🤝 Connect
-          </div>
-          <span style={{ fontSize: '20px', color: 'var(--text2)', margin: '0 8px' }}>—</span>
-          <div
-            className="pillar-header-item compete"
-            onClick={() => onScrollTo('compete')}
-            style={{ cursor: 'pointer' }}
-          >
-            ⚔️ Compete
-          </div>
-        </div>
+      <div className="pillar-wrapper" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '30px' }}>
 
         <div className="pillar-row" style={{ display: 'flex', justifyContent: 'center', gap: '0px', maxWidth: '1000px', margin: '0 auto' }}>
-          {/* CONNECT pillar card */}
-          <div className="pc connect" onClick={() => onScrollTo('connect')} style={{ flex: 1, minWidth: '360px', maxWidth: '400px', borderTop: '3px solid var(--blue)' }}>
-            <div className="pc-top">
-              <span className="pc-icon">🤝</span>
-              <span className="pc-label connect">Connect</span>
-            </div>
-            <div className="pc-title">Post Ideas &amp; Find Co-Founders</div>
-            <p className="pc-desc" style={{ maxWidth: '280px', margin: '0 auto 12px' }}>
-              Post your startup idea, get real feedback from other builders, and find someone to build it with.
-            </p>
-            <button
-              className="pc-cta connect"
-              onClick={(e) => { e.stopPropagation(); onScrollTo('connect') }}
-            >
-              Explore more →
-            </button>
-            <div className="pc-preview" style={{ margin: '0 -16px', display: 'flex', justifyContent: 'center' }}>
-              <div className="pc-cf" style={{ transform: 'scale(0.85)', transformOrigin: 'top center' }}>
-                <div className="pc-cf-title">Co-Founder Match</div>
-                <div className="pc-cf-card">
-                  <div className="pc-cf-top">
-                    <div className="pc-cf-av">M</div>
-                    <div className="pc-cf-name">Marcus T.</div>
-                  </div>
-                  <div className="pc-cf-bio">Full-stack dev looking to build in fintech or edtech.</div>
-                  <div className="pc-cf-skills">
-                    <div className="pc-cf-skill">React</div>
-                    <div className="pc-cf-skill">Python</div>
-                    <div className="pc-cf-skill">Fintech</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
           {/* COMPETE pillar card */}
           <div className="pc compete" onClick={() => onScrollTo('compete')} style={{ flex: 1, minWidth: '360px', maxWidth: '400px' }}>
             <div className="pc-top">
               <span className="pc-icon">⚔️</span>
               <span className="pc-label compete">Compete</span>
             </div>
-            <div className="pc-title">Daily Duels &amp; Weekly Competitions</div>
+            <div className="pc-title">Daily Duels &amp; Live 1v1s</div>
             <p className="pc-desc" style={{ maxWidth: '280px', margin: '0 auto 12px' }}>
-              Daily battles and weekly tournaments. Compete, climb the ELO ladder, and prove your thinking.
+              Compete daily, climb the ELO leaderboard, and prove you're the best teen founder.
             </p>
             <button
               className="pc-cta compete"
@@ -153,9 +100,6 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
               <div className="pc-lb" style={{ transform: 'scale(0.85)', transformOrigin: 'top center' }}>
                 <div className="pc-lb-title">
                   Weekly Leaderboard
-                  <div className="pc-lb-live">
-                    <div className="pc-lb-dot"></div>342 live
-                  </div>
                 </div>
                 <div className="pc-lb-row">
                   <div className="pc-lb-rank">🥇</div>
@@ -177,6 +121,41 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
                   <div className="pc-lb-name" style={{ color: 'var(--green)', fontWeight: 700 }}>you</div>
                   <div className="pc-lb-elo">1,240</div>
                   <div className="pc-lb-delta">↑4</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* CREATE pillar card */}
+          <div className="pc create" onClick={() => onScrollTo('connect')} style={{ flex: 1, minWidth: '360px', maxWidth: '400px', borderTop: '3px solid var(--blue)' }}>
+            <div className="pc-top">
+              <span className="pc-icon">💡</span>
+              <span className="pc-label create">Create</span>
+            </div>
+            <div className="pc-title">Share Ideas &amp; Find Co-Founders</div>
+            <p className="pc-desc" style={{ maxWidth: '280px', margin: '0 auto 12px' }}>
+              Post your startup idea, get real feedback, and find someone to build it with.
+            </p>
+            <button
+              className="pc-cta connect"
+              onClick={(e) => { e.stopPropagation(); onScrollTo('connect') }}
+            >
+              Explore more →
+            </button>
+            <div className="pc-preview" style={{ margin: '0 -16px', display: 'flex', justifyContent: 'center' }}>
+              <div className="pc-cf" style={{ transform: 'scale(0.85)', transformOrigin: 'top center' }}>
+                <div className="pc-cf-title">Co-Founder Match</div>
+                <div className="pc-cf-card">
+                  <div className="pc-cf-top">
+                    <div className="pc-cf-av">M</div>
+                    <div className="pc-cf-name">Marcus T.</div>
+                  </div>
+                  <div className="pc-cf-bio">Looking for a developer to create mobile apps.</div>
+                  <div className="pc-cf-skills">
+                    <div className="pc-cf-skill">Finance</div>
+                    <div className="pc-cf-skill">Design</div>
+                    <div className="pc-cf-skill">Sales</div>
+                  </div>
                 </div>
               </div>
             </div>
