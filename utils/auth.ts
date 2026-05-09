@@ -85,7 +85,7 @@ export async function getAuthState(): Promise<AuthResult> {
   }
 
   const isFullyAuthenticated = !!(profile?.onboarding_complete === true)
-  const needsOnboarding = !!(user && (!profile || profile.onboarding_complete !== true))
+  const needsOnboarding = user && (!profile || profile.onboarding_complete !== true)
 
   return {
     user,
