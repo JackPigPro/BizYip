@@ -398,18 +398,13 @@ export function containsBannedWord(text: string): boolean {
     }
   }
   
-  // Split normalized text into words and check for exact matches
-  const words = normalizedText.split(/\s+/);
-  
-  // Check banned words against normalized text using exact word matching
+  // Check banned words against normalized text for any substring match
   for (const word of bannedWords) {
     const normalizedWord = normalizeText(word);
     
-    // Check if the exact banned word appears as a complete word
-    for (const textWord of words) {
-      if (textWord === normalizedWord) {
-        return true;
-      }
+    // Check if any banned word appears as a substring in the normalized text
+    if (normalizedText.includes(normalizedWord)) {
+      return true;
     }
   }
   

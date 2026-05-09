@@ -48,6 +48,14 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
       return
     }
 
+    // Only validate if username is different from current username
+    const isSameAsCurrent = profile?.username && username.trim() === profile.username
+    if (isSameAsCurrent) {
+      setUsernameStatus(null)
+      setUsernameError(null)
+      return
+    }
+
     // Validate username rules (same as onboarding)
     const validationRules = [
       {
@@ -115,8 +123,9 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
   const handleUpdateUsername = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Only allow submission if username is available
-    if (usernameStatus !== 'available') {
+    // Only allow submission if username is available or unchanged
+    const isUnchanged = profile?.username && username.trim() === profile.username
+    if (usernameStatus !== 'available' && !isUnchanged) {
       showMessage('error', 'Please choose an available username')
       return
     }
