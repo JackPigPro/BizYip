@@ -26,7 +26,6 @@ raghead
 camel jockey
 sandnigger
 zipperhead
-slope
 jungle bunny
 coon
 porch monkey
@@ -69,7 +68,6 @@ queer
 homo
 sodomite
 sissy
-fairy
 pansy
 poofter
 poof
@@ -88,7 +86,6 @@ spaz
 cripple
 mongoloid
 mong
-lunatic
 psycho bitch
 schizo
 
@@ -185,7 +182,7 @@ pedophile
 pedo
 groomer
 child porn
-cp (standalone)
+cp
 kiddie porn
 
 # ============================================================
