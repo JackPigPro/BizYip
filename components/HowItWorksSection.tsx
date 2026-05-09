@@ -229,101 +229,83 @@ export default function HowItWorksSection() {
               transition: 'all 0.3s ease'
             }}
           >
-            <div style={{
-              background: 'var(--card)',
-              border: '1px solid var(--border)',
-              borderRadius: '12px',
-              padding: '20px',
-              width: '200px',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
-              position: 'relative'
-            }}>
-              <div style={{
-                position: 'absolute',
-                top: '-8px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                background: 'var(--blue)',
-                color: 'white',
-                padding: '4px 12px',
-                borderRadius: '12px',
-                fontSize: '10px',
+            <div className="pc-battle" style={{ transform: 'scale(1.2)', transformOrigin: 'top center' }}>
+              <div className="pc-battle-title" style={{
+                fontSize: '14px',
                 fontWeight: 700,
-                fontFamily: 'var(--font-display)',
-                letterSpacing: '1px'
+                color: 'var(--text)',
+                textAlign: 'center',
+                marginBottom: '8px',
+                fontFamily: 'var(--font-display)'
               }}>
-                BATTLE ARENA
+                Live Battle
               </div>
+              
               <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr auto 1fr',
+                display: 'flex',
                 alignItems: 'center',
-                gap: '8px',
-                marginTop: '8px',
+                justifyContent: 'center',
+                gap: '30px',
                 marginBottom: '12px'
               }}>
                 <div style={{
-                  background: 'rgba(34, 197, 94, 0.1)',
-                  border: '1px solid rgba(34, 197, 94, 0.3)',
-                  borderRadius: '6px',
-                  padding: '8px',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  flex: '1'
                 }}>
                   <div style={{
-                    width: '24px',
-                    height: '24px',
+                    width: '36px',
+                    height: '36px',
                     borderRadius: '50%',
                     background: 'var(--green)',
                     color: 'white',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '10px',
+                    fontSize: '14px',
                     fontWeight: 800,
-                    margin: '0 auto 4px'
+                    margin: '0 auto 8px'
                   }}>
                     D
                   </div>
                   <div style={{
-                    fontSize: '10px',
+                    fontSize: '12px',
                     fontWeight: 700,
                     color: 'var(--green)'
                   }}>
                     DesignWolf
                   </div>
                 </div>
+                
                 <div style={{
-                  fontSize: '16px',
+                  fontSize: '20px',
                   fontWeight: 900,
                   color: 'var(--text)',
                   fontFamily: 'var(--font-display)'
                 }}>
                   VS
                 </div>
+                
                 <div style={{
-                  background: 'rgba(239, 68, 68, 0.1)',
-                  border: '1px solid rgba(239, 68, 68, 0.3)',
-                  borderRadius: '6px',
-                  padding: '8px',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  flex: '1'
                 }}>
                   <div style={{
-                    width: '24px',
-                    height: '24px',
+                    width: '36px',
+                    height: '36px',
                     borderRadius: '50%',
                     background: 'var(--red)',
                     color: 'white',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '10px',
+                    fontSize: '14px',
                     fontWeight: 800,
-                    margin: '0 auto 4px'
+                    margin: '0 auto 8px'
                   }}>
                     N
                   </div>
                   <div style={{
-                    fontSize: '10px',
+                    fontSize: '12px',
                     fontWeight: 700,
                     color: 'var(--red)'
                   }}>
@@ -331,53 +313,25 @@ export default function HowItWorksSection() {
                   </div>
                 </div>
               </div>
+              
               <div style={{
-                background: 'linear-gradient(90deg, var(--green), var(--blue))',
-                height: '4px',
-                borderRadius: '2px',
-                marginBottom: '8px',
-                position: 'relative'
-              }}>
-                <div style={{
-                  position: 'absolute',
-                  left: '60%',
-                  top: '-2px',
-                  width: '8px',
-                  height: '8px',
-                  background: 'white',
-                  border: '2px solid var(--green)',
-                  borderRadius: '50%'
-                }} />
-              </div>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                fontSize: '9px',
-                color: 'var(--text2)',
-                marginBottom: '6px'
-              }}>
-                <span>⏱️ 2:34</span>
-                <span>🏆 +5 ELO</span>
-              </div>
-              <div style={{
-                background: 'rgba(59, 130, 246, 0.1)',
-                border: '1px solid rgba(59, 130, 246, 0.3)',
-                borderRadius: '4px',
-                padding: '6px',
-                fontSize: '9px',
+                fontSize: '13px',
                 fontWeight: 700,
                 color: 'var(--blue)',
-                textAlign: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
                 fontFamily: 'var(--font-display)'
               }}>
-                ROUND 3 OF 5
+                🏆 +5 ELO
               </div>
             </div>
           </div>
           
           <div style={{
             position: 'absolute',
-            top: '50%',
+            top: '57%',
             right: '-60px',
             transform: 'translateY(-50%)',
             color: 'white',
@@ -466,93 +420,75 @@ export default function HowItWorksSection() {
               transition: 'all 0.3s ease'
             }}
           >
-            <div style={{
-              background: 'var(--card)',
-              border: '1px solid var(--border)',
-              borderRadius: '12px',
-              padding: '16px',
-              width: '180px',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
-              position: 'relative'
-            }}>
-              <div style={{
-                position: 'absolute',
-                top: '-8px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                background: 'var(--orange)',
-                color: 'white',
-                padding: '4px 12px',
-                borderRadius: '12px',
-                fontSize: '10px',
+            <div className="pc-voting" style={{ transform: 'scale(1.2)', transformOrigin: 'top center' }}>
+              <div className="pc-voting-title" style={{
+                fontSize: '14px',
                 fontWeight: 700,
-                fontFamily: 'var(--font-display)',
-                letterSpacing: '1px'
-              }}>
-                COMMUNITY JUDGED
-              </div>
-              <div style={{
-                background: 'var(--orange)',
-                color: 'white',
-                padding: '10px 12px',
-                borderRadius: '6px',
-                fontSize: '11px',
-                fontWeight: 700,
+                color: 'var(--text)',
                 textAlign: 'center',
-                marginBottom: '10px',
-                fontStyle: 'italic'
-              }}>
-                "AI-powered study tools"
-              </div>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'center',
                 marginBottom: '8px',
-                gap: '2px'
+                fontFamily: 'var(--font-display)'
               }}>
-                {[1,2,3,4,5].map((star) => (
-                  <span key={star} style={{ 
-                    fontSize: '16px', 
-                    color: star <= 4 ? 'var(--gold)' : 'rgba(255, 215, 0, 0.3)'
-                  }}>⭐</span>
-                ))}
+                Community Voting
               </div>
+              
               <div style={{
                 display: 'flex',
-                justifyContent: 'space-between',
-                fontSize: '9px',
-                color: 'var(--text2)',
-                marginBottom: '8px'
-              }}>
-                <span>4.8 avg • 24 reviews</span>
-                <span style={{ color: 'var(--orange)' }}>⚡ 2h ago</span>
-              </div>
-              <div style={{
-                display: 'flex',
-                gap: '4px',
-                justifyContent: 'center'
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '30px',
+                marginBottom: '12px'
               }}>
                 <div style={{
-                  background: 'rgba(249, 115, 22, 0.1)',
-                  border: '1px solid rgba(249, 115, 22, 0.3)',
-                  borderRadius: '4px',
-                  padding: '3px 6px',
-                  fontSize: '8px',
-                  fontWeight: 600,
-                  color: 'var(--orange)'
+                  textAlign: 'center',
+                  flex: '1'
                 }}>
-                  APPROVED
+                  <div style={{
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    color: 'var(--text)',
+                    marginBottom: '6px',
+                    lineHeight: 1.3
+                  }}>
+                    "Smart flashcards"
+                  </div>
+                  <div style={{
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    color: 'var(--green)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '4px'
+                  }}>
+                    👍 24 votes
+                  </div>
                 </div>
+                
                 <div style={{
-                  background: 'rgba(34, 197, 94, 0.1)',
-                  border: '1px solid rgba(34, 197, 94, 0.3)',
-                  borderRadius: '4px',
-                  padding: '3px 6px',
-                  fontSize: '8px',
-                  fontWeight: 600,
-                  color: 'var(--green)'
+                  textAlign: 'center',
+                  flex: '1'
                 }}>
-                  FEATURED
+                  <div style={{
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    color: 'var(--text)',
+                    marginBottom: '6px',
+                    lineHeight: 1.3
+                  }}>
+                    "Study tools"
+                  </div>
+                  <div style={{
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    color: 'var(--red)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '4px'
+                  }}>
+                    👎 18 votes
+                  </div>
                 </div>
               </div>
             </div>
