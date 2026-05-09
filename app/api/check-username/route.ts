@@ -1,5 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
+import { containsBannedWord } from '@/lib/moderation'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -9,14 +10,16 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Username required' }, { status: 400 })
   }
 
-  // Validate username format
+  const trimmedUsername = username.trim().toLowerCase()
+
+  // Validate username format (same as onboarding)
   const validationRules = [
     {
-      test: username.length >= 3 && username.length <= 20,
-      message: 'Username must be 3-20 characters'
+      test: trimmedUsername.length >= 3 && trimmedUsername.length <= 15,
+      message: 'Username must be 3-15 characters'
     },
     {
-      test: /^[a-zA-Z][a-zA-Z0-9_]{2,19}$/.test(username),
+      test: /^[a-zA-Z][a-zA-Z0-9_]*$/.test(trimmedUsername),
       message: 'Username must start with a letter and contain only letters, numbers, and underscores'
     }
   ]
@@ -26,6 +29,14 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ 
       available: false, 
       error: failedRule.message 
+    }, { status: 400 })
+  }
+
+  // Check for banned words (same as onboarding)
+  if (containsBannedWord(trimmedUsername)) {
+    return NextResponse.json({ 
+      available: false, 
+      error: 'Inappropriate content. Please rewrite.' 
     }, { status: 400 })
   }
 

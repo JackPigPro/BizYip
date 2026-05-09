@@ -1,29 +1,21 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSupabase } from '@/components/SupabaseProvider'
+import { useUser } from '@/hooks/useUser'
 import { signOut } from '@/app/actions/auth'
 import { useTheme } from '@/components/ThemeProvider'
+import { containsBannedWord } from '@/lib/moderation'
 
 interface Profile {
   id: string
   username: string
   display_name?: string
-  public_profile?: boolean
-  show_elo_on_profile?: boolean
-  appear_on_leaderboard?: boolean
 }
 
-interface SettingsData {
-  profile: Profile
-  email: string
-  isEmailUser: boolean
-}
 
 export default function SettingsClient({ initialProfile }: { initialProfile: Profile | null }) {
-  const { user, authLoading } = useSupabase()
+  const { user, authLoading, profile, refresh } = useUser()
   const { theme, setTheme, isLoading: themeLoading } = useTheme()
-  const [settingsData, setSettingsData] = useState<SettingsData | null>(null)
   const [activeSection, setActiveSection] = useState('account')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
@@ -32,42 +24,86 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
 
   // Form states
   const [username, setUsername] = useState('')
+  const [displayUsername, setDisplayUsername] = useState('')
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [publicProfile, setPublicProfile] = useState(true)
-  const [showElo, setShowElo] = useState(true)
-  const [appearOnLeaderboard, setAppearOnLeaderboard] = useState(true)
+  
+  // Username validation states (same as onboarding)
+  const [usernameStatus, setUsernameStatus] = useState<'checking' | 'available' | 'taken' | 'invalid' | null>(null)
+  const [usernameError, setUsernameError] = useState<string | null>(null)
+  const [moderationError, setModerationError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (user && !settingsData) {
-      fetchSettings()
+    if (profile) {
+      setUsername(profile.username)
+      setDisplayUsername(profile.username)
     }
-  }, [user, settingsData])
+  }, [profile])
 
+  // Check username availability in real-time (same as onboarding)
   useEffect(() => {
-    if (settingsData) {
-      setUsername(settingsData.profile.username)
-      setPublicProfile(settingsData.profile.public_profile ?? true)
-      setShowElo(settingsData.profile.show_elo_on_profile ?? true)
-      setAppearOnLeaderboard(settingsData.profile.appear_on_leaderboard ?? true)
+    if (!username.trim()) {
+      setUsernameStatus(null)
+      setUsernameError(null)
+      return
     }
-  }, [settingsData])
 
-  const fetchSettings = async () => {
-    try {
-      const response = await fetch('/settings/api')
-      if (!response.ok) {
-        throw new Error('Failed to fetch settings')
+    // Validate username rules (same as onboarding)
+    const validationRules = [
+      {
+        test: username.length >= 3 && username.length <= 15,
+        message: 'Username must be 3-15 characters'
+      },
+      {
+        test: /^[a-zA-Z][a-zA-Z0-9_]*$/.test(username),
+        message: 'Username must start with a letter and contain only letters, numbers, and underscores'
       }
-      
-      const data = await response.json()
-      setSettingsData(data)
-    } catch (err) {
-      console.error('Failed to fetch settings:', err)
-    }
-  }
+    ]
 
+    const failedRule = validationRules.find(rule => !rule.test)
+    if (failedRule) {
+      setUsernameStatus('invalid')
+      setUsernameError(failedRule.message)
+      return
+    }
+
+    // Check for banned words (same as onboarding)
+    if (containsBannedWord(username)) {
+      setUsernameStatus('invalid')
+      setUsernameError('Inappropriate content. Please rewrite.')
+      setModerationError('Inappropriate content. Please rewrite.')
+      return
+    }
+
+    setModerationError(null)
+    setUsernameError(null)
+
+    const checkUsername = async () => {
+      setUsernameStatus('checking')
+      
+      try {
+        const response = await fetch(`/api/check-username?username=${encodeURIComponent(username.trim().toLowerCase())}`)
+        const result = await response.json()
+
+        if (!response.ok) {
+          setUsernameStatus('invalid')
+          setUsernameError(result.error || 'Failed to check username availability')
+          return
+        }
+
+        setUsernameStatus(result.available ? 'available' : 'taken')
+      } catch (err) {
+        setUsernameStatus('invalid')
+        setUsernameError('Failed to check username availability')
+      }
+    }
+
+    const timeoutId = setTimeout(checkUsername, 300)
+    return () => clearTimeout(timeoutId)
+  }, [username])
+
+  
   const showMessage = (type: 'success' | 'error', text: string) => {
     setMessage({ type, text })
     setTimeout(() => setMessage(null), 3000)
@@ -75,6 +111,13 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
 
   const handleUpdateUsername = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Only allow submission if username is available
+    if (usernameStatus !== 'available') {
+      showMessage('error', 'Please choose an available username')
+      return
+    }
+    
     setLoading(true)
     
     try {
@@ -83,7 +126,7 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: 'update_username',
-          data: { username }
+          data: { username: username.trim().toLowerCase() }
         })
       })
 
@@ -91,7 +134,7 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
       
       if (result.success) {
         showMessage('success', 'Username updated successfully')
-        fetchSettings() // Refresh data
+        refresh() // Invalidate cache and update all components across site
       } else {
         showMessage('error', result.error || 'Failed to update username')
       }
@@ -139,37 +182,6 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
     }
   }
 
-  const handleUpdatePrivacy = async () => {
-    setLoading(true)
-    
-    try {
-      const response = await fetch('/settings/api', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'update_privacy',
-          data: { 
-            public_profile: publicProfile,
-            show_elo_on_profile: showElo,
-            appear_on_leaderboard: appearOnLeaderboard
-          }
-        })
-      })
-
-      const result = await response.json()
-      
-      if (result.success) {
-        showMessage('success', 'Privacy settings updated successfully')
-        fetchSettings() // Refresh data
-      } else {
-        showMessage('error', result.error || 'Failed to update privacy settings')
-      }
-    } catch (err) {
-      showMessage('error', 'Failed to update privacy settings')
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const handleDeleteAccount = async () => {
     if (!deletePassword) {
@@ -266,8 +278,7 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
 
   const sidebarItems = [
     { id: 'account', label: 'Account' },
-    ...(settingsData?.isEmailUser ? [{ id: 'password', label: 'Password' }] : []),
-    { id: 'privacy', label: 'Privacy' },
+    ...(user?.app_metadata?.provider === 'email' ? [{ id: 'password', label: 'Password' }] : []),
     { id: 'theme', label: 'Theme' },
     { id: 'danger', label: 'Danger Zone' }
   ]
@@ -388,7 +399,7 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
                   </label>
                   <input
                     type="email"
-                    value={settingsData?.email || ''}
+                    value={user?.email || ''}
                     readOnly
                     style={{
                       width: '100%',
@@ -404,45 +415,97 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
 
                 {/* Username */}
                 <form onSubmit={handleUpdateUsername}>
-                  <div style={{ marginBottom: '24px' }}>
+                  <div style={{ marginBottom: '14px' }}>
                     <label style={{ 
                       display: 'block', 
-                      fontSize: '14px', 
-                      fontWeight: 500, 
-                      color: 'var(--text)',
-                      marginBottom: '8px'
+                      marginBottom: '7px', 
+                      color: 'var(--text)', 
+                      fontWeight: 600, 
+                      fontSize: '14px' 
                     }}>
                       Username
                     </label>
-                    <input
-                      type="text"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      style={{
-                        width: '100%',
-                        padding: '12px 16px',
-                        border: '1px solid var(--border)',
-                        borderRadius: '8px',
-                        fontSize: '14px',
-                        background: 'var(--bg)',
-                        color: 'var(--text)'
-                      }}
-                    />
+                    <div style={{ position: 'relative' }}>
+                      <input
+                        type="text"
+                        value={displayUsername}
+                        onChange={(event) => {
+                          const value = event.target.value
+                          setDisplayUsername(value)
+                          setUsername(value.replace(/[^a-zA-Z0-9_]/g, '')) // Keep only alphanumeric and underscore for comparison
+                        }}
+                        required
+                        placeholder="Choose a username"
+                        maxLength={15}
+                        style={{
+                          width: '100%',
+                          padding: '12px',
+                          paddingRight: '40px',
+                          borderRadius: '10px',
+                          border: '1px solid var(--border)',
+                          background: 'var(--card)',
+                          color: 'var(--text)',
+                          outline: 'none',
+                          fontSize: '14px',
+                        }}
+                      />
+                      {usernameStatus && (
+                        <div
+                          style={{
+                            position: 'absolute',
+                            right: '12px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            fontSize: '16px',
+                          }}
+                        >
+                          {usernameStatus === 'checking' && '⏳'}
+                          {usernameStatus === 'available' && '✅'}
+                          {usernameStatus === 'taken' && '❌'}
+                          {usernameStatus === 'invalid' && '❌'}
+                        </div>
+                      )}
+                    </div>
+                    {usernameStatus === 'taken' && (
+                      <p style={{ color: '#fca5a5', marginTop: '4px', marginBottom: 0, fontSize: '12px' }}>
+                        Username taken
+                      </p>
+                    )}
+                    {usernameStatus === 'available' && (
+                      <p style={{ color: '#86efac', marginTop: '4px', marginBottom: 0, fontSize: '12px' }}>
+                        Username available
+                      </p>
+                    )}
+                    {usernameStatus === 'invalid' && usernameError && (
+                      <p style={{ color: '#fca5a5', marginTop: '4px', marginBottom: 0, fontSize: '12px' }}>
+                        {usernameError}
+                      </p>
+                    )}
+                    {moderationError && (
+                      <p style={{ color: '#fca5a5', marginTop: '4px', marginBottom: 0, fontSize: '12px' }}>
+                        {moderationError}
+                      </p>
+                    )}
                   </div>
                   
                   <button
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || usernameStatus !== 'available'}
                     style={{
+                      width: '100%',
                       padding: '12px 24px',
-                      background: 'var(--green)',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '8px',
-                      fontWeight: 600,
+                      background: usernameStatus === 'available' && !loading
+                        ? 'linear-gradient(135deg, #16a34a, #22c55e)'
+                        : 'var(--surface)',
+                      color: usernameStatus === 'available' && !loading ? '#fff' : 'var(--text3)',
+                      fontWeight: 700,
                       fontSize: '14px',
-                      cursor: loading ? 'not-allowed' : 'pointer',
-                      opacity: loading ? 0.6 : 1
+                      cursor: usernameStatus === 'available' && !loading ? 'pointer' : 'not-allowed',
+                      fontFamily: 'var(--font-display)',
+                      boxShadow: usernameStatus === 'available' && !loading ? '0 8px 20px rgba(21,128,61,.28)' : 'none',
+                      border: 'none',
+                      borderRadius: '10px',
+                      transition: 'all 0.2s ease'
                     }}
                   >
                     {loading ? 'Saving...' : 'Save changes'}
@@ -452,7 +515,7 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
             )}
 
             {/* Password Section */}
-            {activeSection === 'password' && settingsData?.isEmailUser && (
+            {activeSection === 'password' && user?.app_metadata?.provider === 'email' && (
               <div style={{
                 background: 'var(--card)',
                 border: '1px solid var(--border)',
@@ -570,126 +633,6 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
               </div>
             )}
 
-            {/* Privacy Section */}
-            {activeSection === 'privacy' && (
-              <div style={{
-                background: 'var(--card)',
-                border: '1px solid var(--border)',
-                borderRadius: '16px',
-                padding: '32px',
-                boxShadow: 'var(--shadow)'
-              }}>
-                <h2 style={{ 
-                  fontSize: '24px', 
-                  fontWeight: 700, 
-                  fontFamily: 'var(--font-display)',
-                  color: 'var(--text)',
-                  marginBottom: '24px'
-                }}>
-                  Privacy
-                </h2>
-
-                <div style={{ marginBottom: '24px' }}>
-                  <label style={{ 
-                    display: 'flex',
-                    alignItems: 'center',
-                    cursor: 'pointer',
-                    padding: '16px',
-                    border: '1px solid var(--border)',
-                    borderRadius: '8px',
-                    background: 'var(--card2)'
-                  }}>
-                    <input
-                      type="checkbox"
-                      checked={publicProfile}
-                      onChange={(e) => setPublicProfile(e.target.checked)}
-                      style={{ marginRight: '12px' }}
-                    />
-                    <div>
-                      <div style={{ fontWeight: 500, color: 'var(--text)', marginBottom: '4px' }}>
-                        Public profile
-                      </div>
-                      <div style={{ fontSize: '13px', color: 'var(--text2)' }}>
-                        Make your profile visible to other users
-                      </div>
-                    </div>
-                  </label>
-                </div>
-
-                <div style={{ marginBottom: '24px' }}>
-                  <label style={{ 
-                    display: 'flex',
-                    alignItems: 'center',
-                    cursor: 'pointer',
-                    padding: '16px',
-                    border: '1px solid var(--border)',
-                    borderRadius: '8px',
-                    background: 'var(--card2)'
-                  }}>
-                    <input
-                      type="checkbox"
-                      checked={showElo}
-                      onChange={(e) => setShowElo(e.target.checked)}
-                      style={{ marginRight: '12px' }}
-                    />
-                    <div>
-                      <div style={{ fontWeight: 500, color: 'var(--text)', marginBottom: '4px' }}>
-                        Show ELO on profile
-                      </div>
-                      <div style={{ fontSize: '13px', color: 'var(--text2)' }}>
-                        Display your ELO rating on your public profile
-                      </div>
-                    </div>
-                  </label>
-                </div>
-
-                <div style={{ marginBottom: '24px' }}>
-                  <label style={{ 
-                    display: 'flex',
-                    alignItems: 'center',
-                    cursor: 'pointer',
-                    padding: '16px',
-                    border: '1px solid var(--border)',
-                    borderRadius: '8px',
-                    background: 'var(--card2)'
-                  }}>
-                    <input
-                      type="checkbox"
-                      checked={appearOnLeaderboard}
-                      onChange={(e) => setAppearOnLeaderboard(e.target.checked)}
-                      style={{ marginRight: '12px' }}
-                    />
-                    <div>
-                      <div style={{ fontWeight: 500, color: 'var(--text)', marginBottom: '4px' }}>
-                        Appear on leaderboard
-                      </div>
-                      <div style={{ fontSize: '13px', color: 'var(--text2)' }}>
-                        Show your ranking on public leaderboards
-                      </div>
-                    </div>
-                  </label>
-                </div>
-                
-                <button
-                  onClick={handleUpdatePrivacy}
-                  disabled={loading}
-                  style={{
-                    padding: '12px 24px',
-                    background: 'var(--green)',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '8px',
-                    fontWeight: 600,
-                    fontSize: '14px',
-                    cursor: loading ? 'not-allowed' : 'pointer',
-                    opacity: loading ? 0.6 : 1
-                  }}
-                >
-                  {loading ? 'Saving...' : 'Save privacy settings'}
-                </button>
-              </div>
-            )}
-
             {/* Theme Section */}
             {activeSection === 'theme' && (
               <div style={{
@@ -714,56 +657,6 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
                   gridTemplateColumns: '1fr 1fr', 
                   gap: '16px' 
                 }}>
-                  {/* Light Option */}
-                  <div
-                    onClick={() => setTheme('light')}
-                    style={{
-                      border: theme === 'light' ? '2px solid var(--green)' : '1px solid var(--border)',
-                      background: theme === 'light' ? 'var(--green-tint)' : 'var(--card2)',
-                      borderRadius: '12px',
-                      padding: '16px',
-                      cursor: theme === 'light' ? 'default' : 'pointer',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    <div style={{
-                      height: '80px',
-                      borderRadius: '10px',
-                      background: '#ffffff',
-                      border: '1px solid #e5e7eb',
-                      marginBottom: '12px',
-                      position: 'relative',
-                      overflow: 'hidden'
-                    }}>
-                      {/* Grid lines for light theme */}
-                      <div style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        backgroundImage: 'linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px)',
-                        backgroundSize: '20px 20px'
-                      }} />
-                      {/* Green square representing logo */}
-                      <div style={{
-                        position: 'absolute',
-                        top: '8px',
-                        right: '8px',
-                        width: '12px',
-                        height: '12px',
-                        background: 'var(--green)',
-                        borderRadius: '2px'
-                      }} />
-                    </div>
-                    <div style={{ fontWeight: 700, color: theme === 'light' ? 'var(--text)' : 'var(--text)', marginBottom: '4px' }}>
-                      Light
-                    </div>
-                    <div style={{ fontSize: '13px', color: theme === 'light' ? 'var(--text2)' : 'var(--text2)' }}>
-                      Default
-                    </div>
-                  </div>
-
                   {/* Dark Option */}
                   <div
                     onClick={() => setTheme('dark')}
@@ -811,6 +704,56 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
                     </div>
                     <div style={{ fontSize: '13px', color: theme === 'dark' ? '#166534' : 'var(--text2)' }}>
                       Easy on the eyes
+                    </div>
+                  </div>
+
+                  {/* Light Option */}
+                  <div
+                    onClick={() => setTheme('light')}
+                    style={{
+                      border: theme === 'light' ? '2px solid var(--green)' : '1px solid var(--border)',
+                      background: theme === 'light' ? 'var(--green-tint)' : 'var(--card2)',
+                      borderRadius: '12px',
+                      padding: '16px',
+                      cursor: theme === 'light' ? 'default' : 'pointer',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <div style={{
+                      height: '80px',
+                      borderRadius: '10px',
+                      background: '#ffffff',
+                      border: '1px solid #e5e7eb',
+                      marginBottom: '12px',
+                      position: 'relative',
+                      overflow: 'hidden'
+                    }}>
+                      {/* Grid lines for light theme */}
+                      <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundImage: 'linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px)',
+                        backgroundSize: '20px 20px'
+                      }} />
+                      {/* Green square representing logo */}
+                      <div style={{
+                        position: 'absolute',
+                        top: '8px',
+                        right: '8px',
+                        width: '12px',
+                        height: '12px',
+                        background: 'var(--green)',
+                        borderRadius: '2px'
+                      }} />
+                    </div>
+                    <div style={{ fontWeight: 700, color: theme === 'light' ? 'var(--text)' : 'var(--text)', marginBottom: '4px' }}>
+                      Light
+                    </div>
+                    <div style={{ fontSize: '13px', color: theme === 'light' ? 'var(--text2)' : 'var(--text2)' }}>
+                      Default
                     </div>
                   </div>
                 </div>

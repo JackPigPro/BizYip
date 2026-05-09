@@ -101,24 +101,7 @@ export async function POST(request: Request) {
 
         return NextResponse.json({ success: true })
 
-      case 'update_privacy':
-        const { public_profile, show_elo_on_profile, appear_on_leaderboard } = data
-
-        const { error: privacyError } = await supabase
-          .from('profiles')
-          .update({
-            public_profile: public_profile ?? true,
-            show_elo_on_profile: show_elo_on_profile ?? true,
-            appear_on_leaderboard: appear_on_leaderboard ?? true
-          })
-          .eq('id', user.id)
-
-        if (privacyError) {
-          return NextResponse.json({ error: 'Failed to update privacy settings' }, { status: 500 })
-        }
-
-        return NextResponse.json({ success: true })
-
+      
       case 'delete_account':
         const { password } = data
 

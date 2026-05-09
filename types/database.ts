@@ -95,9 +95,6 @@ export interface Database {
           message_preference?: 'anyone' | 'cofounders_only' | 'nobody'
           theme_preference?: 'light' | 'dark'
           onboarding_complete?: boolean
-          public_profile?: boolean
-          show_elo_on_profile?: boolean
-          appear_on_leaderboard?: boolean
           created_at: string
         }
         Insert: {
@@ -115,9 +112,6 @@ export interface Database {
           message_preference?: 'anyone' | 'cofounders_only' | 'nobody'
           theme_preference?: 'light' | 'dark'
           onboarding_complete?: boolean
-          public_profile?: boolean
-          show_elo_on_profile?: boolean
-          appear_on_leaderboard?: boolean
           created_at?: string
         }
         Update: {
@@ -135,9 +129,6 @@ export interface Database {
           message_preference?: 'anyone' | 'cofounders_only' | 'nobody'
           theme_preference?: 'light' | 'dark'
           onboarding_complete?: boolean
-          public_profile?: boolean
-          show_elo_on_profile?: boolean
-          appear_on_leaderboard?: boolean
           created_at?: string
         }
       }
