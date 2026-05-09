@@ -66,7 +66,7 @@ export default function OnboardingPage() {
     document.body.setAttribute('data-theme', onboardingData.theme)
   }, [onboardingData.theme])
 
-  // Show loading state while checking auth and profile
+  // Show minimal loading state while checking auth
   if (authLoading) {
     return (
       <main
@@ -74,50 +74,19 @@ export default function OnboardingPage() {
           minHeight: '100vh',
           display: 'grid',
           placeItems: 'center',
-          padding: '24px 24px 32px',
-          marginTop: '-68px',
+          padding: '24px',
           background: 'var(--bg)',
-          position: 'relative',
-          overflow: 'hidden',
         }}
       >
         <style>{`.nav{display:none !important}`}</style>
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage:
-              'linear-gradient(rgba(21,128,61,.065) 1px, transparent 1px), linear-gradient(90deg, rgba(21,128,61,.065) 1px, transparent 1px)',
-            backgroundSize: '52px 52px',
-            pointerEvents: 'none',
-          }}
-        />
-        <div className="auth-deco auth-deco-1 hero-deco-card">
-          <div className="hdc-badge b">Connect</div>
-          <div className="hdc-val b">94%</div>
-          <div className="hdc-text">Co-founder match score</div>
-        </div>
-        <div className="auth-deco auth-deco-2 hero-deco-card">
-          <div className="hdc-badge g">Compete</div>
-          <div className="hdc-val g">+18 ELO</div>
-          <div className="hdc-text">Won last weekly duel</div>
-        </div>
-        <div className="auth-deco auth-deco-3 hero-deco-card">
-          <div className="hdc-badge p">Learn</div>
-          <div className="hdc-val p">Lesson 3</div>
-          <div className="hdc-text">35% complete</div>
-        </div>
-        <div style={{ position: 'relative', zIndex: 2 }}>
-          <div style={{ 
-            fontSize: '24px', 
-            fontWeight: 700, 
-            color: 'var(--text)', 
-            fontFamily: 'var(--font-display)', 
-            textAlign: 'center',
-            marginBottom: '32px'
-          }}>
-            Loading your profile...
-          </div>
+        <div style={{ 
+          fontSize: '18px', 
+          fontWeight: 600, 
+          color: 'var(--text2)', 
+          fontFamily: 'var(--font-display)', 
+          textAlign: 'center'
+        }}>
+          Loading...
         </div>
       </main>
     )
@@ -129,26 +98,16 @@ export default function OnboardingPage() {
       try {
         const { data: { user } } = await supabase.auth.getUser()
         if (user) {
-          const { data: profile, error } = await supabase
-            .from('profiles')
-            .select('onboarding_complete')
-            .eq('id', user.id)
-            .single()
-          
-          // Handle the case where profile doesn't exist or onboarding is not complete
-          if (error || !profile || profile.onboarding_complete === false) {
-            setAuthLoading(false)
-          } else {
-            // Profile exists and onboarding complete, redirect to dashboard
-            router.push('/dashboard')
-            return
-          }
-        } else {
           setAuthLoading(false)
+        } else {
+          // No user session, redirect to login
+          router.push('/login')
+          return
         }
       } catch (err) {
         console.error('Auth check failed:', err)
-        setAuthLoading(false)
+        router.push('/login')
+        return
       }
     }
 
@@ -211,47 +170,27 @@ export default function OnboardingPage() {
   const isFormValid = usernameStatus === 'available' && onboardingData.ageConfirmed && onboardingData.agreedToTerms
 
   const handleSubmit = async () => {
-    const usernameRegex = /^[a-zA-Z][a-zA-Z0-9_]{2,19}$/
-    if (!usernameRegex.test(onboardingData.username.trim())) {
-      setUsernameError('Username must start with a letter and contain only letters, numbers, and underscores')
-      return
-    }
-    
-    if (!isFormValid) return
+    if (onboardingData.skills.length === 0) return
 
     setLoading(true)
     setError(null)
 
     try {
-      // Call API route to complete onboarding
-      const response = await fetch('/api/complete-onboarding', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: onboardingData.username.trim(),
-          avatar: onboardingData.avatar,
-          theme: onboardingData.theme,
-          skills: onboardingData.skills
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('User not authenticated')
+
+      // Save skills and complete onboarding
+      await supabase
+        .from('profiles')
+        .update({
+          skills: onboardingData.skills,
+          onboarding_complete: true,
         })
-      })
+        .eq('id', user.id)
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to complete onboarding')
-      }
-
-      const result = await response.json()
-
-      // Don't reset loading state on success since we're about to redirect
-      // This prevents the button from flashing back to "Continue" before redirect
-      
-      // Small delay to ensure UI updates before redirect
-      setTimeout(() => {
-        router.push('/dashboard')
-        router.refresh()
-      }, 1000)
+      // Redirect to dashboard
+      router.push('/dashboard')
+      router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred')
       setLoading(false)
@@ -259,8 +198,32 @@ export default function OnboardingPage() {
   }
 
   // Step navigation functions
-  const goToNextStep = () => {
+  const goToNextStep = async () => {
     if (currentStep < 3) {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      // Save data based on current step
+      if (currentStep === 1) {
+        // Save username and agreed_to_terms
+        await supabase
+          .from('profiles')
+          .upsert({
+            id: user.id,
+            username: onboardingData.username.trim(),
+            agreed_to_terms: onboardingData.agreedToTerms,
+          })
+      } else if (currentStep === 2) {
+        // Save avatar and theme
+        await supabase
+          .from('profiles')
+          .update({
+            avatar: onboardingData.avatar,
+            theme_preference: onboardingData.theme,
+          })
+          .eq('id', user.id)
+      }
+
       setCurrentStep(currentStep + 1)
     }
   }
@@ -735,4 +698,40 @@ export default function OnboardingPage() {
       </div>
     </>
   )
-}
+
+  // Main onboarding UI
+  return (
+    <main
+      style={{
+        minHeight: '100vh',
+        display: 'grid',
+        placeItems: 'center',
+        padding: '24px 24px 32px',
+        marginTop: '-68px',
+        background: 'var(--bg)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      <style>{`.nav{display:none !important}`}</style>
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage:
+            'linear-gradient(rgba(21,128,61,.065) 1px, transparent 1px), linear-gradient(90deg, rgba(21,128,61,.065) 1px, transparent 1px)',
+          backgroundSize: '52px 52px',
+          pointerEvents: 'none',
+        }}
+      />
+      <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '400px' }}>
+        <StepIndicator />
+        
+        {currentStep === 1 && <Step1 />}
+        {currentStep === 2 && <Step2 />}
+        {currentStep === 3 && <Step3 />}
+      </div>
+    </main>
+  )
+
+  }
