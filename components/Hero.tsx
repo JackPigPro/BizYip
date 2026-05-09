@@ -68,11 +68,11 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
           Play a live duel
         </Link>
         <Link 
-          href="/login?mode=login" 
+          href="/compete/leaderboard" 
           className="btn-cta-ghost" 
           style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
         >
-          Sign in
+          See the leaderboard
         </Link>
       </div>
 

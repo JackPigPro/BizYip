@@ -58,17 +58,21 @@ export default function RankBar() {
   ]
 
   const [activeWalkers, setActiveWalkers] = React.useState<Walker[]>([])
+  const [lastCharacterId, setLastCharacterId] = React.useState<number | null>(null)
 
   // Reset and start fresh spawning system
   React.useEffect(() => {
     // Clear any existing walkers
     setActiveWalkers([])
+    setLastCharacterId(null)
     
     let spawnTimeout: NodeJS.Timeout
     
     const spawnWalker = () => {
-      const randomCharacter = characterTemplates[Math.floor(Math.random() * characterTemplates.length)]
-      const randomDelay = 4000 + Math.random() * 2000 // 4-6 seconds
+      // Get available characters (exclude last used one)
+      const availableCharacters = characterTemplates.filter(char => char.id !== lastCharacterId)
+      const randomCharacter = availableCharacters[Math.floor(Math.random() * availableCharacters.length)]
+      const randomDelay = 3000 + Math.random() * 5000 // 3-8 seconds
       
       const newWalker = {
         id: Date.now() + Math.random(), // Ensure unique ID
@@ -77,8 +81,9 @@ export default function RankBar() {
       }
       
       setActiveWalkers(prev => [...prev, newWalker])
+      setLastCharacterId(randomCharacter.id)
       
-      // Remove walker after 30 seconds
+      // Remove walker immediately when animation ends (30 seconds exactly)
       setTimeout(() => {
         setActiveWalkers(prev => prev.filter(w => w.id !== newWalker.id))
       }, 30000)
@@ -87,8 +92,8 @@ export default function RankBar() {
       spawnTimeout = setTimeout(spawnWalker, randomDelay)
     }
     
-    // Start first walker after 5 seconds
-    spawnTimeout = setTimeout(spawnWalker, 5000)
+    // Start first walker after 3 seconds
+    spawnTimeout = setTimeout(spawnWalker, 3000)
     
     return () => {
       if (spawnTimeout) clearTimeout(spawnTimeout)
@@ -233,6 +238,7 @@ export default function RankBar() {
           z-index: 0;
           animation: walkAcross 30s linear forwards;
           pointer-events: none;
+          will-change: transform;
         }
         
         .founder-character {
