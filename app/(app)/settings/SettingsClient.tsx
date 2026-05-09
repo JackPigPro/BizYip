@@ -32,7 +32,6 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
   // Username validation states (same as onboarding)
   const [usernameStatus, setUsernameStatus] = useState<'checking' | 'available' | 'taken' | 'invalid' | null>(null)
   const [usernameError, setUsernameError] = useState<string | null>(null)
-  const [moderationError, setModerationError] = useState<string | null>(null)
 
   useEffect(() => {
     if (profile) {
@@ -72,11 +71,9 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
     if (containsBannedWord(username)) {
       setUsernameStatus('invalid')
       setUsernameError('Inappropriate content. Please rewrite.')
-      setModerationError('Inappropriate content. Please rewrite.')
       return
     }
 
-    setModerationError(null)
     setUsernameError(null)
 
     const checkUsername = async () => {
@@ -479,11 +476,6 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
                     {usernameStatus === 'invalid' && usernameError && (
                       <p style={{ color: '#fca5a5', marginTop: '4px', marginBottom: 0, fontSize: '12px' }}>
                         {usernameError}
-                      </p>
-                    )}
-                    {moderationError && (
-                      <p style={{ color: '#fca5a5', marginTop: '4px', marginBottom: 0, fontSize: '12px' }}>
-                        {moderationError}
                       </p>
                     )}
                   </div>
