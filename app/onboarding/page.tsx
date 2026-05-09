@@ -9,16 +9,16 @@ import Link from 'next/link'
 import { createClient } from '@/utils/supabase/client'
 
 const PRESET_AVATARS = [
-  { id: 'avatar-1', color: '#16a34a' },
-  { id: 'avatar-2', color: '#2563eb' },
-  { id: 'avatar-3', color: '#7c3aed' },
-  { id: 'avatar-4', color: '#ea580c' },
-  { id: 'avatar-5', color: '#dc2626' },
-  { id: 'avatar-6', color: '#0891b2' },
-  { id: 'avatar-7', color: '#be123c' },
-  { id: 'avatar-8', color: '#059669' },
-  { id: 'avatar-9', color: '#7c2d12' },
-  { id: 'avatar-10', color: '#4338ca' }
+  { id: 'avatar-1', color: '#6366F1' },
+  { id: 'avatar-2', color: '#10B981' },
+  { id: 'avatar-3', color: '#0EA5E9' },
+  { id: 'avatar-4', color: '#F43F5E' },
+  { id: 'avatar-5', color: '#F59E0B' },
+  { id: 'avatar-6', color: '#8B5CF6' },
+  { id: 'avatar-7', color: '#14B8A6' },
+  { id: 'avatar-8', color: '#F97316' },
+  { id: 'avatar-9', color: '#EC4899' },
+  { id: 'avatar-10', color: '#3B82F6' }
 ]
 
 const SKILLS_OPTIONS = [
@@ -109,7 +109,7 @@ export default function OnboardingPage() {
   }, [username])
 
   const isStep1Valid = usernameStatus === 'available' && ageConfirmed && agreedToTerms
-  const isStep3Valid = skills.length > 0
+  const isStep3Valid = true // Skills are optional, always valid
 
   const goToNextStep = () => {
     if (currentStep < 3) {
@@ -133,7 +133,7 @@ export default function OnboardingPage() {
   }
 
   const handleSubmit = async () => {
-    if (!isStep1Valid || !isStep3Valid) return
+    if (!isStep1Valid) return
 
     setLoading(true)
     setError(null)
@@ -218,7 +218,7 @@ export default function OnboardingPage() {
           }}
           style={{
             width: '100%',
-            maxWidth: '420px',
+            maxWidth: '480px',
             border: '1px solid var(--border)',
             borderRadius: '16px',
             padding: '28px',
@@ -421,7 +421,7 @@ export default function OnboardingPage() {
                         height: '60px',
                         borderRadius: '12px',
                         border: avatar === avatarItem.id 
-                          ? `3px solid ${avatarItem.color}` 
+                          ? `4px solid #fff` 
                           : '1px solid var(--border2)',
                         background: avatarItem.color,
                         color: '#fff',
@@ -516,7 +516,7 @@ export default function OnboardingPage() {
                 Select Your Skills
               </h1>
               <p style={{ color: 'var(--text2)', marginTop: '10px', marginBottom: '18px' }}>
-                Choose up to 3 skills that best describe your expertise.
+                Choose up to 3 skills that best describe your expertise. (Optional)
               </p>
 
               <div style={{ marginBottom: '24px' }}>
@@ -572,7 +572,7 @@ export default function OnboardingPage() {
                   marginBottom: '20px',
                   textAlign: 'center' 
                 }}>
-                  {skills.length}/3 skills selected
+                  {skills.length}/3 skills selected (optional)
                 </p>
               </div>
             </>
@@ -667,20 +667,20 @@ export default function OnboardingPage() {
               </button>
               <button
                 type="submit"
-                disabled={!isStep3Valid || loading}
+                disabled={loading}
                 style={{
                   flex: 1,
                   padding: '12px',
                   border: 'none',
                   borderRadius: '10px',
-                  background: isStep3Valid && !loading
+                  background: !loading
                     ? 'linear-gradient(135deg, #16a34a, #22c55e)'
                     : 'var(--surface)',
-                  color: isStep3Valid && !loading ? '#fff' : 'var(--text3)',
+                  color: !loading ? '#fff' : 'var(--text3)',
                   fontWeight: 700,
-                  cursor: isStep3Valid && !loading ? 'pointer' : 'not-allowed',
+                  cursor: !loading ? 'pointer' : 'not-allowed',
                   fontFamily: 'var(--font-display)',
-                  boxShadow: isStep3Valid && !loading ? '0 8px 20px rgba(21,128,61,.28)' : 'none',
+                  boxShadow: !loading ? '0 8px 20px rgba(21,128,61,.28)' : 'none',
                   transition: 'all 0.15s',
                 }}
               >
