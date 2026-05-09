@@ -173,7 +173,6 @@ loli
 shota
 nsfw
 xxx
-69
 rape
 rapist
 molest
@@ -234,11 +233,8 @@ i will hurt you
 # These are handled as regex patterns by the engineer, not plain words.
 # Format: [REGEX] prefix means pass to regex engine
 # ============================================================
-[REGEX] \\b\\d{3}[-.\\s]?\\d{3}[-.\\s]?\\d{4}\\b
-[REGEX] \\b\\d{5}(?:[-\\s]\\d{4})?\\b
-[REGEX] \\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\\b
-[REGEX] \\b\\d{1,5}\\s\\w+\\s(?:street|st|avenue|ave|road|rd|boulevard|blvd|drive|dr|lane|ln|court|ct)\\b
-[REGEX] \\b\\d{3}-\\d{2}-\\d{4}\\b
+[REGEX] \b\d{3}[-.\s]?\d{3}[-.\s]?\d{4}\b
+[REGEX] \b\d{1,5}\s\w+\s(?:street|st|avenue|ave|road|rd|boulevard|blvd|drive|dr|lane|ln|court|ct)\b
 your address is
 i know where you live
 i know where you go to school
