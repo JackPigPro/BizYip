@@ -131,39 +131,54 @@ export default async function DailyBattlePage() {
     }
   )
   
-  // Get authenticated user
+  // Get authenticated user (optional)
   const { data: { user } } = await supabase.auth.getUser()
   
-  if (!user) {
-    redirect('/login')
+  let userSubmission = null
+  let userStreak = null
+  
+  // Only fetch user-specific data if authenticated and onboarded
+  if (user) {
+    // Get user profile to check onboarding
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('onboarding_complete')
+      .eq('id', user.id)
+      .single()
+
+    if (profile?.onboarding_complete) {
+      // Fetch today's battle
+      const battle = await getTodayBattle()
+      
+      // Fetch user's submission and streak
+      const [submission, streak] = await Promise.all([
+        getUserSubmission(battle?.id || '', user.id),
+        getUserStreak(user.id)
+      ])
+      
+      userSubmission = submission
+      userStreak = streak
+      
+      return (
+        <DailyBattleClient 
+          battle={battle}
+          userSubmission={userSubmission}
+          userStreak={userStreak}
+          userId={user.id}
+        />
+      )
+    }
   }
-
-  // Get user profile to check onboarding
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('onboarding_complete')
-    .eq('id', user.id)
-    .single()
-
-  if (!profile?.onboarding_complete) {
-    redirect('/onboarding')
-  }
-
-  // Fetch today's battle
+  
+  // For non-authenticated users or non-onboarded users, fetch only public data
   const battle = await getTodayBattle()
   
-  // Fetch user's submission and streak
-  const [userSubmission, userStreak] = await Promise.all([
-    getUserSubmission(battle?.id || '', user.id),
-    getUserStreak(user.id)
-  ])
-
   return (
     <DailyBattleClient 
       battle={battle}
-      userSubmission={userSubmission}
-      userStreak={userStreak}
-      userId={user.id}
+      userSubmission={null}
+      userStreak={null}
+      userId=""
     />
   )
 }

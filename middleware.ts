@@ -82,6 +82,18 @@ export async function middleware(request: NextRequest) {
   
   const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route))
   
+  // Allow access to specific public pages within protected routes
+  const publicPages = [
+    '/compete/leaderboard',
+    '/compete/daily-battle',
+    '/compete/weekly-duel',
+    '/1v1',
+    '/connect/ideas',
+    '/connect/cofounder-match',
+  ]
+  
+  const isPublicPage = publicPages.includes(pathname)
+  
   // Allow access to /compete/leaderboard without authentication
   const isLeaderboardRoute = pathname === '/compete/leaderboard'
   
@@ -90,7 +102,7 @@ export async function middleware(request: NextRequest) {
     pathname.split('/').length === 3 && // Only /profile/username, not /profile/username/settings
     !pathname.includes('/settings') && !pathname.includes('/edit')
   
-  if (isProtectedRoute && !user && !isLeaderboardRoute && !isUserProfileRoute) {
+  if (isProtectedRoute && !user && !isLeaderboardRoute && !isUserProfileRoute && !isPublicPage) {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = '/login'
     return NextResponse.redirect(redirectUrl)

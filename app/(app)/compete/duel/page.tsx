@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useUser } from '@/hooks/useUser'
 import { useAppState } from '../../../../components/AppStateProvider'
 
 export default function DuelPage() {
+  const { isAuthenticated, authLoading } = useUser()
   const { duelDraft } = useAppState()
   const [submitted, setSubmitted] = useState(false)
   const [entry, setEntry] = useState(duelDraft)
@@ -19,6 +21,17 @@ export default function DuelPage() {
   const m = Math.floor((secondsLeft % 3600) / 60)
   const s = secondsLeft % 60
   const timeStr = `${h}h ${m.toString().padStart(2, '0')}m ${s.toString().padStart(2, '0')}s`
+
+  if (authLoading) {
+    return (
+      <div style={{ width: '100%', minHeight: '100vh', background: 'var(--bg)', backgroundImage: 'linear-gradient(rgba(21,128,61,.065) 1px, transparent 1px), linear-gradient(90deg, rgba(21,128,61,.065) 1px, transparent 1px)', backgroundSize: '48px 48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ width: '200px', height: '48px', background: 'var(--border)', borderRadius: '8px', margin: '0 auto 24px', animation: 'pulse 2s infinite' }} />
+          <div style={{ width: '300px', height: '32px', background: 'var(--border)', borderRadius: '8px', margin: '0 auto', animation: 'pulse 2s infinite' }} />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div style={{ width: '100%' }}>
@@ -68,7 +81,38 @@ export default function DuelPage() {
 
         {/* Submission area */}
         <div>
-          {!submitted ? (
+          {!isAuthenticated ? (
+            /* Sign-in banner for non-authenticated users */
+            <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: '14px', overflow: 'hidden', boxShadow: 'var(--shadow-sm)' }}>
+              <div style={{ padding: '18px 22px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-display)' }}>✍️ Your Entry</span>
+              </div>
+              <div style={{ padding: '32px 22px', textAlign: 'center' }}>
+                <div style={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px', fontFamily: 'var(--font-display)' }}>
+                  Sign in to enter this week's duel
+                </div>
+                <p style={{ color: 'var(--text2)', marginBottom: '24px' }}>
+                  Submit your tagline and compete with other founders for ELO rewards.
+                </p>
+                <Link
+                  href="/login"
+                  style={{
+                    display: 'inline-block',
+                    padding: '12px 24px',
+                    background: 'var(--green)',
+                    color: 'white',
+                    textDecoration: 'none',
+                    borderRadius: '8px',
+                    fontSize: '16px',
+                    fontWeight: 600,
+                    fontFamily: 'var(--font-display)'
+                  }}
+                >
+                  Sign In to Enter
+                </Link>
+              </div>
+            </div>
+          ) : !submitted ? (
             <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: '14px', overflow: 'hidden', boxShadow: 'var(--shadow-sm)' }}>
               <div style={{ padding: '18px 22px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-display)' }}>✍️ Your Entry</span>

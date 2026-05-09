@@ -194,42 +194,346 @@ export default function OneVOnePage() {
         background: 'var(--bg)',
         backgroundImage: 'linear-gradient(rgba(21,128,61,.065) 1px, transparent 1px), linear-gradient(90deg, rgba(21,128,61,.065) 1px, transparent 1px)',
         backgroundSize: '48px 48px',
-        padding: '40px 24px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
+        padding: '40px 24px'
       }}>
-        <div style={{ 
-          background: 'var(--card)', 
-          borderRadius: '16px', 
-          padding: '48px',
-          border: '1px solid var(--border)',
-          boxShadow: 'var(--shadow)',
-          textAlign: 'center',
-          maxWidth: '400px'
-        }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px', fontFamily: 'var(--font-display)' }}>
-            Please Log In
-          </h1>
-          <p style={{ color: 'var(--text2)', marginBottom: '24px', fontFamily: 'var(--font-body)' }}>
-            You need to be logged in to access 1v1 battles.
-          </p>
-          <Link
-            href="/login?mode=login"
-            style={{
-              display: 'inline-block',
-              padding: '12px 24px',
-              background: 'var(--green)',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '8px',
-              fontSize: '14px',
-              fontWeight: 600,
-              fontFamily: 'var(--font-display)'
-            }}
-          >
-            Log In
-          </Link>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          {/* Header */}
+          <div style={{ marginBottom: '32px' }}>
+            <h1 style={{ 
+              fontSize: '48px', 
+              fontWeight: 800, 
+              letterSpacing: '-2px', 
+              fontFamily: 'var(--font-display)', 
+              color: 'var(--text)', 
+              margin: 0,
+              marginBottom: '8px'
+            }}>
+              Live 1v1
+            </h1>
+            <div style={{ 
+              fontSize: '18px', 
+              fontWeight: '400', 
+              fontFamily: 'var(--font-body)', 
+              color: 'var(--text2)' 
+            }}>
+              Face off against other entrepreneurs in intense head-to-head competitions
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '32px' }}>
+            {/* Main Content - Queue Cards */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              {/* Ranked Queue Card */}
+              <div style={{ 
+                background: 'var(--card)', 
+                borderRadius: '16px', 
+                padding: '32px',
+                border: '1px solid var(--border)',
+                boxShadow: 'var(--shadow)'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+                  <h2 style={{ 
+                    fontSize: '24px', 
+                    fontWeight: 700, 
+                    fontFamily: 'var(--font-display)',
+                    color: 'var(--text)',
+                    letterSpacing: '-0.1px',
+                    margin: 0
+                  }}>
+                    Ranked Queue
+                  </h2>
+                  <div style={{
+                    padding: '4px 12px',
+                    borderRadius: '20px',
+                    background: 'var(--green-tint)',
+                    color: 'var(--green)',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    fontFamily: 'var(--font-display)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px'
+                  }}>
+                    ELO on the line: ±25
+                  </div>
+                </div>
+                
+                {/* Game Mode Selector */}
+                <div style={{ marginBottom: '32px' }}>
+                  <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text2)', marginBottom: '16px', fontFamily: 'var(--font-display)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                    Select Game Mode
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {/* Logo Design Mode */}
+                    <div
+                      style={{
+                        padding: '16px',
+                        borderRadius: '12px',
+                        border: selectedGameMode === 'logo' ? '2px solid var(--green)' : '1px solid var(--border)',
+                        background: selectedGameMode === 'logo' ? 'var(--green-tint)' : 'var(--surface)',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onClick={() => setSelectedGameMode('logo')}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div style={{ fontSize: '24px' }}>🎨</div>
+                        <div>
+                          <div style={{ 
+                            fontSize: '16px', 
+                            fontWeight: 700, 
+                            marginBottom: '4px',
+                            fontFamily: 'var(--font-display)',
+                            color: 'var(--text)',
+                            letterSpacing: '-0.1px'
+                          }}>
+                            Logo Design
+                          </div>
+                          <div style={{ 
+                            color: 'var(--text2)', 
+                            fontSize: '13px',
+                            fontFamily: 'var(--font-body)',
+                            lineHeight: '1.4'
+                          }}>
+                            Get a brand brief, upload your logo
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Business Idea Mode */}
+                    <div
+                      style={{
+                        padding: '16px',
+                        borderRadius: '12px',
+                        border: selectedGameMode === 'business_idea' ? '2px solid var(--green)' : '1px solid var(--border)',
+                        background: selectedGameMode === 'business_idea' ? 'var(--green-tint)' : 'var(--surface)',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onClick={() => setSelectedGameMode('business_idea')}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div style={{ fontSize: '24px' }}>💡</div>
+                        <div>
+                          <div style={{ 
+                            fontSize: '16px', 
+                            fontWeight: 700, 
+                            marginBottom: '4px',
+                            fontFamily: 'var(--font-display)',
+                            color: 'var(--text)',
+                            letterSpacing: '-0.1px'
+                          }}>
+                            Business Idea
+                          </div>
+                          <div style={{ 
+                            color: 'var(--text2)', 
+                            fontSize: '13px',
+                            fontFamily: 'var(--font-body)',
+                            lineHeight: '1.4'
+                          }}>
+                            Get a market prompt, pitch your concept
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
+                    <span style={{ color: 'var(--text2)' }}>Estimated wait:</span>
+                    <span style={{ fontWeight: 600, color: 'var(--green)' }}>~2:30</span>
+                  </div>
+                </div>
+                
+                {/* Sign-in banner instead of join queue button */}
+                <div style={{
+                  background: 'var(--card)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '12px',
+                  padding: '24px',
+                  textAlign: 'center',
+                  marginBottom: '16px'
+                }}>
+                  <div style={{ fontSize: '20px', fontWeight: 700, marginBottom: '12px', fontFamily: 'var(--font-display)' }}>
+                    Sign in to compete
+                  </div>
+                  <p style={{ color: 'var(--text2)', marginBottom: '20px' }}>
+                    Join ranked matches and climb the ELO leaderboard.
+                  </p>
+                  <Link
+                    href="/login"
+                    style={{
+                      display: 'inline-block',
+                      padding: '12px 24px',
+                      background: 'var(--green)',
+                      color: 'white',
+                      textDecoration: 'none',
+                      borderRadius: '8px',
+                      fontSize: '16px',
+                      fontWeight: 600,
+                      fontFamily: 'var(--font-display)'
+                    }}
+                  >
+                    Sign In to Compete
+                  </Link>
+                </div>
+              </div>
+
+              {/* Private Room Card */}
+              <div style={{ 
+                background: 'var(--card)', 
+                borderRadius: '16px', 
+                padding: '32px',
+                border: '1px solid var(--border)',
+                boxShadow: 'var(--shadow)'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+                  <h2 style={{ 
+                    fontSize: '24px', 
+                    fontWeight: 700, 
+                    fontFamily: 'var(--font-display)',
+                    color: 'var(--text)',
+                    letterSpacing: '-0.1px',
+                    margin: 0
+                  }}>
+                    Private Room
+                  </h2>
+                  <div style={{
+                    padding: '4px 12px',
+                    borderRadius: '20px',
+                    background: 'var(--blue-tint)',
+                    color: 'var(--blue)',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    fontFamily: 'var(--font-display)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px'
+                  }}>
+                    Play with friends
+                  </div>
+                </div>
+                
+                {/* Sign-in banner for private room */}
+                <div style={{
+                  background: 'var(--card)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '12px',
+                  padding: '24px',
+                  textAlign: 'center'
+                }}>
+                  <div style={{ fontSize: '20px', fontWeight: 700, marginBottom: '12px', fontFamily: 'var(--font-display)' }}>
+                    Sign in to create or join rooms
+                  </div>
+                  <p style={{ color: 'var(--text2)', marginBottom: '20px' }}>
+                    Create private rooms to play with friends.
+                  </p>
+                  <Link
+                    href="/login"
+                    style={{
+                      display: 'inline-block',
+                      padding: '12px 24px',
+                      background: 'var(--blue)',
+                      color: 'white',
+                      textDecoration: 'none',
+                      borderRadius: '8px',
+                      fontSize: '16px',
+                      fontWeight: 600,
+                      fontFamily: 'var(--font-display)'
+                    }}
+                  >
+                    Sign In to Play
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side - Public Stats and Info */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              {/* Public Stats Card */}
+              <div style={{ 
+                background: 'var(--card)', 
+                borderRadius: '16px', 
+                padding: '32px',
+                border: '1px solid var(--border)',
+                boxShadow: 'var(--shadow)'
+              }}>
+                <h2 style={{ 
+                  fontSize: '20px', 
+                  fontWeight: 700, 
+                  marginBottom: '24px',
+                  fontFamily: 'var(--font-display)',
+                  color: 'var(--text)',
+                  letterSpacing: '-0.1px'
+                }}>
+                  Active Matches
+                </h2>
+                
+                <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                  <div style={{ 
+                    fontSize: '48px', 
+                    fontWeight: 800, 
+                    fontFamily: 'var(--font-display)', 
+                    color: 'var(--text)', 
+                    marginBottom: '8px' 
+                  }}>
+                    0
+                  </div>
+                  <div style={{ 
+                    fontSize: '14px', 
+                    color: 'var(--text2)',
+                    fontFamily: 'var(--font-body)'
+                  }}>
+                    Currently active battles
+                  </div>
+                </div>
+
+                <div style={{ borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
+                  <h4 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '12px', fontFamily: 'var(--font-display)' }}>
+                    How to Watch
+                  </h4>
+                  <div style={{ fontSize: '14px', lineHeight: '1.6', color: 'var(--text2)' }}>
+                    <div style={{ marginBottom: '8px' }}>• Sign in to join live matches</div>
+                    <div style={{ marginBottom: '8px' }}>• Watch ongoing battles in real-time</div>
+                    <div>• Judge submissions to earn ELO</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Judge Banner */}
+              <div style={{ 
+                background: 'var(--card)', 
+                borderRadius: '16px', 
+                padding: '24px',
+                border: '1px solid var(--border)',
+                boxShadow: 'var(--shadow)',
+                textAlign: 'center'
+              }}>
+                <div style={{ fontSize: '20px', fontWeight: 700, marginBottom: '12px', fontFamily: 'var(--font-display)' }}>
+                  Sign in to judge
+                </div>
+                <p style={{ color: 'var(--text2)', marginBottom: '20px' }}>
+                  Help decide the winner and earn ELO rewards.
+                </p>
+                <Link
+                  href="/login"
+                  style={{
+                    display: 'inline-block',
+                    padding: '12px 24px',
+                    background: 'var(--orange)',
+                    color: 'white',
+                    textDecoration: 'none',
+                    borderRadius: '8px',
+                    fontSize: '16px',
+                    fontWeight: 600,
+                    fontFamily: 'var(--font-display)'
+                  }}
+                >
+                  Sign In to Judge
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     )

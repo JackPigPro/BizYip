@@ -58,10 +58,8 @@ export default function DailyBattleClient({ battle, userSubmission, userStreak, 
   const supabase = createClient()
 
   useEffect(() => {
-    if (userSubmission) {
-      setLocalUserSubmission(userSubmission)
-      fetchSubmissions()
-    }
+    setLocalUserSubmission(userSubmission)
+    fetchSubmissions()
   }, [userSubmission])
 
   useEffect(() => {
@@ -292,7 +290,231 @@ export default function DailyBattleClient({ battle, userSubmission, userStreak, 
     )
   }
 
-  if (!user) return <div>Please log in to participate</div>
+  // Show sign-in banner for non-authenticated users
+  if (!user) {
+    return (
+      <>
+        <style jsx>{`
+          @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+          }
+        `}</style>
+        <div style={{ 
+          minHeight: '100vh',
+          background: 'var(--bg)',
+          backgroundImage: 'linear-gradient(rgba(21,128,61,.065) 1px, transparent 1px), linear-gradient(90deg, rgba(21,128,61,.065) 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
+          padding: '0 0 48px 0'
+        }}>
+        {/* Header */}
+        <div style={{ 
+          padding: '32px 24px 24px 24px'
+        }}>
+          <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+            <h1 style={{ fontSize: '48px', fontWeight: 800, letterSpacing: '-2px', fontFamily: 'var(--font-display)', color: 'var(--text)', margin: 0 }}>
+              Daily Bellringer
+            </h1>
+          </div>
+        </div>
+
+        <div className="daily-battle-container">
+          {/* Main Content */}
+          <div className="daily-battle-main">
+            {/* Today's Prompt */}
+            <div className="daily-battle-prompt">
+              <h2>
+                Today's Prompt
+              </h2>
+              <p>
+                {battle?.prompt || 'No prompt yet today — be creative! 🎨'}
+              </p>
+            </div>
+
+            {/* Sign-in banner instead of submission form */}
+            <div style={{
+              background: 'var(--card)',
+              border: '1px solid var(--border)',
+              borderRadius: '12px',
+              padding: '32px',
+              textAlign: 'center',
+              marginBottom: '24px'
+            }}>
+              <div style={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px', fontFamily: 'var(--font-display)' }}>
+                Sign in to submit your answer
+              </div>
+              <p style={{ color: 'var(--text2)', marginBottom: '24px' }}>
+                Join the community and share your response to today's prompt.
+              </p>
+              <Link
+                href="/login"
+                style={{
+                  display: 'inline-block',
+                  padding: '12px 24px',
+                  background: 'var(--green)',
+                  color: 'white',
+                  textDecoration: 'none',
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  fontFamily: 'var(--font-display)'
+                }}
+              >
+                Sign In
+              </Link>
+            </div>
+
+            {/* Public submissions - show to everyone */}
+            <div style={{
+              background: 'var(--card)',
+              padding: '24px',
+              borderRadius: '12px',
+              marginBottom: '16px'
+            }}>
+              <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '16px' }}>
+                Community Submissions
+              </h3>
+              {loading ? (
+                <div style={{ textAlign: 'center', padding: '32px' }}>
+                  Loading submissions...
+                </div>
+              ) : submissions.length > 0 ? (
+                <div className="daily-battle-submissions-grid">
+                  {submissions.map(submission => (
+                    <div key={submission.id} style={{
+                      background: 'var(--card)',
+                      border: '1px solid var(--border)',
+                      borderRadius: '12px',
+                      padding: '20px',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      position: 'relative'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = 'var(--green)'
+                      e.currentTarget.style.transform = 'translateY(-2px)'
+                      e.currentTarget.style.boxShadow = 'var(--shadow)'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = 'var(--border)'
+                      e.currentTarget.style.transform = 'translateY(0)'
+                      e.currentTarget.style.boxShadow = 'none'
+                    }}>
+                      {/* Author */}
+                      <div style={{ marginBottom: '12px' }}>
+                        <Link 
+                          href={`/profile/${submission.username}`} 
+                          style={{
+                            fontSize: '13px',
+                            color: 'var(--blue)',
+                            textDecoration: 'none',
+                            fontWeight: 500
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.textDecoration = 'underline'
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.textDecoration = 'none'
+                          }}
+                        >
+                          @{submission.username}
+                        </Link>
+                      </div>
+
+                      {/* Content */}
+                      <p style={{
+                        fontSize: '14px',
+                        color: 'var(--text2)',
+                        marginBottom: '16px',
+                        lineHeight: 1.5
+                      }}>
+                        {submission.content}
+                      </p>
+
+                      {/* Stats */}
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-end'
+                      }}>
+                        <div style={{
+                          display: 'flex',
+                          gap: '16px',
+                          fontSize: '13px',
+                          color: 'var(--text3)'
+                        }}>
+                          <div>{new Date(submission.created_at).toLocaleDateString()}</div>
+                        </div>
+                        
+                        {/* Like button disabled for non-authenticated users */}
+                        <div
+                          style={{
+                            background: 'var(--border)',
+                            color: 'var(--text3)',
+                            border: '1px solid var(--border)',
+                            padding: '6px 12px',
+                            borderRadius: '6px',
+                            fontSize: '12px',
+                            fontWeight: 500,
+                            fontFamily: 'var(--font-body)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            opacity: 0.6
+                          }}
+                        >
+                          <span>👍</span>
+                          <span>{submission.likes}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div style={{ textAlign: 'center', padding: '32px', color: 'var(--text-secondary)' }}>
+                  No submissions yet — be the first to share!
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Right Side Panel - Public Info */}
+          <div className="daily-battle-sidebar">
+            <div>
+              <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                🔥 Daily Streak
+              </h3>
+              
+              <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+                Sign in to start your streak and earn ELO rewards!
+              </div>
+
+              <div style={{ borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
+                <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '12px' }}>
+                  Streak ELO Breakdown
+                </h4>
+                <div style={{ fontSize: '14px', lineHeight: '1.6' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                    <span>Day 1:</span>
+                    <span style={{ fontWeight: 'bold', color: 'var(--green)' }}>+1 ELO</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                    <span>Days 2-6:</span>
+                    <span style={{ fontWeight: 'bold', color: 'var(--green)' }}>+3 ELO</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>Days 7+:</span>
+                    <span style={{ fontWeight: 'bold', color: 'var(--green)' }}>+5 ELO</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </>
+    )
+  }
 
   return (
     <>

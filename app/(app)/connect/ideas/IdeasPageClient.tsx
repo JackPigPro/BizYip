@@ -118,32 +118,171 @@ export default function IdeasPageClient() {
   }
 
   if (authLoading) {
-    return null
+    return (
+      <div style={{ 
+        minHeight: '100vh',
+        background: 'var(--bg)',
+        backgroundImage: 'linear-gradient(rgba(21,128,61,.065) 1px, transparent 1px), linear-gradient(90deg, rgba(21,128,61,.065) 1px, transparent 1px)',
+        backgroundSize: '48px 48px',
+        padding: '40px 24px'
+      }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <div style={{
+            width: '200px',
+            height: '48px',
+            background: 'var(--border)',
+            borderRadius: '8px',
+            animation: 'pulse 2s infinite',
+            marginBottom: '24px'
+          }} />
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
+            <div style={{
+              background: 'var(--card)',
+              borderRadius: '16px',
+              padding: '32px',
+              height: '400px'
+            }} />
+            <div style={{
+              background: 'var(--card)',
+              borderRadius: '16px',
+              padding: '32px',
+              height: '400px'
+            }} />
+          </div>
+        </div>
+      </div>
+    )
   }
 
   if (!user) {
     return (
-      <div style={{ textAlign: 'center', padding: '60px 20px' }}>
-        <h2 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px', fontFamily: 'var(--font-display)' }}>
-          Please log in to view ideas
-        </h2>
-        <p style={{ color: 'var(--text2)', marginBottom: '24px' }}>
-          You need to be signed in to see the idea feed and post your own ideas.
-        </p>
-        <a 
-          href="/login" 
-          style={{
-            display: 'inline-block',
-            padding: '12px 24px',
-            background: 'var(--green)',
-            color: 'white',
-            textDecoration: 'none',
-            borderRadius: '8px',
-            fontWeight: 600,
-          }}
-        >
-          Log In
-        </a>
+      <div style={{ 
+        minHeight: '100vh',
+        background: 'var(--bg)',
+        backgroundImage: 'linear-gradient(rgba(21,128,61,.065) 1px, transparent 1px), linear-gradient(90deg, rgba(21,128,61,.065) 1px, transparent 1px)',
+        backgroundSize: '48px 48px',
+        padding: '40px 24px'
+      }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          {/* Header */}
+          <div style={{ marginBottom: '32px' }}>
+            <h1 style={{ fontSize: '48px', fontWeight: 800, letterSpacing: '-2px', fontFamily: 'var(--font-display)', color: 'var(--text)', margin: 0, marginBottom: '8px' }}>
+              Idea Board
+            </h1>
+            <div style={{ fontSize: '18px', fontWeight: '400', fontFamily: 'var(--font-body)', color: 'var(--text2)' }}>
+              Share and discover startup ideas from the community
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
+            {/* Left side - Ideas feed */}
+            <div style={{ background: 'var(--card)', borderRadius: '16px', padding: '32px', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: 700, fontFamily: 'var(--font-display)', color: 'var(--text)', marginBottom: '24px', letterSpacing: '-0.1px' }}>
+                Community Ideas
+              </h2>
+              
+              {/* Sign-in banner for posting ideas */}
+              <div style={{
+                background: 'var(--card)',
+                border: '1px solid var(--border)',
+                borderRadius: '12px',
+                padding: '24px',
+                textAlign: 'center',
+                marginBottom: '24px'
+              }}>
+                <div style={{ fontSize: '20px', fontWeight: 700, marginBottom: '12px', fontFamily: 'var(--font-display)' }}>
+                  Sign in to post your idea
+                </div>
+                <p style={{ color: 'var(--text2)', marginBottom: '20px' }}>
+                  Share your startup ideas with the community.
+                </p>
+                <a
+                  href="/login"
+                  style={{
+                    display: 'inline-block',
+                    padding: '12px 24px',
+                    background: 'var(--green)',
+                    color: 'white',
+                    textDecoration: 'none',
+                    borderRadius: '8px',
+                    fontSize: '16px',
+                    fontWeight: 600,
+                    fontFamily: 'var(--font-display)'
+                  }}
+                >
+                  Sign In to Post
+                </a>
+              </div>
+              
+              {/* Public ideas placeholder */}
+              <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text2)' }}>
+                <div style={{ fontSize: '48px', fontWeight: 800, fontFamily: 'var(--font-display)', color: 'var(--text)', marginBottom: '16px' }}>
+                  💡
+                </div>
+                <div style={{ fontSize: '20px', fontWeight: 700, fontFamily: 'var(--font-display)', color: 'var(--text)', marginBottom: '8px' }}>
+                  Loading community ideas...
+                </div>
+                <p style={{ fontSize: '16px', color: 'var(--text2)' }}>
+                  Sign in to see and interact with ideas from other founders.
+                </p>
+              </div>
+            </div>
+
+            {/* Right side - Sign-in prompt */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <div style={{ 
+                background: 'var(--card)', 
+                borderRadius: '16px', 
+                padding: '32px',
+                border: '1px solid var(--border)',
+                boxShadow: 'var(--shadow)'
+              }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 700, fontFamily: 'var(--font-display)', color: 'var(--text)', marginBottom: '16px' }}>
+                  Join the Conversation
+                </h3>
+                <p style={{ fontSize: '14px', color: 'var(--text2)', marginBottom: '20px', lineHeight: '1.5' }}>
+                  Sign in to post your own ideas, like and comment on others' posts, and build your startup network.
+                </p>
+                <a
+                  href="/login"
+                  style={{
+                    display: 'block',
+                    padding: '12px 24px',
+                    background: 'var(--green)',
+                    color: 'white',
+                    textDecoration: 'none',
+                    borderRadius: '8px',
+                    fontSize: '16px',
+                    fontWeight: 600,
+                    fontFamily: 'var(--font-display)',
+                    textAlign: 'center'
+                  }}
+                >
+                  Sign In to Participate
+                </a>
+              </div>
+              
+              {/* Features */}
+              <div style={{ 
+                background: 'var(--card)', 
+                borderRadius: '16px', 
+                padding: '24px',
+                border: '1px solid var(--border)',
+                boxShadow: 'var(--shadow)'
+              }}>
+                <h4 style={{ fontSize: '16px', fontWeight: 700, fontFamily: 'var(--font-display)', color: 'var(--text)', marginBottom: '16px' }}>
+                  What You Can Do
+                </h4>
+                <div style={{ fontSize: '14px', lineHeight: '1.6', color: 'var(--text2)' }}>
+                  <div style={{ marginBottom: '12px' }}>📝 Post your startup ideas</div>
+                  <div style={{ marginBottom: '12px' }}>💬 Comment on others' ideas</div>
+                  <div style={{ marginBottom: '12px' }}>👍 Like and support concepts</div>
+                  <div>🤝 Connect with cofounders</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
+import { useUser } from '@/hooks/useUser'
 
 interface Profile {
   id: string
@@ -41,10 +42,261 @@ export default function CofounderMatchClient({
   outgoingRequestProfiles,
   currentUserId 
 }: CofounderMatchClientProps) {
+  const { isAuthenticated, authLoading } = useUser()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<'discover' | 'mycofounders'>('discover')
   const supabase = createClient()
+
+  if (authLoading) {
+    return (
+      <div style={{ 
+        minHeight: '100vh',
+        background: 'var(--bg)',
+        backgroundImage: 'linear-gradient(rgba(21,128,61,.065) 1px, transparent 1px), linear-gradient(90deg, rgba(21,128,61,.065) 1px, transparent 1px)',
+        backgroundSize: '48px 48px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '40px 24px'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ 
+            width: '200px', 
+            height: '48px', 
+            background: 'var(--border)', 
+            borderRadius: '8px', 
+            margin: '0 auto 24px', 
+            animation: 'pulse 2s infinite' 
+          }} />
+          <div style={{ 
+            width: '300px', 
+            height: '32px', 
+            background: 'var(--border)', 
+            borderRadius: '8px', 
+            margin: '0 auto', 
+            animation: 'pulse 2s infinite' 
+          }} />
+        </div>
+      </div>
+    )
+  }
+
+  // Show sign-in banner for non-authenticated users
+  if (!isAuthenticated) {
+    return (
+      <div style={{ 
+        minHeight: '100vh',
+        background: 'var(--bg)',
+        backgroundImage: 'linear-gradient(rgba(21,128,61,.065) 1px, transparent 1px), linear-gradient(90deg, rgba(21,128,61,.065) 1px, transparent 1px)',
+        backgroundSize: '48px 48px',
+        padding: '40px 24px'
+      }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          {/* Header */}
+          <div style={{ marginBottom: '32px' }}>
+            <h1 style={{ fontSize: '48px', fontWeight: 800, letterSpacing: '-2px', fontFamily: 'var(--font-display)', color: 'var(--text)', margin: 0 }}>
+              Co-founder Match
+            </h1>
+            <div style={{ 
+              fontSize: '18px', 
+              fontWeight: '400', 
+              fontFamily: 'var(--font-body)', 
+              color: 'var(--text2)'
+            }}>
+              Find your perfect co-founder match
+            </div>
+          </div>
+
+          {/* Sign-in banner */}
+          <div style={{ 
+            background: 'var(--card)', 
+            borderRadius: '16px', 
+            padding: '48px',
+            border: '1px solid var(--border)',
+            boxShadow: 'var(--shadow)',
+            textAlign: 'center',
+            marginBottom: '32px'
+          }}>
+            <div style={{ fontSize: '32px', fontWeight: 800, fontFamily: 'var(--font-display)', color: 'var(--text)', marginBottom: '16px' }}>
+              Sign in to appear as a co-founder
+            </div>
+            <p style={{ fontSize: '18px', color: 'var(--text2)', marginBottom: '32px', lineHeight: '1.5' }}>
+              Connect with other founders, build your team, and turn your startup vision into reality.
+            </p>
+            <a
+              href="/login"
+              style={{
+                display: 'inline-block',
+                padding: '16px 32px',
+                background: 'var(--green)',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '8px',
+                fontSize: '18px',
+                fontWeight: 600,
+                fontFamily: 'var(--font-display)'
+              }}
+            >
+              Sign In to Join
+            </a>
+          </div>
+
+          {/* Public profiles preview */}
+          <div style={{ 
+            background: 'var(--card)', 
+            borderRadius: '16px', 
+            padding: '32px',
+            border: '1px solid var(--border)',
+            boxShadow: 'var(--shadow)'
+          }}>
+            <h2 style={{ 
+              fontSize: '24px', 
+              fontWeight: 700, 
+              fontFamily: 'var(--font-display)', 
+              color: 'var(--text)', 
+              marginBottom: '24px',
+              letterSpacing: '-0.1px'
+            }}>
+              Available Founders ({profiles.length})
+            </h2>
+            
+            {profiles.length === 0 ? (
+              <div style={{
+                textAlign: 'center',
+                padding: '40px 20px',
+                color: 'var(--text2)',
+                fontSize: '16px',
+                fontFamily: 'var(--font-body)'
+              }}>
+                <div style={{ fontSize: '48px', fontWeight: 800, fontFamily: 'var(--font-display)', color: 'var(--text)', marginBottom: '16px' }}>
+                  🎯
+                </div>
+                <div style={{ fontSize: '20px', fontWeight: 700, fontFamily: 'var(--font-display)', color: 'var(--text)', marginBottom: '8px' }}>
+                  No founders available yet
+                </div>
+                <p style={{ fontSize: '16px', color: 'var(--text2)', marginTop: '16px' }}>
+                  Sign in to be the first to appear in the co-founder matching pool!
+                </p>
+              </div>
+            ) : (
+              <div style={{ 
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                gap: '16px'
+              }}>
+                {profiles.map((profile) => (
+                  <div key={profile.id} style={{
+                    background: 'var(--surface)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '12px',
+                    padding: '20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px'
+                  }}>
+                    <div style={{
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: '50%',
+                      background: 'var(--blue)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      fontWeight: 600,
+                      fontSize: '18px',
+                      fontFamily: 'var(--font-display)',
+                      flexShrink: 0
+                    }}>
+                      {(profile.display_name || profile.username || 'Unknown').charAt(0)}
+                    </div>
+                    
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{
+                        fontSize: '16px',
+                        fontWeight: 700,
+                        fontFamily: 'var(--font-display)',
+                        color: 'var(--text)',
+                        marginBottom: '4px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap'
+                      }}>
+                        {profile.display_name || profile.username || 'Unknown'}
+                      </div>
+                      <div style={{
+                        fontSize: '14px',
+                        color: 'var(--text2)',
+                        marginBottom: '8px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap'
+                      }}>
+                        <a 
+                          href={`/profile/${profile.username}`}
+                          style={{
+                            color: 'var(--text2)',
+                            textDecoration: 'none',
+                            transition: 'color 0.2s ease'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = 'var(--text)'
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = 'var(--text2)'
+                          }}
+                        >
+                          @{profile.username}
+                        </a>
+                      </div>
+                      {profile.bio && (
+                        <div style={{
+                          fontSize: '13px',
+                          color: 'var(--text2)',
+                          lineHeight: '1.4',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden'
+                        }}>
+                          {profile.bio}
+                        </div>
+                      )}
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      <a
+                        href={`/profile/${profile.username}`}
+                        style={{
+                          padding: '8px 16px',
+                          background: 'var(--surface)',
+                          color: 'var(--text)',
+                          textDecoration: 'none',
+                          border: '1px solid var(--border)',
+                          borderRadius: '6px',
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          fontFamily: 'var(--font-display)',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          whiteSpace: 'nowrap',
+                          textAlign: 'center',
+                          display: 'block'
+                        }}
+                      >
+                        View Profile
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   const handleToggleListing = async () => {
     try {
