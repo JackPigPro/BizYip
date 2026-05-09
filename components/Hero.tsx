@@ -92,7 +92,7 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
             </p>
             <button
               className="pc-cta compete"
-              onClick={(e) => { e.stopPropagation(); onScrollTo('compete') }}
+              onClick={(e) => { e.stopPropagation(); onScrollTo('platform') }}
             >
               Explore more →
             </button>
@@ -138,7 +138,7 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
             </p>
             <button
               className="pc-cta connect"
-              onClick={(e) => { e.stopPropagation(); onScrollTo('connect') }}
+              onClick={(e) => { e.stopPropagation(); onScrollTo('platform') }}
             >
               Explore more →
             </button>

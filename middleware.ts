@@ -85,7 +85,12 @@ export async function middleware(request: NextRequest) {
   // Allow access to /compete/leaderboard without authentication
   const isLeaderboardRoute = pathname === '/compete/leaderboard'
   
-  if (isProtectedRoute && !user && !isLeaderboardRoute) {
+  // Allow access to user profile pages (/profile/[username]) without authentication
+  const isUserProfileRoute = pathname.startsWith('/profile/') && 
+    pathname.split('/').length === 3 && // Only /profile/username, not /profile/username/settings
+    !pathname.includes('/settings') && !pathname.includes('/edit')
+  
+  if (isProtectedRoute && !user && !isLeaderboardRoute && !isUserProfileRoute) {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = '/login'
     return NextResponse.redirect(redirectUrl)

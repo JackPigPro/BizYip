@@ -266,8 +266,6 @@ export default function TopNavClient({
 
     setOpen(null)
 
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-
   }
 
 

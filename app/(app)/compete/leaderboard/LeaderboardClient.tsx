@@ -277,15 +277,21 @@ export default function LeaderboardClient({
                     >
                       {displayUsers[1].profiles.username.charAt(0).toUpperCase()}
                     </a>
-                    <div style={{
-                      fontSize: '14px',
-                      fontWeight: '700',
-                      fontFamily: 'var(--font-display)',
-                      color: 'var(--text)',
-                      marginBottom: '4px'
-                    }}>
+                    <a
+                      href={`/profile/${displayUsers[1].profiles.username}`}
+                      style={{
+                        textDecoration: 'none',
+                        fontSize: '14px',
+                        fontWeight: '700',
+                        fontFamily: 'var(--font-display)',
+                        color: 'var(--text)',
+                        marginBottom: '4px',
+                        display: 'block',
+                        cursor: 'pointer'
+                      }}
+                    >
                       {displayUsers[1].profiles.username}
-                    </div>
+                    </a>
                     <div style={{
                       fontSize: '20px',
                       fontWeight: '800',
@@ -361,13 +367,19 @@ export default function LeaderboardClient({
                     >
                       {displayUsers[0].profiles.username.charAt(0).toUpperCase()}
                     </a>
-                    <div style={{
-                      fontSize: '16px',
-                      fontWeight: '800',
-                      fontFamily: 'var(--font-display)',
-                      color: 'var(--text)',
-                      marginBottom: '4px'
-                    }}>
+                    <a
+                      href={`/profile/${displayUsers[0].profiles.username}`}
+                      style={{
+                        textDecoration: 'none',
+                        fontSize: '16px',
+                        fontWeight: '800',
+                        fontFamily: 'var(--font-display)',
+                        color: 'var(--text)',
+                        marginBottom: '4px',
+                        display: 'block',
+                        cursor: 'pointer'
+                      }}
+                    >
                       {displayUsers[0].profiles.username}
                     {currentUserId && displayUsers[0]?.user_id === currentUserId && (
                       <span style={{
@@ -379,7 +391,7 @@ export default function LeaderboardClient({
                         (You)
                       </span>
                     )}
-                    </div>
+                    </a>
                     <div style={{
                       fontSize: '24px',
                       fontWeight: '800',
@@ -454,13 +466,19 @@ export default function LeaderboardClient({
                     >
                       {displayUsers[2].profiles.username.charAt(0).toUpperCase()}
                     </a>
-                    <div style={{
-                      fontSize: '14px',
-                      fontWeight: '700',
-                      fontFamily: 'var(--font-display)',
-                      color: 'var(--text)',
-                      marginBottom: '4px'
-                    }}>
+                    <a
+                      href={`/profile/${displayUsers[2].profiles.username}`}
+                      style={{
+                        textDecoration: 'none',
+                        fontSize: '14px',
+                        fontWeight: '700',
+                        fontFamily: 'var(--font-display)',
+                        color: 'var(--text)',
+                        marginBottom: '4px',
+                        display: 'block',
+                        cursor: 'pointer'
+                      }}
+                    >
                       {displayUsers[2].profiles.username}
                     {currentUserId && displayUsers[2]?.user_id === currentUserId && (
                       <span style={{
@@ -472,7 +490,7 @@ export default function LeaderboardClient({
                         (You)
                       </span>
                     )}
-                    </div>
+                    </a>
                     <div style={{
                       fontSize: '20px',
                       fontWeight: '800',
