@@ -42,7 +42,7 @@ export default async function LeaderboardPage() {
   // Step 2: Fetch all rows from profiles
   const { data: profiles, error: profilesError } = await supabase
     .from('profiles')
-    .select('id, username')
+    .select('id, username, avatar')
 
   if (profilesError) {
     console.error('Error fetching profiles:', profilesError)
@@ -57,7 +57,8 @@ export default async function LeaderboardPage() {
       user_id: stat.user_id,
       rank_label: getRankLabel(stat.elo || 0),
       profiles: {
-        username: profile?.username || 'Unknown'
+        username: profile?.username || 'Unknown',
+        avatar: profile?.avatar || 'avatar-1'
       },
       current_streak: dailyStreak?.current_streak || 0
     }
@@ -94,6 +95,26 @@ export default async function LeaderboardPage() {
 
   if (weeklyError) {
     console.error('Error fetching weekly history:', weeklyError)
+  }
+
+  // Fetch monthly leaderboard (from 1st of current month in Eastern Time)
+  const now = new Date()
+  const easternTime = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}))
+  const firstOfMonthEastern = new Date(easternTime.getFullYear(), easternTime.getMonth(), 1)
+  
+  const { data: monthlyHistory, error: monthlyError } = await supabase
+    .from('elo_history')
+    .select(`
+      elo_change,
+      new_elo,
+      user_id,
+      created_at
+    `)
+    .gte('created_at', firstOfMonthEastern.toISOString())
+    .order('new_elo', { ascending: false })
+
+  if (monthlyError) {
+    console.error('Error fetching monthly history:', monthlyError)
   }
 
 
@@ -142,6 +163,27 @@ export default async function LeaderboardPage() {
     return a.user_id.localeCompare(b.user_id)
   })
 
+  // Build complete monthly list - start with all users, then calculate their monthly gains
+  const completeMonthlyList = transformedAllUsers.map(user => {
+    const monthlyEntries = (monthlyHistory || []).filter(entry => entry.user_id === user.user_id)
+    const totalMonthlyGain = monthlyEntries.reduce((sum, entry) => sum + (entry.elo_change || 0), 0)
+    
+    return {
+      elo_change: totalMonthlyGain,
+      new_elo: totalMonthlyGain, // Use period gain, not total ELO
+      user_id: user.user_id,
+      rank_label: user.rank_label, // Include rank label from all-time ELO
+      created_at: new Date().toISOString(),
+      profiles: user.profiles
+    }
+  }).sort((a, b) => {
+    // Sort by period gain descending, then by user_id ascending to prevent ties
+    if (b.new_elo !== a.new_elo) {
+      return b.new_elo - a.new_elo
+    }
+    return a.user_id.localeCompare(b.user_id)
+  })
+
 
   // Get current user's stats (only if authenticated)
   let currentUserStats = null
@@ -162,6 +204,7 @@ export default async function LeaderboardPage() {
       allUsers={transformedAllUsers}
       dailyHistory={completeDailyList}
       weeklyHistory={completeWeeklyList}
+      monthlyHistory={completeMonthlyList}
       currentUserId={currentUserId}
       currentUserStats={currentUserStats}
     />

@@ -8,6 +8,7 @@ interface User {
   rank_label: string
   profiles: {
     username: string
+    avatar: string
   }
   current_streak: number
 }
@@ -20,6 +21,7 @@ interface EloHistory {
   created_at: string
   profiles: {
     username: string
+    avatar: string
   }
 }
 
@@ -27,6 +29,7 @@ interface LeaderboardClientProps {
   allUsers: User[]
   dailyHistory: EloHistory[]
   weeklyHistory: EloHistory[]
+  monthlyHistory: EloHistory[]
   currentUserId?: string | null
   currentUserStats?: {
     elo: number
@@ -48,29 +51,29 @@ const getRankByElo = (elo?: number) => {
 
 const getRankColor = (rank: string) => {
   switch (rank) {
-    case 'Trainee': return '#9ca3af' // grey
-    case 'Builder': return '#3b82f6' // blue
-    case 'Creator': return '#22c55e' // green
-    case 'Founder': return '#eab308' // gold
-    case 'Visionary': return '#a855f7' // purple
-    case 'Icon': return '#f97316' // orange
-    case 'Titan': return '#ef4444' // red
+    case 'Trainee': return '#6b7280' // darker grey, more vibrant
+    case 'Builder': return '#2563eb' // brighter blue
+    case 'Creator': return '#16a34a' // brighter green
+    case 'Founder': return '#f59e0b' // brighter gold
+    case 'Visionary': return '#9333ea' // brighter purple
+    case 'Icon': return '#ea580c' // brighter orange
+    case 'Titan': return '#dc2626' // brighter red
     case 'Unicorn': return 'linear-gradient(135deg, #7c3aed, #ec4899, #10b981)' // rainbow gradient
-    default: return '#9ca3af'
+    default: return '#6b7280'
   }
 }
 
 const getRankFaintColor = (rank: string) => {
   switch (rank) {
-    case 'Trainee': return 'rgba(156, 163, 175, 0.25)' // faint grey
-    case 'Builder': return 'rgba(59, 130, 246, 0.25)' // faint blue
-    case 'Creator': return 'rgba(34, 197, 94, 0.25)' // faint green
-    case 'Founder': return 'rgba(234, 179, 8, 0.25)' // faint gold
-    case 'Visionary': return 'rgba(168, 85, 247, 0.25)' // faint purple
-    case 'Icon': return 'rgba(249, 115, 22, 0.25)' // faint orange
-    case 'Titan': return 'rgba(239, 68, 68, 0.25)' // faint red
-    case 'Unicorn': return 'linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(236, 72, 153, 0.25), rgba(16, 185, 129, 0.25))' // faint rainbow gradient
-    default: return 'rgba(156, 163, 175, 0.25)'
+    case 'Trainee': return 'rgba(107, 114, 128, 0.25)' // faint grey
+    case 'Builder': return 'rgba(37, 99, 235, 0.25)' // faint blue
+    case 'Creator': return 'rgba(22, 163, 74, 0.25)' // faint green
+    case 'Founder': return 'rgba(245, 158, 11, 0.25)' // faint gold
+    case 'Visionary': return 'rgba(147, 51, 234, 0.25)' // faint purple
+    case 'Icon': return 'rgba(234, 88, 12, 0.25)' // faint orange
+    case 'Titan': return 'rgba(220, 38, 38, 0.25)' // faint red
+    case 'Unicorn': return 'linear-gradient(135deg, rgba(124, 58, 237, 0.25), rgba(236, 72, 153, 0.25), rgba(16, 185, 129, 0.25))' // faint rainbow gradient
+    default: return 'rgba(107, 114, 128, 0.25)'
   }
 }
 
@@ -97,10 +100,11 @@ export default function LeaderboardClient({
   allUsers, 
   dailyHistory, 
   weeklyHistory, 
+  monthlyHistory, 
   currentUserId, 
   currentUserStats 
 }: LeaderboardClientProps) {
-  const [activeTab, setActiveTab] = useState<'daily' | 'weekly' | 'alltime'>('alltime')
+  const [activeTab, setActiveTab] = useState<'daily' | 'monthly' | 'weekly' | 'alltime'>('monthly')
 
   // Get unique users for each time period
   const getUniqueUsers = (history: EloHistory[], isPeriodGain: boolean = false) => {
@@ -123,6 +127,8 @@ export default function LeaderboardClient({
     switch (activeTab) {
       case 'daily':
         return getUniqueUsers(dailyHistory, true)
+      case 'monthly':
+        return getUniqueUsers(monthlyHistory, true)
       case 'weekly':
         return getUniqueUsers(weeklyHistory, true)
       case 'alltime':
@@ -166,41 +172,258 @@ export default function LeaderboardClient({
             marginTop: '8px' 
           }}>
             {activeTab === 'daily' && 'ELO gained in the last 24 hours'}
+            {activeTab === 'monthly' && 'ELO gained this month'}
             {activeTab === 'weekly' && 'ELO gained in the last 7 days'}
             {activeTab === 'alltime' && 'All time ELO'}
+          </div>
+        </div>
+
+        {/* Tab Switcher - Outside any container, above podium */}
+        <div style={{ 
+          maxWidth: '1400px', 
+          margin: '0 0 24px 24px',
+          display: 'flex',
+          justifyContent: 'flex-start'
+        }}>
+          <div className="leaderboard-tabs" style={{ 
+            background: 'var(--card)',
+            borderRadius: '12px',
+            padding: '8px',
+            border: '1px solid var(--border)',
+            boxShadow: 'var(--shadow)',
+            minWidth: '400px'
+          }}>
+            {(['daily', 'monthly', 'alltime'] as const).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                style={{
+                  flex: 1,
+                  padding: '12px 20px',
+                  border: 'none',
+                  borderRadius: '8px',
+                  background: activeTab === tab ? 'var(--green)' : 'transparent',
+                  color: activeTab === tab ? 'white' : 'var(--text)',
+                  fontSize: '14px',
+                  fontWeight: '700',
+                  fontFamily: 'var(--font-display)',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  textTransform: 'capitalize',
+                  letterSpacing: '-0.1px',
+                  boxShadow: activeTab === tab ? '0 2px 4px rgba(34, 197, 94, 0.2)' : 'none'
+                }}
+              >
+                {tab === 'alltime' ? 'All-time' : tab}
+              </button>
+            ))}
           </div>
         </div>
 
         <div className="leaderboard-container">
           {/* Left Side - Leaderboard List */}
           <div className="leaderboard-main">
-            {/* Tab Switcher */}
-            <div className="leaderboard-tabs">
-              {(['daily', 'weekly', 'alltime'] as const).map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  style={{
-                    flex: 1,
-                    padding: '12px 20px',
-                    border: 'none',
-                    borderRadius: '8px',
-                    background: activeTab === tab ? 'var(--green)' : 'transparent',
-                    color: activeTab === tab ? 'white' : 'var(--text)',
-                    fontSize: '14px',
-                    fontWeight: 700,
-                    fontFamily: 'var(--font-display)',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    textTransform: 'capitalize',
-                    letterSpacing: '-0.1px',
-                    boxShadow: activeTab === tab ? '0 2px 4px rgba(34, 197, 94, 0.2)' : 'none'
-                  }}
-                >
-                  {tab === 'alltime' ? 'All Time' : tab}
-                </button>
-              ))}
-            </div>
+            {/* Podium Section - Top 3 */}
+            {displayUsers.length >= 3 && (
+              <div style={{ 
+                marginBottom: '32px',
+                padding: '24px',
+                background: 'var(--card)',
+                borderRadius: '16px',
+                border: '1px solid var(--border)',
+                boxShadow: 'var(--shadow)'
+              }}>
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-around', 
+                  alignItems: 'flex-end',
+                  gap: '16px'
+                }}>
+                  {/* 2nd Place */}
+                  <div style={{ textAlign: 'center', flex: 1 }}>
+                    <div style={{
+                      width: '80px',
+                      height: '80px',
+                      borderRadius: '16px',
+                      background: (() => {
+                        const avatarColors: Record<string, string> = {
+                          'avatar-1': '#6366F1', 'avatar-2': '#10B981', 'avatar-3': '#0EA5E9',
+                          'avatar-4': '#F43F5E', 'avatar-5': '#F59E0B', 'avatar-6': '#8B5CF6',
+                          'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
+                          'avatar-10': '#3B82F6'
+                        }
+                        return avatarColors[displayUsers[1]?.profiles?.avatar] || '#6366F1'
+                      })(),
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#fff',
+                      fontSize: '32px',
+                      fontWeight: '800',
+                      fontFamily: 'var(--font-display)',
+                      margin: '0 auto 12px',
+                      border: '3px solid #C0C0C0',
+                      boxShadow: '0 4px 12px rgba(192, 192, 192, 0.3)'
+                    }}>
+                      {displayUsers[1].profiles.username.charAt(0).toUpperCase()}
+                    </div>
+                    <div style={{
+                      fontSize: '14px',
+                      fontWeight: '700',
+                      fontFamily: 'var(--font-display)',
+                      color: 'var(--text)',
+                      marginBottom: '4px'
+                    }}>
+                      {displayUsers[1].profiles.username}
+                    </div>
+                    <div style={{
+                      fontSize: '20px',
+                      fontWeight: '800',
+                      fontFamily: 'var(--font-display)',
+                      color: 'var(--text)',
+                      marginBottom: '4px'
+                    }}>
+                      {activeTab === 'daily' || activeTab === 'monthly' 
+                        ? `${displayUsers[1].elo >= 0 ? '+' : ''}${displayUsers[1].elo}`
+                        : displayUsers[1].elo}
+                    </div>
+                    <div style={{
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      color: 'var(--text2)',
+                      backgroundColor: '#E5E7EB',
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      display: 'inline-block'
+                    }}>
+                      {getRankByElo(displayUsers[1].elo)}
+                    </div>
+                  </div>
+
+                  {/* 1st Place */}
+                  <div style={{ textAlign: 'center', flex: 1, transform: 'translateY(-8px)' }}>
+                    <div style={{
+                      width: '100px',
+                      height: '100px',
+                      borderRadius: '20px',
+                      background: (() => {
+                        const avatarColors: Record<string, string> = {
+                          'avatar-1': '#6366F1', 'avatar-2': '#10B981', 'avatar-3': '#0EA5E9',
+                          'avatar-4': '#F43F5E', 'avatar-5': '#F59E0B', 'avatar-6': '#8B5CF6',
+                          'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
+                          'avatar-10': '#3B82F6'
+                        }
+                        return avatarColors[displayUsers[0]?.profiles?.avatar] || '#6366F1'
+                      })(),
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#fff',
+                      fontSize: '40px',
+                      fontWeight: '800',
+                      fontFamily: 'var(--font-display)',
+                      margin: '0 auto 12px',
+                      border: '3px solid #FFD700',
+                      boxShadow: '0 4px 16px rgba(255, 215, 0, 0.4)'
+                    }}>
+                      {displayUsers[0].profiles.username.charAt(0).toUpperCase()}
+                    </div>
+                    <div style={{
+                      fontSize: '16px',
+                      fontWeight: '800',
+                      fontFamily: 'var(--font-display)',
+                      color: 'var(--text)',
+                      marginBottom: '4px'
+                    }}>
+                      {displayUsers[0].profiles.username}
+                    </div>
+                    <div style={{
+                      fontSize: '24px',
+                      fontWeight: '800',
+                      fontFamily: 'var(--font-display)',
+                      color: 'var(--green)',
+                      marginBottom: '4px'
+                    }}>
+                      {activeTab === 'daily' || activeTab === 'monthly' 
+                        ? `${displayUsers[0].elo >= 0 ? '+' : ''}${displayUsers[0].elo}`
+                        : displayUsers[0].elo}
+                    </div>
+                    <div style={{
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      color: '#fff',
+                      backgroundColor: 'var(--green)',
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      display: 'inline-block'
+                    }}>
+                      {getRankByElo(displayUsers[0].elo)}
+                    </div>
+                  </div>
+
+                  {/* 3rd Place */}
+                  <div style={{ textAlign: 'center', flex: 1 }}>
+                    <div style={{
+                      width: '80px',
+                      height: '80px',
+                      borderRadius: '16px',
+                      background: (() => {
+                        const avatarColors: Record<string, string> = {
+                          'avatar-1': '#6366F1', 'avatar-2': '#10B981', 'avatar-3': '#0EA5E9',
+                          'avatar-4': '#F43F5E', 'avatar-5': '#F59E0B', 'avatar-6': '#8B5CF6',
+                          'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
+                          'avatar-10': '#3B82F6'
+                        }
+                        return avatarColors[displayUsers[2]?.profiles?.avatar] || '#6366F1'
+                      })(),
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#fff',
+                      fontSize: '32px',
+                      fontWeight: '800',
+                      fontFamily: 'var(--font-display)',
+                      margin: '0 auto 12px',
+                      border: '3px solid #CD7F32',
+                      boxShadow: '0 4px 12px rgba(205, 127, 50, 0.3)'
+                    }}>
+                      {displayUsers[2].profiles.username.charAt(0).toUpperCase()}
+                    </div>
+                    <div style={{
+                      fontSize: '14px',
+                      fontWeight: '700',
+                      fontFamily: 'var(--font-display)',
+                      color: 'var(--text)',
+                      marginBottom: '4px'
+                    }}>
+                      {displayUsers[2].profiles.username}
+                    </div>
+                    <div style={{
+                      fontSize: '20px',
+                      fontWeight: '800',
+                      fontFamily: 'var(--font-display)',
+                      color: 'var(--text)',
+                      marginBottom: '4px'
+                    }}>
+                      {activeTab === 'daily' || activeTab === 'monthly' 
+                        ? `${displayUsers[2].elo >= 0 ? '+' : ''}${displayUsers[2].elo}`
+                        : displayUsers[2].elo}
+                    </div>
+                    <div style={{
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      color: 'var(--text2)',
+                      backgroundColor: '#FEF3C7',
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      display: 'inline-block'
+                    }}>
+                      {getRankByElo(displayUsers[2].elo)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Column Headers */}
             <div className="leaderboard-table-headers">
@@ -212,7 +435,7 @@ export default function LeaderboardClient({
                 letterSpacing: '0.5px', 
                 textTransform: 'uppercase'
               }}>
-                #
+                Rank
               </div>
               <div style={{ 
                 fontSize: '12px', 
@@ -222,7 +445,7 @@ export default function LeaderboardClient({
                 letterSpacing: '0.5px', 
                 textTransform: 'uppercase'
               }}>
-                Username
+                User
               </div>
               <div style={{ 
                 fontSize: '12px', 
@@ -233,7 +456,18 @@ export default function LeaderboardClient({
                 textTransform: 'uppercase',
                 textAlign: 'right'
               }}>
-                {activeTab === 'daily' || activeTab === 'weekly' ? 'Gain' : 'ELO'}
+                {activeTab === 'daily' || activeTab === 'monthly' ? 'Gain' : 'ELO'}
+              </div>
+              <div style={{ 
+                fontSize: '12px', 
+                fontWeight: '600', 
+                fontFamily: 'var(--font-display)', 
+                color: 'var(--text2)', 
+                letterSpacing: '0.5px', 
+                textTransform: 'uppercase',
+                textAlign: 'right'
+              }}>
+                Total ELO
               </div>
               <div style={{ 
                 fontSize: '12px', 
@@ -248,13 +482,14 @@ export default function LeaderboardClient({
               </div>
             </div>
 
-            {/* Right Side */}
+            {/* Rankings Table - Starting from 4th place */}
           <div className="leaderboard-sidebar">
-              {displayList.map((user, index) => {
-                const rank = index + 1
+              {displayUsers.slice(3).map((user, index) => {
+                const actualRank = index + 4 // Start from 4th place
                 const isCurrentUser = currentUserId && user.user_id === currentUserId
-                const userRank = activeTab === 'alltime' ? getRankByElo(user.elo) : user.rank_label
+                const userRank = getRankByElo(user.elo)
                 const rankColor = getRankColor(userRank)
+                const totalElo = allUsers.find(u => u.user_id === user.user_id)?.elo || 0
 
                 return (
                   <div
@@ -268,70 +503,111 @@ export default function LeaderboardClient({
                   >
                     {/* Rank Number */}
                     <div style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '50%',
-                      background: rank <= 3 ? 'linear-gradient(135deg, var(--gold), #f59e0b)' : 'var(--surface)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '14px',
+                      fontSize: '16px',
                       fontWeight: '800',
                       fontFamily: 'var(--font-display)',
-                      color: rank <= 3 ? '#fff' : 'var(--text2)'
+                      color: 'var(--text2)',
+                      minWidth: '32px',
+                      textAlign: 'center'
                     }}>
-                      {rank}
+                      {actualRank}
                     </div>
 
-                    {/* Username */}
-                    <a
-                      href={`/profile/${user.profiles.username}`}
-                      style={{
-                        textDecoration: 'none',
-                        fontSize: '16px',
-                        fontWeight: '700',
-                        fontFamily: 'var(--font-display)',
-                        color: 'var(--text)',
-                        letterSpacing: '-0.1px'
-                      }}
-                    >
-                      {user.profiles.username}
-                      {isCurrentUser && (
-                        <span style={{
-                          marginLeft: '8px',
-                          fontSize: '12px',
-                          color: 'var(--green)',
-                          fontWeight: '600'
-                        }}>
-                          (You)
-                        </span>
-                      )}
-                      {user.current_streak > 0 && (
-                        <span style={{
-                          marginLeft: '8px',
-                          fontSize: '14px',
-                          color: 'var(--text2)',
-                          fontWeight: '600'
-                        }}>
-                          🔥 {user.current_streak}
-                        </span>
-                      )}
-                    </a>
-
-                    {/* ELO Score */}
+                    {/* User Info - Avatar + Username */}
                     <div style={{
-                      fontSize: '18px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      flex: 1
+                    }}>
+                      {/* Avatar */}
+                      <div style={{
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '10px',
+                        background: (() => {
+                          const avatarColors: Record<string, string> = {
+                            'avatar-1': '#6366F1', 'avatar-2': '#10B981', 'avatar-3': '#0EA5E9',
+                            'avatar-4': '#F43F5E', 'avatar-5': '#F59E0B', 'avatar-6': '#8B5CF6',
+                            'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
+                            'avatar-10': '#3B82F6'
+                          }
+                          return avatarColors[user.profiles.avatar] || '#6366F1'
+                        })(),
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#fff',
+                        fontSize: '16px',
+                        fontWeight: '800',
+                        fontFamily: 'var(--font-display)'
+                      }}>
+                        {user.profiles.username.charAt(0).toUpperCase()}
+                      </div>
+
+                      {/* Username */}
+                      <a
+                        href={`/profile/${user.profiles.username}`}
+                        style={{
+                          textDecoration: 'none',
+                          fontSize: '16px',
+                          fontWeight: '700',
+                          fontFamily: 'var(--font-display)',
+                          color: 'var(--text)',
+                          letterSpacing: '-0.1px'
+                        }}
+                      >
+                        {user.profiles.username}
+                        {isCurrentUser && (
+                          <span style={{
+                            marginLeft: '8px',
+                            fontSize: '12px',
+                            color: 'var(--green)',
+                            fontWeight: '600'
+                          }}>
+                            (You)
+                          </span>
+                        )}
+                        {user.current_streak > 0 && (
+                          <span style={{
+                            marginLeft: '8px',
+                            fontSize: '14px',
+                            color: 'var(--text2)',
+                            fontWeight: '600'
+                          }}>
+                            🔥 {user.current_streak}
+                          </span>
+                        )}
+                      </a>
+                    </div>
+
+                    {/* ELO Gain */}
+                    <div style={{
+                      fontSize: '16px',
                       fontWeight: '800',
                       fontFamily: 'var(--font-display)',
-                      color: (activeTab === 'daily' || activeTab === 'weekly') 
+                      color: (activeTab === 'daily' || activeTab === 'monthly') 
                         ? (user.elo >= 0 ? 'var(--green)' : 'var(--red)') 
                         : 'var(--green)',
                       letterSpacing: '-0.2px',
-                      textAlign: 'right'
+                      textAlign: 'right',
+                      minWidth: '80px'
                     }}>
-                      {activeTab === 'daily' || activeTab === 'weekly' 
+                      {activeTab === 'daily' || activeTab === 'monthly' 
                         ? `${user.elo >= 0 ? '+' : ''}${user.elo}` 
                         : user.elo}
+                    </div>
+
+                    {/* Total ELO */}
+                    <div style={{
+                      fontSize: '16px',
+                      fontWeight: '600',
+                      fontFamily: 'var(--font-display)',
+                      color: 'var(--text)',
+                      textAlign: 'right',
+                      minWidth: '80px'
+                    }}>
+                      {totalElo}
                     </div>
 
                     {/* Rank Title */}
@@ -346,36 +622,174 @@ export default function LeaderboardClient({
                       border: `1px solid ${rankColor}20`,
                       letterSpacing: '0.5px',
                       textTransform: 'uppercase',
-                      textAlign: 'center'
+                      textAlign: 'center',
+                      minWidth: '80px'
                     }}>
                       {userRank}
                     </div>
                   </div>
                 )
               })}
+
+              {/* Pinned User Position (if logged in and outside top 10) */}
+              {currentUserId && (() => {
+                const currentUserInList = displayUsers.find(user => user.user_id === currentUserId)
+                const currentUserRank = currentUserInList ? displayUsers.indexOf(currentUserInList) + 1 : null
+                
+                if (currentUserRank && currentUserRank > 10) {
+                  const user = currentUserInList
+                  const userRank = getRankByElo(user.elo)
+                  const rankColor = getRankColor(userRank)
+                  const totalElo = allUsers.find(u => u.user_id === user.user_id)?.elo || 0
+
+                  return (
+                    <>
+                      {/* Divider */}
+                      <div style={{
+                        height: '1px',
+                        background: 'var(--border)',
+                        margin: '16px 0'
+                      }} />
+                      
+                      {/* Current User Pinned Position */}
+                      <div
+                        className="leaderboard-row"
+                        style={{
+                          background: getRankFaintColor(userRank),
+                          border: '2px solid var(--green)',
+                          transition: 'all 0.2s ease',
+                          position: 'sticky',
+                          bottom: '0'
+                        }}
+                      >
+                        {/* Rank Number */}
+                        <div style={{
+                          fontSize: '16px',
+                          fontWeight: '800',
+                          fontFamily: 'var(--font-display)',
+                          color: 'var(--green)',
+                          minWidth: '32px',
+                          textAlign: 'center'
+                        }}>
+                          {currentUserRank}
+                        </div>
+
+                        {/* User Info - Avatar + Username */}
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '12px',
+                          flex: 1
+                        }}>
+                          {/* Avatar */}
+                          <div style={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '10px',
+                            background: (() => {
+                              const avatarColors: Record<string, string> = {
+                                'avatar-1': '#6366F1', 'avatar-2': '#10B981', 'avatar-3': '#0EA5E9',
+                                'avatar-4': '#F43F5E', 'avatar-5': '#F59E0B', 'avatar-6': '#8B5CF6',
+                                'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
+                                'avatar-10': '#3B82F6'
+                              }
+                              return avatarColors[user.profiles.avatar] || '#6366F1'
+                            })(),
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#fff',
+                            fontSize: '16px',
+                            fontWeight: '800',
+                            fontFamily: 'var(--font-display)'
+                          }}>
+                            {user.profiles.username.charAt(0).toUpperCase()}
+                          </div>
+
+                          {/* Username */}
+                          <a
+                            href={`/profile/${user.profiles.username}`}
+                            style={{
+                              textDecoration: 'none',
+                              fontSize: '16px',
+                              fontWeight: '700',
+                              fontFamily: 'var(--font-display)',
+                              color: 'var(--text)',
+                              letterSpacing: '-0.1px'
+                            }}
+                          >
+                            {user.profiles.username}
+                            <span style={{
+                              marginLeft: '8px',
+                              fontSize: '12px',
+                              color: 'var(--green)',
+                              fontWeight: '600'
+                            }}>
+                              (You)
+                            </span>
+                          </a>
+                        </div>
+
+                        {/* ELO Gain */}
+                        <div style={{
+                          fontSize: '16px',
+                          fontWeight: '800',
+                          fontFamily: 'var(--font-display)',
+                          color: (activeTab === 'daily' || activeTab === 'monthly') 
+                            ? (user.elo >= 0 ? 'var(--green)' : 'var(--red)') 
+                            : 'var(--green)',
+                          letterSpacing: '-0.2px',
+                          textAlign: 'right',
+                          minWidth: '80px'
+                        }}>
+                          {activeTab === 'daily' || activeTab === 'monthly' 
+                            ? `${user.elo >= 0 ? '+' : ''}${user.elo}` 
+                            : user.elo}
+                        </div>
+
+                        {/* Total ELO */}
+                        <div style={{
+                          fontSize: '16px',
+                          fontWeight: '600',
+                          fontFamily: 'var(--font-display)',
+                          color: 'var(--text)',
+                          textAlign: 'right',
+                          minWidth: '80px'
+                        }}>
+                          {totalElo}
+                        </div>
+
+                        {/* Rank Title */}
+                        <div style={{
+                          fontSize: '13px',
+                          fontWeight: '600',
+                          fontFamily: 'var(--font-display)',
+                          padding: '4px 12px',
+                          borderRadius: '6px',
+                          background: getRankFaintColor(userRank),
+                          color: rankColor,
+                          border: `1px solid ${rankColor}20`,
+                          letterSpacing: '0.5px',
+                          textTransform: 'uppercase',
+                          textAlign: 'center',
+                          minWidth: '80px'
+                        }}>
+                          {userRank}
+                        </div>
+                      </div>
+                    </>
+                  )
+                }
+                return null
+              })()}
             </div>
           </div>
 
           {/* Right Side - User Stats Panel */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            {/* CTA Button */}
-            <a
-              href="/compete/weekly-duel"
-              className="btn-cta-primary"
-              style={{
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '100%',
-                textAlign: 'center'
-              }}
-            >
-              ⚔️ Compete in Weekly Duel to earn ELO →
-            </a>
-
-            {/* Current User Stats - Only show if authenticated */}
-            {currentUserId && (
+            
+            {/* Current User Stats - Show breakdown if authenticated, CTA if logged out */}
+            {currentUserId ? (
               <div style={{ 
                 background: 'var(--card)', 
                 borderRadius: '16px', 
@@ -385,34 +799,6 @@ export default function LeaderboardClient({
                 textAlign: 'center'
               }}>
                 <div style={{ marginBottom: '24px' }}>
-                  <div style={{ 
-                    fontSize: '64px', 
-                    fontWeight: '800', 
-                    color: 'var(--green)', 
-                    fontFamily: 'var(--font-display)',
-                    marginBottom: '8px'
-                  }}>
-                    {currentUserStats?.elo || 0}
-                  </div>
-                  <div style={{ 
-                    fontSize: '13px', 
-                    color: 'var(--text2)',
-                    fontWeight: '600',
-                    fontFamily: 'var(--font-display)',
-                    letterSpacing: '2px',
-                    textTransform: 'uppercase'
-                  }}>
-                    Your ELO
-                  </div>
-                </div>
-                
-                <div style={{ 
-                  height: '1px', 
-                  background: 'var(--border)', 
-                  margin: '20px 0' 
-                }} />
-                
-                <div>
                   <div style={{ 
                     fontSize: '36px', 
                     fontWeight: '800', 
@@ -432,6 +818,202 @@ export default function LeaderboardClient({
                   }}>
                     Your Rank
                   </div>
+                </div>
+                
+                <div style={{ 
+                  height: '1px', 
+                  background: 'var(--border)', 
+                  margin: '20px 0' 
+                }} />
+                
+                {/* ELO Breakdown */}
+                <div style={{ textAlign: 'left' }}>
+                  <div style={{ 
+                    fontSize: '14px', 
+                    fontWeight: '700', 
+                    fontFamily: 'var(--font-display)', 
+                    color: 'var(--text)', 
+                    marginBottom: '16px',
+                    letterSpacing: '-0.1px',
+                    textAlign: 'center'
+                  }}>
+                    Your ELO Breakdown
+                  </div>
+                  
+                  {/* Daily ELO */}
+                  <div style={{ 
+                    display: 'flex', 
+                    justifyContent: 'space-between', 
+                    alignItems: 'center',
+                    marginBottom: '12px',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    background: 'rgba(34, 197, 94, 0.1)'
+                  }}>
+                    <span style={{ 
+                      fontSize: '13px', 
+                      fontWeight: '600', 
+                      color: 'var(--text)',
+                      fontFamily: 'var(--font-display)'
+                    }}>
+                      Daily
+                    </span>
+                    <span style={{ 
+                      fontSize: '14px', 
+                      fontWeight: '700', 
+                      color: 'var(--green)',
+                      fontFamily: 'var(--font-display)'
+                    }}>
+                      {(() => {
+                        const dailyUser = dailyHistory.find(u => u.user_id === currentUserId)
+                        const gain = dailyUser ? dailyUser.elo_change : 0
+                        return `${gain >= 0 ? '+' : ''}${gain}`
+                      })()}
+                    </span>
+                  </div>
+                  
+                  {/* Monthly ELO */}
+                  <div style={{ 
+                    display: 'flex', 
+                    justifyContent: 'space-between', 
+                    alignItems: 'center',
+                    marginBottom: '12px',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    background: 'rgba(59, 130, 246, 0.1)'
+                  }}>
+                    <span style={{ 
+                      fontSize: '13px', 
+                      fontWeight: '600', 
+                      color: 'var(--text)',
+                      fontFamily: 'var(--font-display)'
+                    }}>
+                      Monthly
+                    </span>
+                    <span style={{ 
+                      fontSize: '14px', 
+                      fontWeight: '700', 
+                      color: '#3b82f6',
+                      fontFamily: 'var(--font-display)'
+                    }}>
+                      {(() => {
+                        const monthlyUser = monthlyHistory.find(u => u.user_id === currentUserId)
+                        const gain = monthlyUser ? monthlyUser.elo_change : 0
+                        return `${gain >= 0 ? '+' : ''}${gain}`
+                      })()}
+                    </span>
+                  </div>
+                  
+                  {/* All-time ELO */}
+                  <div style={{ 
+                    display: 'flex', 
+                    justifyContent: 'space-between', 
+                    alignItems: 'center',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    background: 'rgba(168, 85, 247, 0.1)'
+                  }}>
+                    <span style={{ 
+                      fontSize: '13px', 
+                      fontWeight: '600', 
+                      color: 'var(--text)',
+                      fontFamily: 'var(--font-display)'
+                    }}>
+                      All-time
+                    </span>
+                    <span style={{ 
+                      fontSize: '14px', 
+                      fontWeight: '700', 
+                      color: '#8b5cf6',
+                      fontFamily: 'var(--font-display)'
+                    }}>
+                      {currentUserStats?.elo || 0}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* CTA for logged out users */
+              <div style={{ 
+                background: 'var(--card)', 
+                borderRadius: '16px', 
+                padding: '20px',
+                border: '1px solid var(--border)',
+                boxShadow: 'var(--shadow)',
+                textAlign: 'center'
+              }}>
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ 
+                    fontSize: '32px', 
+                    fontWeight: '800', 
+                    color: 'var(--text)', 
+                    fontFamily: 'var(--font-display)',
+                    marginBottom: '8px'
+                  }}>
+                    📊
+                  </div>
+                  <div style={{ 
+                    fontSize: '16px', 
+                    fontWeight: '700', 
+                    color: 'var(--text)', 
+                    fontFamily: 'var(--font-display)',
+                    marginBottom: '8px',
+                    letterSpacing: '-0.5px'
+                  }}>
+                    Track Your Stats
+                  </div>
+                  <div style={{ 
+                    fontSize: '13px', 
+                    color: 'var(--text2)',
+                    fontWeight: '400',
+                    fontFamily: 'var(--font-body)',
+                    lineHeight: '1.4',
+                    marginBottom: '16px'
+                  }}>
+                    Sign in to see your ELO breakdown and compete for the top spot!
+                  </div>
+                </div>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <a
+                    href="/login"
+                    className="btn-cta-primary"
+                    style={{
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '100%',
+                      textAlign: 'center',
+                      padding: '10px 16px',
+                      fontSize: '14px'
+                    }}
+                  >
+                    Sign In
+                  </a>
+                  <a
+                    href="/onboarding"
+                    className="btn-secondary"
+                    style={{
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '100%',
+                      textAlign: 'center',
+                      padding: '10px 16px',
+                      border: '1px solid var(--border)',
+                      borderRadius: '8px',
+                      background: 'transparent',
+                      color: 'var(--text)',
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      fontFamily: 'var(--font-display)',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    Create Account
+                  </a>
                 </div>
               </div>
             )}
