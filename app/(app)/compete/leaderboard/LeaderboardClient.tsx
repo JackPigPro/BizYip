@@ -369,6 +369,16 @@ export default function LeaderboardClient({
                       marginBottom: '4px'
                     }}>
                       {displayUsers[0].profiles.username}
+                    {currentUserId && displayUsers[0]?.user_id === currentUserId && (
+                      <span style={{
+                        marginLeft: '8px',
+                        fontSize: '12px',
+                        color: 'var(--green)',
+                        fontWeight: '600'
+                      }}>
+                        (You)
+                      </span>
+                    )}
                     </div>
                     <div style={{
                       fontSize: '24px',
@@ -452,6 +462,16 @@ export default function LeaderboardClient({
                       marginBottom: '4px'
                     }}>
                       {displayUsers[2].profiles.username}
+                    {currentUserId && displayUsers[2]?.user_id === currentUserId && (
+                      <span style={{
+                        marginLeft: '8px',
+                        fontSize: '12px',
+                        color: 'var(--green)',
+                        fontWeight: '600'
+                      }}>
+                        (You)
+                      </span>
+                    )}
                     </div>
                     <div style={{
                       fontSize: '20px',
@@ -1084,8 +1104,7 @@ export default function LeaderboardClient({
                     Sign In
                   </a>
                   <a
-                    href="/onboarding"
-                    className="btn-secondary"
+                    href="https://bizyip.com/login?mode=signup"
                     style={{
                       textDecoration: 'none',
                       display: 'inline-flex',
@@ -1102,6 +1121,16 @@ export default function LeaderboardClient({
                       fontWeight: '600',
                       fontFamily: 'var(--font-display)',
                       transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'var(--green)'
+                      e.currentTarget.style.color = 'white'
+                      e.currentTarget.style.borderColor = 'var(--green)'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent'
+                      e.currentTarget.style.color = 'var(--text)'
+                      e.currentTarget.style.borderColor = 'var(--border)'
                     }}
                   >
                     Create Account
