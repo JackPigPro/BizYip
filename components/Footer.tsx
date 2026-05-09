@@ -112,52 +112,29 @@ export default function Footer({ onScrollTo, stats: serverStats }: FooterProps) 
 
             <a href="#connect" onClick={(e) => { e.preventDefault(); handleLandingNavigation('connect') }}>Connect</a>
 
-            <span style={{ 
-
-              color: 'rgba(255,255,255,.48)', 
-
+            <span style={{
+              color: 'var(--text2)',
               cursor: 'not-allowed',
-
               display: 'inline-flex',
-
               alignItems: 'center',
-
               gap: '6px',
-
               fontSize: '13px',
-
               textDecoration: 'none'
-
             }}>
-
               Learn
-
               <span
-
                 style={{
-
                   fontSize: '10px',
-
                   background: 'var(--border)',
-
-                  color: 'rgba(255,255,255,.48)',
-
+                  color: 'var(--text2)',
                   padding: '2px 6px',
-
                   borderRadius: '4px',
-
                   fontWeight: 700,
-
                   fontFamily: 'var(--font-display)'
-
                 }}
-
               >
-
                 Coming Sep
-
               </span>
-
             </span>
 
           </div>
