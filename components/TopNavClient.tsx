@@ -588,7 +588,7 @@ export default function TopNavClient({
 
           <Link 
 
-            href={isLoggedIn ? "/connect/ideas" : "/login?mode=signup"}
+            href={isLoggedIn ? "/connect/ideas" : "/connect/ideas"}
 
             prefetch={isLoggedIn ? true : false}
 
@@ -628,7 +628,7 @@ export default function TopNavClient({
 
           <Link 
 
-            href={isLoggedIn ? "/connect/cofounder-match" : "/login?mode=signup"}
+            href={isLoggedIn ? "/connect/cofounder-match" : "/connect/cofounder-match"}
 
             prefetch={isLoggedIn ? true : false}
 
@@ -1026,7 +1026,7 @@ export default function TopNavClient({
 
             <Link 
 
-              href={isLoggedIn ? "/1v1" : "/login?mode=signup"} 
+              href={isLoggedIn ? "/1v1" : "/1v1"} 
 
               prefetch={true}
 
@@ -1054,7 +1054,7 @@ export default function TopNavClient({
 
             <Link 
 
-              href={isLoggedIn ? "/compete/daily-battle" : "/login?mode=signup"} 
+              href={isLoggedIn ? "/compete/daily-battle" : "/compete/daily-battle"} 
 
               prefetch={true}
 
@@ -1082,7 +1082,7 @@ export default function TopNavClient({
 
             <Link 
 
-              href={isLoggedIn ? "/compete/weekly-duel" : "/login?mode=signup"} 
+              href={isLoggedIn ? "/compete/weekly-duel" : "/compete/weekly-duel"} 
 
               prefetch={isLoggedIn ? true : false}
 
@@ -1172,7 +1172,7 @@ export default function TopNavClient({
 
             <Link 
 
-              href={isLoggedIn ? "/connect/ideas" : "/login?mode=signup"} 
+              href={isLoggedIn ? "/connect/ideas" : "/connect/ideas"} 
 
               prefetch={true}
 
@@ -1262,7 +1262,7 @@ export default function TopNavClient({
 
             <Link 
 
-              href={isLoggedIn ? "/connect/cofounder-match" : "/login?mode=signup"} 
+              href={isLoggedIn ? "/connect/cofounder-match" : "/connect/cofounder-match"} 
 
               prefetch={true}
 

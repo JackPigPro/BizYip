@@ -9,8 +9,9 @@ export async function GET(
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     
+    // If no user, return empty array - allow public access to page
     if (authError || !user) {
-      return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
+      return NextResponse.json({ success: true, data: [] })
     }
 
     const { matchId } = await params

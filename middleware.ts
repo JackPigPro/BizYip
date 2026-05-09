@@ -2,10 +2,18 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { updateSession } from '@/utils/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+  
+  // Skip middleware for API routes entirely
+  if (pathname.startsWith('/api/')) {
+    const { response } = updateSession(request)
+    return response
+  }
+  
   const { supabase, response } = updateSession(request)
   const { data } = await supabase.auth.getUser()
   const user = data.user
-  const { pathname, search } = request.nextUrl
+  const { search } = request.nextUrl
 
   // Define completely public routes that require no auth check
   const publicRoutes = [
@@ -135,15 +143,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/',
-    '/onboarding',
-    '/compete/:path*',
-    '/connect/:path*',
-    '/profile/:path*',
-    '/settings',
-    '/learn',
-    '/schools',
-    '/admin/:path*',
-    '/dashboard',
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
 }

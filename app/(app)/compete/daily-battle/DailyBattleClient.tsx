@@ -113,15 +113,10 @@ export default function DailyBattleClient({ battle, userSubmission, userStreak, 
       })
 
       if (!response.ok) {
-        console.error('Response not OK:', response.status, response.statusText)
         throw new Error('Failed to submit')
       }
 
-      const contentType = response.headers.get('content-type')
-      console.log('Response content-type:', contentType)
-      
       const data = await response.json()
-      console.log('Response data:', data)
       setEloPopupMessage(`+${data.eloGained || 0} ELO`)
       setShowEloPopup(true)
       

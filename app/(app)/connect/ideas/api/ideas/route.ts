@@ -8,8 +8,9 @@ export async function GET(request: NextRequest) {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     
+    // If no user, return empty array - allow public access to page
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ data: [] })
     }
 
     const { searchParams } = new URL(request.url)

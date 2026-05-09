@@ -35,6 +35,11 @@ export async function GET(request: Request) {
     // Get authenticated user (optional for likes)
     const { data: { user } } = await supabase.auth.getUser()
 
+    // If no user, return empty array - allow public access to page
+    if (!user) {
+      return NextResponse.json([])
+    }
+
     // Fetch submissions
     const { data: submissions, error: submissionsError } = await supabase
       .from('daily_submissions')

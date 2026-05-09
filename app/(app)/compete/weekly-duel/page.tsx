@@ -39,12 +39,6 @@ export default function WeeklyDuelPage() {
       // Check if user is authenticated
       const { data: { user: authUser } } = await supabase.auth.getUser()
       
-      if (!authUser) {
-        setIsLoading(false)
-        router.push('/login')
-        return
-      }
-
       setUser(authUser)
 
       // Fetch current duel (active, voting, or completed)
@@ -66,7 +60,7 @@ export default function WeeklyDuelPage() {
       setCurrentDuel(currentDuel)
 
       // Fetch user's submission for current duel
-      if (currentDuel) {
+      if (currentDuel && authUser) {
         const { data: userSub } = await supabase
           .from('duel_submissions')
           .select('*')
@@ -77,7 +71,7 @@ export default function WeeklyDuelPage() {
         console.log('Setting userSubmission to:', userSub)
         setUserSubmission(userSub)
 
-        // Fetch all submissions for current duel
+        // Fetch all submissions for current duel (public data)
         const { data: allSubs } = await supabase
           .from('duel_submissions')
           .select('id, content, vote_score, vote_count, created_at, user_id')
@@ -490,6 +484,74 @@ export default function WeeklyDuelPage() {
   const handleSubmissionSuccess = (newSubmission: any) => {
     // Add the new submission to allSubmissions to update counter immediately
     setAllSubmissions(prev => [...prev, newSubmission])
+  }
+
+  // Show sign-in banner for non-authenticated users
+  if (!user) {
+    return (
+      <>
+        <style jsx>{`
+          @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+          }
+        `}</style>
+        <div style={{ 
+          minHeight: '100vh',
+          background: 'var(--bg)',
+          backgroundImage: 'linear-gradient(rgba(21,128,61,.065) 1px, transparent 1px), linear-gradient(90deg, rgba(21,128,61,.065) 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
+          padding: '0 0 48px 0'
+        }}>
+          {/* Header */}
+          <div style={{ 
+            padding: '32px 24px 24px 24px'
+          }}>
+            <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+              <h1 style={{ fontSize: '48px', fontWeight: 800, letterSpacing: '-2px', fontFamily: 'var(--font-display)', color: 'var(--text)', margin: 0 }}>
+                Weekly Duel
+              </h1>
+            </div>
+          </div>
+
+          <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 24px' }}>
+            {/* Main Content */}
+            <div style={{ marginBottom: '24px' }}>
+              <div style={{
+                background: 'var(--card)',
+                border: '1px solid var(--border)',
+                borderRadius: '16px',
+                padding: '32px',
+                textAlign: 'center',
+                marginBottom: '24px'
+              }}>
+                <div style={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px', fontFamily: 'var(--font-display)' }}>
+                  Sign in to join the Weekly Duel
+                </div>
+                <p style={{ color: 'var(--text2)', marginBottom: '24px' }}>
+                  Compete against other entrepreneurs and win ELO prizes in our weekly competition.
+                </p>
+                <div style={{
+                  display: 'inline-block',
+                  padding: '12px 24px',
+                  background: 'var(--green)',
+                  color: 'white',
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  fontFamily: 'var(--font-display)',
+                  textDecoration: 'none'
+                }}>
+                  <a href="/login" style={{ color: 'white', textDecoration: 'none' }}>
+                    Sign In
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    )
   }
 
   return (
