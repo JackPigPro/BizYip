@@ -9,6 +9,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import { LiveStats } from '@/utils/stats'
 
 import { useLiveStats } from '@/hooks/useLiveStats'
+import { useAppState } from '@/components/AppStateProvider'
 
 
 
@@ -29,6 +30,8 @@ export default function Footer({ onScrollTo, stats: serverStats }: FooterProps) 
   const pathname = usePathname()
 
   const { stats: clientStats } = useLiveStats()
+
+  const { setHighlightLearn } = useAppState()
 
   
 
@@ -55,6 +58,12 @@ export default function Footer({ onScrollTo, stats: serverStats }: FooterProps) 
       const viewportCenter = window.innerHeight / 2
 
       window.scrollTo({ top: elCenter - viewportCenter, behavior: 'smooth' })
+
+      // Add highlight animation for Learn section
+      if (sectionId === 'learn') {
+        setHighlightLearn(true)
+        setTimeout(() => setHighlightLearn(false), 2000) // Remove highlight after 2 seconds
+      }
 
     } else {
 
@@ -112,15 +121,20 @@ export default function Footer({ onScrollTo, stats: serverStats }: FooterProps) 
 
             <a href="#connect" onClick={(e) => { e.preventDefault(); handleLandingNavigation('connect') }}>Connect</a>
 
-            <span style={{
-              color: 'var(--text2)',
-              cursor: 'not-allowed',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              fontSize: '13px',
-              textDecoration: 'none'
-            }}>
+            <a 
+              href="#learn"
+              onClick={(e) => {
+                e.preventDefault()
+                handleLandingNavigation('learn')
+              }}
+              style={{
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '13px',
+                textDecoration: 'none'
+              }}>
               Learn
               <span
                 style={{
@@ -135,7 +149,7 @@ export default function Footer({ onScrollTo, stats: serverStats }: FooterProps) 
               >
                 Coming Sep
               </span>
-            </span>
+            </a>
 
           </div>
 

@@ -56,134 +56,90 @@ export default function TeacherEmailForm() {
   if (isSubmitted) {
     return (
       <div className="teacher-form-success" style={{
-        background: 'var(--green)',
-        color: 'white',
-        padding: '24px',
+        background: 'var(--card)',
+        border: '2px solid var(--gold)',
+        color: 'var(--text)',
+        padding: '16px',
         borderRadius: '12px',
         textAlign: 'center',
-        border: '2px solid var(--green)'
+        fontSize: '14px',
+        fontWeight: 600,
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
       }}>
-        <div style={{ fontSize: '48px', marginBottom: '16px' }}>✉️</div>
-        <h4 style={{
-          fontSize: '20px',
-          fontWeight: 800,
-          fontFamily: 'var(--font-display)',
-          margin: '0 0 8px'
-        }}>
-          You're on the list!
-        </h4>
-        <p style={{
-          fontSize: '16px',
-          margin: 0,
-          opacity: 0.9
-        }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '4px' }}>
+          <span style={{ fontSize: '18px' }}>🎉</span>
+          <span style={{ color: 'var(--gold)', fontWeight: 700 }}>You're on the list!</span>
+        </div>
+        <div style={{ fontSize: '13px', color: 'var(--text2)', lineHeight: 1.4 }}>
           We'll email you when Learn launches in September.
-        </p>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="teacher-email-form" style={{
-      background: 'var(--card)',
-      border: '1px solid var(--border)',
-      borderRadius: '16px',
-      padding: '32px',
-      boxShadow: 'var(--shadow)'
-    }}>
-      <div className="form-header" style={{ textAlign: 'center', marginBottom: '24px' }}>
-        <div style={{ fontSize: '32px', marginBottom: '12px' }}>🎓</div>
-        <h4 style={{
-          fontSize: '20px',
-          fontWeight: 800,
-          fontFamily: 'var(--font-display)',
-          color: 'var(--text)',
-          margin: '0 0 8px'
-        }}>
-          Get Notified for Launch
-        </h4>
-        <p style={{
-          fontSize: '14px',
-          color: 'var(--text2)',
-          margin: 0,
-          lineHeight: 1.5
-        }}>
-          Be the first to know when Learn goes live in September
-        </p>
-      </div>
-
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <div>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your school email"
-            required
-            style={{
-              width: '100%',
-              padding: '16px',
-              borderRadius: '8px',
-              border: '1px solid var(--border)',
-              background: 'var(--surface)',
-              color: 'var(--text)',
-              fontSize: '16px',
-              fontFamily: 'var(--font-body)',
-              transition: 'all 0.2s ease'
-            }}
-            onFocus={(e) => {
-              e.target.style.borderColor = 'var(--gold)'
-              e.target.style.outline = 'none'
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = 'var(--border)'
-            }}
-          />
-        </div>
-
-        {error && (
-          <div style={{
-            color: 'var(--red)',
-            fontSize: '14px',
-            textAlign: 'center',
-            padding: '12px',
-            background: 'rgba(239, 68, 68, 0.1)',
-            borderRadius: '8px',
-            border: '1px solid rgba(239, 68, 68, 0.2)'
-          }}>
-            {error}
-          </div>
-        )}
-
+    <div className="teacher-email-form" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your school email to get notified at launch"
+          required
+          style={{
+            flex: 1,
+            padding: '18px 24px',
+            borderRadius: '12px',
+            border: '1px solid var(--border)',
+            background: 'var(--surface)',
+            color: 'var(--text)',
+            fontSize: '18px',
+            fontFamily: 'var(--font-body)',
+            transition: 'all 0.2s ease'
+          }}
+          onFocus={(e) => {
+            e.target.style.borderColor = 'var(--gold)'
+            e.target.style.outline = 'none'
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = 'var(--border)'
+          }}
+        />
+        
         <button
           type="submit"
           disabled={isSubmitting || !email}
           style={{
-            padding: '16px 24px',
-            borderRadius: '8px',
+            padding: '18px 32px',
+            borderRadius: '12px',
             border: 'none',
             background: isSubmitting || !email ? 'var(--border)' : 'var(--gold)',
             color: isSubmitting || !email ? 'var(--text3)' : 'white',
-            fontSize: '16px',
+            fontSize: '18px',
             fontWeight: 700,
             fontFamily: 'var(--font-display)',
             cursor: isSubmitting || !email ? 'not-allowed' : 'pointer',
             transition: 'all 0.2s ease',
-            opacity: isSubmitting ? 0.7 : 1
+            opacity: isSubmitting ? 0.7 : 1,
+            whiteSpace: 'nowrap'
           }}
         >
-          {isSubmitting ? 'Submitting...' : 'Notify Me at Launch'}
+          {isSubmitting ? 'Submitting...' : 'Notify Me'}
         </button>
       </form>
 
-      <div style={{
-        fontSize: '12px',
-        color: 'var(--text3)',
-        textAlign: 'center',
-        marginTop: '16px'
-      }}>
-        We respect your privacy. Unsubscribe at any time.
-      </div>
+      {error && (
+        <div style={{
+          color: 'var(--red)',
+          fontSize: '14px',
+          padding: '12px 16px',
+          background: 'rgba(239, 68, 68, 0.1)',
+          borderRadius: '8px',
+          border: '1px solid rgba(239, 68, 68, 0.2)'
+        }}>
+          {error}
+        </div>
+      )}
     </div>
   )
 }

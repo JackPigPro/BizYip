@@ -32,7 +32,7 @@ export default function Landing({ onScrollTo, stats }: LandingProps = {}) {
     if (typeof window === 'undefined') return
     
     const hash = window.location.hash.slice(1) // Remove # from hash
-    if (!hash || !['connect', 'compete'].includes(hash)) return
+    if (!hash || !['connect', 'compete', 'learn'].includes(hash)) return
     
     // Small delay to ensure DOM is ready
     const timer = setTimeout(() => {

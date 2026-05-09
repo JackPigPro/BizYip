@@ -23,6 +23,21 @@
   50% { opacity: 1; }
 }
 
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
+    border-color: rgba(255, 215, 0, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 20px 10px rgba(255, 215, 0, 0.2);
+    border-color: rgba(255, 215, 0, 1);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+    border-color: rgba(255, 215, 0, 0.8);
+  }
+}
+
 /* ═══════════════════════════════════════════════════════════
    DESIGN TOKENS
    ═══════════════════════════════════════════════════════════ */
@@ -603,7 +618,7 @@ button:hover, .nav-login:hover, .nav-signup:hover, .ft-cta:hover, .pc-cta:hover,
    FEATURE SECTIONS
    ═══════════════════════════════════════════════════════════ */
 .feature-section {
-  display: grid; grid-template-columns: 2fr 3fr;
+  display: grid; grid-template-columns: 3fr 2fr;
   border-bottom: 1px solid var(--border); min-height: 560px; position: relative;
 }
 .feature-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; z-index: 1; }

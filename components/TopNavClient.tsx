@@ -13,6 +13,7 @@ import { createClient } from '@/utils/supabase/client'
 import { signOut } from '@/app/actions/auth'
 
 import { useTheme } from '@/components/ThemeProvider'
+import { useAppState } from '@/components/AppStateProvider'
 
 
 
@@ -43,6 +44,7 @@ export default function TopNavClient({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const { theme, toggleTheme } = useTheme()
+  const { highlightLearn, setHighlightLearn } = useAppState()
 
 
 
@@ -231,6 +233,12 @@ export default function TopNavClient({
         : rect.top + window.scrollY - navOffset
 
     window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' })
+
+    // Add highlight animation for Learn section
+    if (id === 'learn') {
+      setHighlightLearn(true)
+      setTimeout(() => setHighlightLearn(false), 2000) // Remove highlight after 2 seconds
+    }
 
   }
 
@@ -658,9 +666,25 @@ export default function TopNavClient({
 
 
 
-          {/* Learn - Non-clickable */}
+          {/* Learn - Clickable */}
 
-          <span
+          <a
+
+            href="/#learn"
+
+            onClick={(e) => {
+
+              e.preventDefault()
+
+              scrollToLandingSection('learn', 'center')
+
+              setMobileMenuOpen(false)
+
+            }}
+
+            onMouseEnter={() => setHoveredItem('learn-mobile')}
+
+            onMouseLeave={() => setHoveredItem(null)}
 
             style={{
 
@@ -668,13 +692,11 @@ export default function TopNavClient({
 
               display: 'block',
 
-              color: 'var(--text3)',
+              marginBottom: '8px',
 
-              cursor: 'not-allowed',
+              cursor: 'pointer',
 
-              opacity: 0.6,
-
-              marginBottom: '8px'
+              ...(hoveredItem === 'learn-mobile' ? dropdownLinkHoverStyle : {})
 
             }}
 
@@ -708,7 +730,7 @@ export default function TopNavClient({
 
             </span>
 
-          </span>
+          </a>
 
         </div>
 
@@ -1274,21 +1296,37 @@ export default function TopNavClient({
 
 
 
-        {/* Learn - Non-clickable with Sep badge */}
+        {/* Learn - Clickable with Sep badge */}
 
-        <span
+        <a
+
+          href="/#learn"
 
           className="topnav-link"
+
+          onClick={(e) => {
+
+            e.preventDefault()
+
+            scrollToLandingSection('learn', 'center')
+
+          }}
+
+          onMouseEnter={() => setHoveredItem('learn')}
+
+          onMouseLeave={() => setHoveredItem(null)}
 
           style={{
 
             ...menuItemStyle,
 
-            color: 'var(--text3)',
+            cursor: 'pointer',
 
-            cursor: 'not-allowed',
+            textDecoration: 'none',
 
-            opacity: 0.6
+            color: 'var(--text2)',
+
+            ...(hoveredItem === 'learn' ? menuItemHoverStyle : {})
 
           }}
 
@@ -1322,7 +1360,7 @@ export default function TopNavClient({
 
           </span>
 
-        </span>
+        </a>
 
       </div>
 
