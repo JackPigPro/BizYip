@@ -9,16 +9,16 @@ import Link from 'next/link'
 import { createClient } from '@/utils/supabase/client'
 
 const PRESET_AVATARS = [
-  { id: 'avatar-1', color: '#16a34a', emoji: '🚀' },
-  { id: 'avatar-2', color: '#2563eb', emoji: '💡' },
-  { id: 'avatar-3', color: '#7c3aed', emoji: '🎯' },
-  { id: 'avatar-4', color: '#ea580c', emoji: '⚡' },
-  { id: 'avatar-5', color: '#dc2626', emoji: '🔥' },
-  { id: 'avatar-6', color: '#0891b2', emoji: '💎' },
-  { id: 'avatar-7', color: '#be123c', emoji: '🌟' },
-  { id: 'avatar-8', color: '#059669', emoji: '🎨' },
-  { id: 'avatar-9', color: '#7c2d12', emoji: '🏆' },
-  { id: 'avatar-10', color: '#4338ca', emoji: '🎪' }
+  { id: 'avatar-1', color: '#16a34a' },
+  { id: 'avatar-2', color: '#2563eb' },
+  { id: 'avatar-3', color: '#7c3aed' },
+  { id: 'avatar-4', color: '#ea580c' },
+  { id: 'avatar-5', color: '#dc2626' },
+  { id: 'avatar-6', color: '#0891b2' },
+  { id: 'avatar-7', color: '#be123c' },
+  { id: 'avatar-8', color: '#059669' },
+  { id: 'avatar-9', color: '#7c2d12' },
+  { id: 'avatar-10', color: '#4338ca' }
 ]
 
 const SKILLS_OPTIONS = [
@@ -44,6 +44,11 @@ export default function OnboardingPage() {
   const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [avatar, setAvatar] = useState(PRESET_AVATARS[0].id)
   const [theme, setTheme] = useState<'light' | 'dark'>('dark')
+
+  // Apply theme immediately when changed
+  useEffect(() => {
+    document.body.setAttribute('data-theme', theme)
+  }, [theme])
   const [skills, setSkills] = useState<string[]>([])
   const [usernameStatus, setUsernameStatus] = useState<'checking' | 'available' | 'taken' | 'invalid' | null>(null)
   const [usernameError, setUsernameError] = useState<string | null>(null)
@@ -204,6 +209,8 @@ export default function OnboardingPage() {
           onSubmit={(e) => {
             e.preventDefault()
             if (currentStep === 1) {
+              goToNextStep()
+            } else if (currentStep === 2) {
               goToNextStep()
             } else if (currentStep === 3) {
               handleSubmit()
@@ -416,9 +423,10 @@ export default function OnboardingPage() {
                         border: avatar === avatarItem.id 
                           ? `3px solid ${avatarItem.color}` 
                           : '1px solid var(--border2)',
-                        background: avatarItem.color + '20',
-                        color: 'var(--text)',
+                        background: avatarItem.color,
+                        color: '#fff',
                         fontSize: '24px',
+                        fontWeight: 700,
                         cursor: 'pointer',
                         transition: 'all 0.2s ease',
                         display: 'flex',
@@ -429,7 +437,7 @@ export default function OnboardingPage() {
                           : 'var(--shadow-sm)',
                       }}
                     >
-                      {avatarItem.emoji}
+                      {username.charAt(0).toUpperCase()}
                     </button>
                   ))}
                 </div>
@@ -440,34 +448,6 @@ export default function OnboardingPage() {
                   Theme Preference
                 </label>
                 <div style={{ display: 'flex', gap: '12px' }}>
-                  <button
-                    type="button"
-                    onClick={() => setTheme('light')}
-                    style={{
-                      flex: 1,
-                      padding: '12px',
-                      borderRadius: '10px',
-                      border: theme === 'light' 
-                        ? '2px solid var(--green)' 
-                        : '1px solid var(--border2)',
-                      background: theme === 'light' 
-                        ? 'var(--green-tint)' 
-                        : 'var(--card)',
-                      color: theme === 'light' 
-                        ? 'var(--green)' 
-                        : 'var(--text)',
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                      fontFamily: 'var(--font-display)',
-                      transition: 'all 0.2s ease',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '8px',
-                    }}
-                  >
-                    ☀️ Light
-                  </button>
                   <button
                     type="button"
                     onClick={() => setTheme('dark')}
@@ -495,6 +475,34 @@ export default function OnboardingPage() {
                     }}
                   >
                     🌙 Dark
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTheme('light')}
+                    style={{
+                      flex: 1,
+                      padding: '12px',
+                      borderRadius: '10px',
+                      border: theme === 'light' 
+                        ? '2px solid var(--green)' 
+                        : '1px solid var(--border2)',
+                      background: theme === 'light' 
+                        ? 'var(--green-tint)' 
+                        : 'var(--card)',
+                      color: theme === 'light' 
+                        ? 'var(--green)' 
+                        : 'var(--text)',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      fontFamily: 'var(--font-display)',
+                      transition: 'all 0.2s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                    }}
+                  >
+                    ☀️ Light
                   </button>
                 </div>
               </div>
