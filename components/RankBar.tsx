@@ -57,7 +57,7 @@ export default function RankBar() {
         .rank-container {
           width: 100%;
           display: flex;
-          height: 125px;
+          height: 162px;
           overflow: hidden;
           box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
           position: relative;
@@ -83,26 +83,26 @@ export default function RankBar() {
         }
         
         .rank-name {
-          font-size: 14px;
+          font-size: 18px;
           font-weight: 700;
           color: white;
           text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-          margin-bottom: 4px;
+          margin-bottom: 6px;
           font-family: var(--font-display);
           letter-spacing: 0.5px;
         }
         
         .rank-percentage {
-          font-size: 16px;
+          font-size: 20px;
           font-weight: 800;
           color: white;
           text-shadow: 0 1px 2px rgba(0,0,0,0.3);
           font-family: var(--font-display);
-          margin: 2px 0;
+          margin: 3px 0;
         }
         
         .rank-elo {
-          font-size: 11px;
+          font-size: 13px;
           font-weight: 600;
           color: rgba(255,255,255,0.9);
           text-shadow: 0 1px 2px rgba(0,0,0,0.3);
@@ -111,15 +111,15 @@ export default function RankBar() {
         
         @media (max-width: 768px) {
           .rank-container {
-            height: 100px;
+            height: 130px;
           }
           
           .rank-name {
-            font-size: 12px;
+            font-size: 15px;
           }
           
           .rank-elo {
-            font-size: 10px;
+            font-size: 12px;
           }
           
           .rank-item {
@@ -129,15 +129,15 @@ export default function RankBar() {
         
         @media (max-width: 480px) {
           .rank-container {
-            height: 88px;
+            height: 114px;
           }
           
           .rank-name {
-            font-size: 11px;
+            font-size: 14px;
           }
           
           .rank-elo {
-            font-size: 9px;
+            font-size: 11px;
           }
           
           .rank-item {

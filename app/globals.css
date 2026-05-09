@@ -352,6 +352,16 @@ body[data-theme='dark'] .hero-bg {
   border: 1px solid rgba(0,0,0,0.25);
   backface-visibility: hidden;
   transform: translateZ(0);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.hero-deco-card:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.08);
+  border-color: rgba(0,0,0,0.35);
+  background: var(--card2);
+  z-index: 3;
 }
 
 /* Hero section card positioning */
@@ -510,7 +520,23 @@ button:hover, .nav-login:hover, .nav-signup:hover, .ft-cta:hover, .pc-cta:hover,
     margin: 0 -20px;
   }
 }
+.pc {
+  background: var(--card);
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.pc:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+
 .pc.compete { border-top: 3px solid var(--green); }
+.pc.create { border-top: 3px solid var(--blue); }
 .pc.learn { border-top: 3px solid var(--purple); }
 .coming-soon-badge { position: absolute; top: 12px; right: 12px; background: var(--purple); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 .try-switching-hint { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); font-size: 11px; color: var(--text3); font-weight: 500; background: var(--card2); padding: 4px 8px; border-radius: 4px; pointer-events: none; }
@@ -531,30 +557,30 @@ button:hover, .nav-login:hover, .nav-signup:hover, .ft-cta:hover, .pc-cta:hover,
 .pc-cta.compete:hover { background: var(--green); color: #fff; }
 .pc-cta.learn { background: var(--purple-tint); color: var(--purple); }
 .pc-cta.learn:hover { background: var(--purple); color: #fff; }
-.pc-preview { border-top: 1px solid var(--border); margin: 0 -22px; flex: 1; }
-.pc-lb { padding: 12px 14px; }
-.pc-lb-title { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--green); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; font-family: var(--font-display); }
+.pc-preview { border-top: 1px solid var(--border); margin: 0 -22px; flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 16px 0 0 0; }
+.pc-lb { padding: 20px 18px 0 18px; }
+.pc-lb-title { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--green); margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; font-family: var(--font-display); }
 .pc-lb-live { display: flex; align-items: center; gap: 4px; font-size: 9px; color: var(--text3); }
 .pc-lb-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); box-shadow: 0 0 4px rgba(21,128,61,.5); animation: lpulse 1.5s infinite; flex-shrink: 0; }
-.pc-lb-row { display: flex; align-items: center; gap: 7px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+.pc-lb-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
 .pc-lb-row:last-child { border-bottom: none; }
 .pc-lb-row.you-row { background: var(--green-tint); margin: 0 -14px; padding: 5px 14px; border-left: 2px solid var(--green); }
-.pc-lb-rank { font-size: 11px; width: 18px; flex-shrink: 0; }
+.pc-lb-rank { font-size: 15px; width: 24px; flex-shrink: 0; }
 .pc-lb-av { width: 18px; height: 18px; border-radius: 4px; background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: var(--green); flex-shrink: 0; }
-.pc-lb-name { flex: 1; font-size: 10px; font-weight: 500; color: var(--text); }
+.pc-lb-name { flex: 1; font-size: 14px; font-weight: 500; color: var(--text); }
 .pc-lb-elo { font-size: 10px; font-weight: 700; color: var(--green); }
-.pc-lb-delta { font-size: 9px; color: var(--green); font-weight: 700; }
-.pc-cf { padding: 12px 14px; }
+.pc-lb-delta { font-size: 10px; color: var(--green); font-weight: 700; }
+.pc-cf { padding: 20px 18px 0 18px; }
 .pc-cf-title { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--blue); margin-bottom: 10px; font-family: var(--font-display); }
-.pc-cf-card { background: var(--blue-tint); border: 1px solid rgba(37,99,235,.15); border-radius: 8px; padding: 10px; }
+.pc-cf-card { background: var(--blue-tint); border: 1px solid rgba(37,99,235,.15); border-radius: 8px; padding: 16px; }
 .pc-cf-top { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
-.pc-cf-av { width: 22px; height: 22px; border-radius: 50%; background: var(--blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0; }
+.pc-cf-av { width: 32px; height: 32px; border-radius: 50%; background: var(--blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
 .pc-cf-name { font-size: 11px; font-weight: 700; color: var(--text); }
 .pc-cf-tag { font-size: 9px; color: var(--text3); margin-left: auto; }
 .pc-cf-match { font-size: 10px; font-weight: 800; color: var(--blue); margin-bottom: 6px; }
-.pc-cf-bio { font-size: 10px; color: var(--text2); line-height: 1.4; margin-bottom: 7px; }
+.pc-cf-bio { font-size: 13px; color: var(--text2); line-height: 1.4; margin-bottom: 8px; }
 .pc-cf-skills { display: flex; gap: 4px; flex-wrap: wrap; }
-.pc-cf-skill { font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 3px; background: rgba(37,99,235,.1); color: var(--blue); }
+.pc-cf-skill { font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 3px; background: rgba(37,99,235,.1); color: var(--blue); }
 .pc-learn { padding: 12px 14px; }
 .pc-learn-title { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--purple); margin-bottom: 8px; font-family: var(--font-display); }
 .pc-learn-course { background: var(--purple-tint); border: 1px solid rgba(124,58,237,.15); border-radius: 6px; padding: 8px; margin-bottom: 8px; }

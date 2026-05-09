@@ -34,8 +34,8 @@ export default function HowItWorksSection() {
           className="step-box"
           style={{
             flex: '0 0 312px',
-            background: activeStep === 1 ? 'var(--green)' : 'var(--card)',
-            border: activeStep === 1 ? '2px solid var(--green)' : '1px solid var(--border)',
+            background: activeStep === 1 ? 'rgba(34, 197, 94, 0.7)' : 'var(--card)',
+            border: activeStep === 1 ? '2px solid rgba(34, 197, 94, 1)' : '1px solid var(--border)',
             borderRadius: '16px',
             padding: '50px 25px',
             textAlign: 'center',
@@ -59,8 +59,8 @@ export default function HowItWorksSection() {
               width: '39px',
               height: '39px',
               borderRadius: '50%',
-              background: activeStep === 1 ? 'white' : 'var(--green)',
-              color: activeStep === 1 ? 'var(--green)' : 'white',
+              background: activeStep === 1 ? 'white' : 'rgba(34, 197, 94, 0.7)',
+              color: activeStep === 1 ? 'rgba(34, 197, 94, 1)' : 'white',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -103,27 +103,45 @@ export default function HowItWorksSection() {
               transition: 'all 0.3s ease'
             }}
           >
-            <div style={{
-              background: activeStep === 1 ? 'white' : 'var(--green)',
-              color: activeStep === 1 ? 'var(--green)' : 'white',
-              padding: '14px 28px',
-              borderRadius: '8px',
-              fontSize: '18px',
-              fontWeight: 700,
-              fontFamily: 'var(--font-display)',
-              border: 'none',
-              cursor: 'pointer',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
-              transition: 'all 0.2s ease'
-            }}>
+            <button
+              onClick={() => window.location.href = '/login?mode=signup'}
+              style={{
+                background: activeStep === 1 ? 'white' : 'rgba(34, 197, 94, 0.7)',
+                color: activeStep === 1 ? 'rgba(34, 197, 94, 1)' : 'white',
+                padding: '14px 28px',
+                borderRadius: '8px',
+                fontSize: '18px',
+                fontWeight: 700,
+                fontFamily: 'var(--font-display)',
+                border: activeStep === 1 ? '2px solid rgba(34, 197, 94, 1)' : '2px solid rgba(34, 197, 94, 0.7)',
+                cursor: 'pointer',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+                transition: 'all 0.2s ease',
+                textDecoration: 'none'
+              }}
+              onMouseEnter={(e) => {
+                const target = e.target as HTMLButtonElement;
+                target.style.background = 'rgba(34, 197, 94, 1)';
+                target.style.color = 'white';
+                target.style.borderColor = 'rgba(34, 197, 94, 1)';
+                target.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                const target = e.target as HTMLButtonElement;
+                target.style.background = activeStep === 1 ? 'white' : 'rgba(34, 197, 94, 0.7)';
+                target.style.color = activeStep === 1 ? 'rgba(34, 197, 94, 1)' : 'white';
+                target.style.borderColor = activeStep === 1 ? 'rgba(34, 197, 94, 1)' : 'rgba(34, 197, 94, 0.7)';
+                target.style.transform = 'translateY(0)';
+              }}
+            >
               Sign Up Free
-            </div>
+            </button>
           </div>
           
           <div style={{
             position: 'absolute',
             top: '50%',
-            right: '-65px',
+            right: '-60px',
             transform: 'translateY(-50%)',
             color: 'white',
             fontSize: '48px',
@@ -131,7 +149,6 @@ export default function HowItWorksSection() {
             zIndex: 1,
             textShadow: '0 5px 10px rgba(0,0,0,0.7)',
             letterSpacing: '-5px',
-            strokeWidth: '3px',
             filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.3))'
           }}>
             →
@@ -143,8 +160,8 @@ export default function HowItWorksSection() {
           className="step-box"
           style={{
             flex: '0 0 338px',
-            background: activeStep === 2 ? 'var(--blue)' : 'var(--card)',
-            border: activeStep === 2 ? '2px solid var(--blue)' : '1px solid var(--border)',
+            background: activeStep === 2 ? 'rgba(59, 130, 246, 0.7)' : 'var(--card)',
+            border: activeStep === 2 ? '2px solid rgba(59, 130, 246, 1)' : '1px solid var(--border)',
             borderRadius: '16px',
             padding: '55px 30px',
             textAlign: 'center',
@@ -168,8 +185,8 @@ export default function HowItWorksSection() {
               width: '39px',
               height: '39px',
               borderRadius: '50%',
-              background: activeStep === 2 ? 'white' : 'var(--blue)',
-              color: activeStep === 2 ? 'var(--blue)' : 'white',
+              background: activeStep === 2 ? 'white' : 'rgba(59, 130, 246, 0.7)',
+              color: activeStep === 2 ? 'rgba(59, 130, 246, 1)' : 'white',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -217,89 +234,143 @@ export default function HowItWorksSection() {
               border: '1px solid var(--border)',
               borderRadius: '12px',
               padding: '20px',
-              width: '180px',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.15)'
+              width: '200px',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+              position: 'relative'
             }}>
               <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '12px',
-                fontSize: '12px',
+                position: 'absolute',
+                top: '-8px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                background: 'var(--blue)',
+                color: 'white',
+                padding: '4px 12px',
+                borderRadius: '12px',
+                fontSize: '10px',
                 fontWeight: 700,
-                color: 'var(--text)'
+                fontFamily: 'var(--font-display)',
+                letterSpacing: '1px'
               }}>
-                <span>LIVE 1v1 BATTLE</span>
-                <span style={{ color: 'var(--green)' }}>🔴 LIVE</span>
+                BATTLE ARENA
               </div>
               <div style={{
-                display: 'flex',
+                display: 'grid',
+                gridTemplateColumns: '1fr auto 1fr',
                 alignItems: 'center',
-                gap: '10px',
+                gap: '8px',
+                marginTop: '8px',
                 marginBottom: '12px'
               }}>
                 <div style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
-                  background: 'var(--green)',
-                  color: 'white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '14px',
-                  fontWeight: 800
+                  background: 'rgba(34, 197, 94, 0.1)',
+                  border: '1px solid rgba(34, 197, 94, 0.3)',
+                  borderRadius: '6px',
+                  padding: '8px',
+                  textAlign: 'center'
                 }}>
-                  D
-                </div>
-                <div>
                   <div style={{
-                    fontSize: '14px',
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '50%',
+                    background: 'var(--green)',
+                    color: 'white',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '10px',
+                    fontWeight: 800,
+                    margin: '0 auto 4px'
+                  }}>
+                    D
+                  </div>
+                  <div style={{
+                    fontSize: '10px',
                     fontWeight: 700,
-                    color: 'var(--text)',
-                    lineHeight: 1.2
+                    color: 'var(--green)'
                   }}>
                     DesignWolf
                   </div>
+                </div>
+                <div style={{
+                  fontSize: '16px',
+                  fontWeight: 900,
+                  color: 'var(--text)',
+                  fontFamily: 'var(--font-display)'
+                }}>
+                  VS
+                </div>
+                <div style={{
+                  background: 'rgba(239, 68, 68, 0.1)',
+                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                  borderRadius: '6px',
+                  padding: '8px',
+                  textAlign: 'center'
+                }}>
                   <div style={{
-                    fontSize: '11px',
-                    color: 'var(--text2)',
-                    lineHeight: 1.2
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '50%',
+                    background: 'var(--red)',
+                    color: 'white',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '10px',
+                    fontWeight: 800,
+                    margin: '0 auto 4px'
                   }}>
-                    vs NeonBrush
+                    N
+                  </div>
+                  <div style={{
+                    fontSize: '10px',
+                    fontWeight: 700,
+                    color: 'var(--red)'
+                  }}>
+                    NeonBrush
                   </div>
                 </div>
+              </div>
+              <div style={{
+                background: 'linear-gradient(90deg, var(--green), var(--blue))',
+                height: '4px',
+                borderRadius: '2px',
+                marginBottom: '8px',
+                position: 'relative'
+              }}>
+                <div style={{
+                  position: 'absolute',
+                  left: '60%',
+                  top: '-2px',
+                  width: '8px',
+                  height: '8px',
+                  background: 'white',
+                  border: '2px solid var(--green)',
+                  borderRadius: '50%'
+                }} />
               </div>
               <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center',
-                fontSize: '11px',
+                fontSize: '9px',
                 color: 'var(--text2)',
-                marginBottom: '8px'
+                marginBottom: '6px'
               }}>
-                <span>⏱️ 2:34 remaining</span>
+                <span>⏱️ 2:34</span>
                 <span>🏆 +5 ELO</span>
               </div>
               <div style={{
-                background: 'var(--green)',
-                color: 'white',
-                padding: '8px 12px',
-                borderRadius: '6px',
-                fontSize: '11px',
+                background: 'rgba(59, 130, 246, 0.1)',
+                border: '1px solid rgba(59, 130, 246, 0.3)',
+                borderRadius: '4px',
+                padding: '6px',
+                fontSize: '9px',
                 fontWeight: 700,
+                color: 'var(--blue)',
                 textAlign: 'center',
-                marginBottom: '8px'
+                fontFamily: 'var(--font-display)'
               }}>
-                "AI-powered study tools"
-              </div>
-              <div style={{
-                fontSize: '10px',
-                color: 'var(--text2)',
-                textAlign: 'center',
-                fontStyle: 'italic'
-              }}>
-                Round 3 of 5
+                ROUND 3 OF 5
               </div>
             </div>
           </div>
@@ -307,7 +378,7 @@ export default function HowItWorksSection() {
           <div style={{
             position: 'absolute',
             top: '50%',
-            right: '-65px',
+            right: '-60px',
             transform: 'translateY(-50%)',
             color: 'white',
             fontSize: '48px',
@@ -315,7 +386,6 @@ export default function HowItWorksSection() {
             zIndex: 1,
             textShadow: '0 5px 10px rgba(0,0,0,0.7)',
             letterSpacing: '-5px',
-            strokeWidth: '3px',
             filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.3))'
           }}>
             →
@@ -327,10 +397,10 @@ export default function HowItWorksSection() {
           className="step-box"
           style={{
             flex: '0 0 364px',
-            background: activeStep === 3 ? 'var(--orange)' : 'var(--card)',
-            border: activeStep === 3 ? '2px solid var(--orange)' : '1px solid var(--border)',
+            background: activeStep === 3 ? 'rgba(249, 115, 22, 0.7)' : 'var(--card)',
+            border: activeStep === 3 ? '2px solid rgba(249, 115, 22, 1)' : '1px solid var(--border)',
             borderRadius: '16px',
-            padding: '60px 35px',
+            padding: '85px 35px',
             textAlign: 'center',
             cursor: 'pointer',
             transition: 'all 0.3s ease',
@@ -352,8 +422,8 @@ export default function HowItWorksSection() {
               width: '39px',
               height: '39px',
               borderRadius: '50%',
-              background: activeStep === 3 ? 'white' : 'var(--orange)',
-              color: activeStep === 3 ? 'var(--orange)' : 'white',
+              background: activeStep === 3 ? 'white' : 'rgba(249, 115, 22, 0.7)',
+              color: activeStep === 3 ? 'rgba(249, 115, 22, 1)' : 'white',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -400,43 +470,39 @@ export default function HowItWorksSection() {
               background: 'var(--card)',
               border: '1px solid var(--border)',
               borderRadius: '12px',
-              padding: '20px',
+              padding: '16px',
               width: '180px',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.15)'
+              boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+              position: 'relative'
             }}>
               <div style={{
-                fontSize: '12px',
+                position: 'absolute',
+                top: '-8px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                background: 'var(--orange)',
+                color: 'white',
+                padding: '4px 12px',
+                borderRadius: '12px',
+                fontSize: '10px',
                 fontWeight: 700,
-                color: 'var(--text)',
-                marginBottom: '8px',
-                textAlign: 'center',
-                textTransform: 'uppercase',
+                fontFamily: 'var(--font-display)',
                 letterSpacing: '1px'
               }}>
-                Community Review
+                COMMUNITY JUDGED
               </div>
               <div style={{
                 background: 'var(--orange)',
                 color: 'white',
-                padding: '8px 12px',
+                padding: '10px 12px',
                 borderRadius: '6px',
                 fontSize: '11px',
                 fontWeight: 700,
                 textAlign: 'center',
-                marginBottom: '12px'
+                marginBottom: '10px',
+                fontStyle: 'italic'
               }}>
                 "AI-powered study tools"
-              </div>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '8px',
-                fontSize: '11px',
-                color: 'var(--text2)'
-              }}>
-                <span>Submitted by DesignWolf</span>
-                <span style={{ color: 'var(--orange)' }}>⚡ 2h ago</span>
               </div>
               <div style={{
                 display: 'flex',
@@ -445,33 +511,57 @@ export default function HowItWorksSection() {
                 gap: '2px'
               }}>
                 {[1,2,3,4,5].map((star) => (
-                  <span key={star} style={{ fontSize: '16px', color: 'var(--gold)' }}>⭐</span>
+                  <span key={star} style={{ 
+                    fontSize: '16px', 
+                    color: star <= 4 ? 'var(--gold)' : 'rgba(255, 215, 0, 0.3)'
+                  }}>⭐</span>
                 ))}
-              </div>
-              <div style={{
-                fontSize: '10px',
-                color: 'var(--text2)',
-                textAlign: 'center',
-                marginBottom: '8px'
-              }}>
-                24 reviews • 4.8 avg rating
               </div>
               <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                fontSize: '10px',
-                color: 'var(--text2)'
+                fontSize: '9px',
+                color: 'var(--text2)',
+                marginBottom: '8px'
               }}>
-                <span>👍 89% helpful</span>
-                <span>💬 12 comments</span>
+                <span>4.8 avg • 24 reviews</span>
+                <span style={{ color: 'var(--orange)' }}>⚡ 2h ago</span>
+              </div>
+              <div style={{
+                display: 'flex',
+                gap: '4px',
+                justifyContent: 'center'
+              }}>
+                <div style={{
+                  background: 'rgba(249, 115, 22, 0.1)',
+                  border: '1px solid rgba(249, 115, 22, 0.3)',
+                  borderRadius: '4px',
+                  padding: '3px 6px',
+                  fontSize: '8px',
+                  fontWeight: 600,
+                  color: 'var(--orange)'
+                }}>
+                  APPROVED
+                </div>
+                <div style={{
+                  background: 'rgba(34, 197, 94, 0.1)',
+                  border: '1px solid rgba(34, 197, 94, 0.3)',
+                  borderRadius: '4px',
+                  padding: '3px 6px',
+                  fontSize: '8px',
+                  fontWeight: 600,
+                  color: 'var(--green)'
+                }}>
+                  FEATURED
+                </div>
               </div>
             </div>
           </div>
           
           <div style={{
             position: 'absolute',
-            top: '50%',
-            right: '-65px',
+            top: '60%',
+            right: '-60px',
             transform: 'translateY(-50%)',
             color: 'white',
             fontSize: '48px',
@@ -479,7 +569,6 @@ export default function HowItWorksSection() {
             zIndex: 1,
             textShadow: '0 5px 10px rgba(0,0,0,0.7)',
             letterSpacing: '-5px',
-            strokeWidth: '3px',
             filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.3))'
           }}>
             →
@@ -491,10 +580,10 @@ export default function HowItWorksSection() {
           className="step-box"
           style={{
             flex: '0 0 390px',
-            background: activeStep === 4 ? 'var(--gold)' : 'var(--card)',
-            border: activeStep === 4 ? '2px solid var(--gold)' : '1px solid var(--border)',
+            background: activeStep === 4 ? 'rgba(234, 179, 8, 0.7)' : 'var(--card)',
+            border: activeStep === 4 ? '2px solid rgba(234, 179, 8, 1)' : '1px solid var(--border)',
             borderRadius: '16px',
-            padding: '95px 40px',
+            padding: '120px 40px',
             textAlign: 'center',
             cursor: 'pointer',
             transition: 'all 0.3s ease',
@@ -516,8 +605,8 @@ export default function HowItWorksSection() {
               width: '39px',
               height: '39px',
               borderRadius: '50%',
-              background: activeStep === 4 ? 'white' : 'var(--gold)',
-              color: activeStep === 4 ? 'var(--gold)' : 'white',
+              background: activeStep === 4 ? 'white' : 'rgba(234, 179, 8, 0.7)',
+              color: activeStep === 4 ? 'rgba(234, 179, 8, 1)' : 'white',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -560,7 +649,7 @@ export default function HowItWorksSection() {
               transition: 'all 0.3s ease'
             }}
           >
-            <div className="pc-lb" style={{ transform: 'scale(0.9)', transformOrigin: 'top center' }}>
+            <div className="pc-lb" style={{ transform: 'scale(1.2)', transformOrigin: 'top center' }}>
                 <div className="pc-lb-title" style={{
                   fontSize: '14px',
                   fontWeight: 700,
