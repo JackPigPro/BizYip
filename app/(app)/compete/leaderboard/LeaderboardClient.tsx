@@ -160,28 +160,15 @@ export default function LeaderboardClient({
     }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         {/* Header */}
-        <div style={{ marginBottom: '32px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <h1 style={{ fontSize: '48px', fontWeight: 800, letterSpacing: '-2px', fontFamily: 'var(--font-display)', color: 'var(--text)', margin: 0 }}>
             Leaderboard
           </h1>
-          <div style={{ 
-            fontSize: '18px', 
-            fontWeight: '400', 
-            fontFamily: 'var(--font-body)', 
-            color: 'var(--text2)', 
-            marginTop: '8px' 
-          }}>
-            {activeTab === 'daily' && 'ELO gained in the last 24 hours'}
-            {activeTab === 'monthly' && 'ELO gained this month'}
-            {activeTab === 'weekly' && 'ELO gained in the last 7 days'}
-            {activeTab === 'alltime' && 'All time ELO'}
-          </div>
         </div>
 
-        {/* Tab Switcher - Outside any container, above podium */}
+        {/* Tab Switcher - Outside header to align with podium */}
         <div style={{ 
-          maxWidth: '1400px', 
-          margin: '0 0 24px 24px',
+          marginBottom: '0px',
           display: 'flex',
           justifyContent: 'flex-start'
         }}>
@@ -191,7 +178,8 @@ export default function LeaderboardClient({
             padding: '8px',
             border: '1px solid var(--border)',
             boxShadow: 'var(--shadow)',
-            minWidth: '400px'
+            display: 'inline-flex',
+            minWidth: '320px'
           }}>
             {(['daily', 'monthly', 'alltime'] as const).map((tab) => (
               <button
@@ -199,18 +187,18 @@ export default function LeaderboardClient({
                 onClick={() => setActiveTab(tab)}
                 style={{
                   flex: 1,
-                  padding: '12px 20px',
+                  padding: '8px 12px',
                   border: 'none',
                   borderRadius: '8px',
                   background: activeTab === tab ? 'var(--green)' : 'transparent',
                   color: activeTab === tab ? 'white' : 'var(--text)',
-                  fontSize: '14px',
+                  fontSize: '13px',
                   fontWeight: '700',
                   fontFamily: 'var(--font-display)',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
                   textTransform: 'capitalize',
-                  letterSpacing: '-0.1px',
+                  letterSpacing: '-0.3px',
                   boxShadow: activeTab === tab ? '0 2px 4px rgba(34, 197, 94, 0.2)' : 'none'
                 }}
               >
@@ -222,7 +210,7 @@ export default function LeaderboardClient({
 
         <div className="leaderboard-container">
           {/* Left Side - Leaderboard List */}
-          <div className="leaderboard-main">
+          <div className="leaderboard-main" style={{ marginTop: '-16px' }}>
             {/* Podium Section - Top 3 */}
             {displayUsers.length >= 3 && (
               <div style={{ 
@@ -241,32 +229,54 @@ export default function LeaderboardClient({
                 }}>
                   {/* 2nd Place */}
                   <div style={{ textAlign: 'center', flex: 1 }}>
+                    {/* Position Tag */}
                     <div style={{
-                      width: '80px',
-                      height: '80px',
-                      borderRadius: '16px',
-                      background: (() => {
-                        const avatarColors: Record<string, string> = {
-                          'avatar-1': '#6366F1', 'avatar-2': '#10B981', 'avatar-3': '#0EA5E9',
-                          'avatar-4': '#F43F5E', 'avatar-5': '#F59E0B', 'avatar-6': '#8B5CF6',
-                          'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
-                          'avatar-10': '#3B82F6'
-                        }
-                        return avatarColors[displayUsers[1]?.profiles?.avatar] || '#6366F1'
-                      })(),
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#fff',
-                      fontSize: '32px',
+                      fontSize: '14px',
                       fontWeight: '800',
                       fontFamily: 'var(--font-display)',
-                      margin: '0 auto 12px',
-                      border: '3px solid #C0C0C0',
-                      boxShadow: '0 4px 12px rgba(192, 192, 192, 0.3)'
+                      color: '#fff',
+                      backgroundColor: '#C0C0C0',
+                      padding: '4px 12px',
+                      borderRadius: '12px',
+                      marginBottom: '12px',
+                      display: 'inline-block',
+                      letterSpacing: '0.5px',
+                      textTransform: 'uppercase'
                     }}>
-                      {displayUsers[1].profiles.username.charAt(0).toUpperCase()}
+                      2nd
                     </div>
+                    <a
+                      href={`/profile/${displayUsers[1].profiles.username}`}
+                      style={{
+                        textDecoration: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '80px',
+                        height: '80px',
+                        borderRadius: '16px',
+                        background: (() => {
+                          const avatarColors: Record<string, string> = {
+                            'avatar-1': '#6366F1', 'avatar-2': '#10B981', 'avatar-3': '#0EA5E9',
+                            'avatar-4': '#F43F5E', 'avatar-5': '#F59E0B', 'avatar-6': '#8B5CF6',
+                            'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
+                            'avatar-10': '#3B82F6'
+                          }
+                          return avatarColors[displayUsers[1]?.profiles?.avatar] || '#6366F1'
+                        })(),
+                        color: '#fff',
+                        fontSize: '32px',
+                        fontWeight: '800',
+                        fontFamily: 'var(--font-display)',
+                        border: '3px solid #C0C0C0',
+                        boxShadow: '0 4px 12px rgba(192, 192, 192, 0.3)',
+                        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                        cursor: 'pointer',
+                        margin: '0 auto 12px'
+                      }}
+                    >
+                      {displayUsers[1].profiles.username.charAt(0).toUpperCase()}
+                    </a>
                     <div style={{
                       fontSize: '14px',
                       fontWeight: '700',
@@ -290,44 +300,67 @@ export default function LeaderboardClient({
                     <div style={{
                       fontSize: '12px',
                       fontWeight: '600',
-                      color: 'var(--text2)',
-                      backgroundColor: '#E5E7EB',
+                      color: '#fff',
+                      backgroundColor: getRankColor(getRankByElo(allUsers.find(u => u.user_id === displayUsers[1].user_id)?.elo || 0)),
                       padding: '4px 8px',
                       borderRadius: '4px',
                       display: 'inline-block'
                     }}>
-                      {getRankByElo(displayUsers[1].elo)}
+                      {getRankByElo(allUsers.find(u => u.user_id === displayUsers[1].user_id)?.elo || 0)}
                     </div>
                   </div>
 
                   {/* 1st Place */}
                   <div style={{ textAlign: 'center', flex: 1, transform: 'translateY(-8px)' }}>
+                    {/* Position Tag */}
                     <div style={{
-                      width: '100px',
-                      height: '100px',
-                      borderRadius: '20px',
-                      background: (() => {
-                        const avatarColors: Record<string, string> = {
-                          'avatar-1': '#6366F1', 'avatar-2': '#10B981', 'avatar-3': '#0EA5E9',
-                          'avatar-4': '#F43F5E', 'avatar-5': '#F59E0B', 'avatar-6': '#8B5CF6',
-                          'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
-                          'avatar-10': '#3B82F6'
-                        }
-                        return avatarColors[displayUsers[0]?.profiles?.avatar] || '#6366F1'
-                      })(),
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#fff',
-                      fontSize: '40px',
+                      fontSize: '16px',
                       fontWeight: '800',
                       fontFamily: 'var(--font-display)',
-                      margin: '0 auto 12px',
-                      border: '3px solid #FFD700',
-                      boxShadow: '0 4px 16px rgba(255, 215, 0, 0.4)'
+                      color: '#fff',
+                      backgroundColor: '#FFD700',
+                      padding: '6px 16px',
+                      borderRadius: '12px',
+                      marginBottom: '12px',
+                      display: 'inline-block',
+                      letterSpacing: '0.5px',
+                      textTransform: 'uppercase',
+                      boxShadow: '0 2px 8px rgba(255, 215, 0, 0.3)'
                     }}>
-                      {displayUsers[0].profiles.username.charAt(0).toUpperCase()}
+                      1st
                     </div>
+                    <a
+                      href={`/profile/${displayUsers[0].profiles.username}`}
+                      style={{
+                        textDecoration: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '100px',
+                        height: '100px',
+                        borderRadius: '20px',
+                        background: (() => {
+                          const avatarColors: Record<string, string> = {
+                            'avatar-1': '#6366F1', 'avatar-2': '#10B981', 'avatar-3': '#0EA5E9',
+                            'avatar-4': '#F43F5E', 'avatar-5': '#F59E0B', 'avatar-6': '#8B5CF6',
+                            'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
+                            'avatar-10': '#3B82F6'
+                          }
+                          return avatarColors[displayUsers[0]?.profiles?.avatar] || '#6366F1'
+                        })(),
+                        color: '#fff',
+                        fontSize: '40px',
+                        fontWeight: '800',
+                        fontFamily: 'var(--font-display)',
+                        border: '3px solid #FFD700',
+                        boxShadow: '0 4px 16px rgba(255, 215, 0, 0.4)',
+                        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                        cursor: 'pointer',
+                        margin: '0 auto 12px'
+                      }}
+                    >
+                      {displayUsers[0].profiles.username.charAt(0).toUpperCase()}
+                    </a>
                     <div style={{
                       fontSize: '16px',
                       fontWeight: '800',
@@ -352,43 +385,65 @@ export default function LeaderboardClient({
                       fontSize: '12px',
                       fontWeight: '600',
                       color: '#fff',
-                      backgroundColor: 'var(--green)',
+                      backgroundColor: getRankColor(getRankByElo(allUsers.find(u => u.user_id === displayUsers[0].user_id)?.elo || 0)),
                       padding: '4px 8px',
                       borderRadius: '4px',
                       display: 'inline-block'
                     }}>
-                      {getRankByElo(displayUsers[0].elo)}
+                      {getRankByElo(allUsers.find(u => u.user_id === displayUsers[0].user_id)?.elo || 0)}
                     </div>
                   </div>
 
                   {/* 3rd Place */}
                   <div style={{ textAlign: 'center', flex: 1 }}>
+                    {/* Position Tag */}
                     <div style={{
-                      width: '80px',
-                      height: '80px',
-                      borderRadius: '16px',
-                      background: (() => {
-                        const avatarColors: Record<string, string> = {
-                          'avatar-1': '#6366F1', 'avatar-2': '#10B981', 'avatar-3': '#0EA5E9',
-                          'avatar-4': '#F43F5E', 'avatar-5': '#F59E0B', 'avatar-6': '#8B5CF6',
-                          'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
-                          'avatar-10': '#3B82F6'
-                        }
-                        return avatarColors[displayUsers[2]?.profiles?.avatar] || '#6366F1'
-                      })(),
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#fff',
-                      fontSize: '32px',
+                      fontSize: '14px',
                       fontWeight: '800',
                       fontFamily: 'var(--font-display)',
-                      margin: '0 auto 12px',
-                      border: '3px solid #CD7F32',
-                      boxShadow: '0 4px 12px rgba(205, 127, 50, 0.3)'
+                      color: '#fff',
+                      backgroundColor: '#CD7F32',
+                      padding: '4px 12px',
+                      borderRadius: '12px',
+                      marginBottom: '12px',
+                      display: 'inline-block',
+                      letterSpacing: '0.5px',
+                      textTransform: 'uppercase'
                     }}>
-                      {displayUsers[2].profiles.username.charAt(0).toUpperCase()}
+                      3rd
                     </div>
+                    <a
+                      href={`/profile/${displayUsers[2].profiles.username}`}
+                      style={{
+                        textDecoration: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '80px',
+                        height: '80px',
+                        borderRadius: '16px',
+                        background: (() => {
+                          const avatarColors: Record<string, string> = {
+                            'avatar-1': '#6366F1', 'avatar-2': '#10B981', 'avatar-3': '#0EA5E9',
+                            'avatar-4': '#F43F5E', 'avatar-5': '#F59E0B', 'avatar-6': '#8B5CF6',
+                            'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
+                            'avatar-10': '#3B82F6'
+                          }
+                          return avatarColors[displayUsers[2]?.profiles?.avatar] || '#6366F1'
+                        })(),
+                        color: '#fff',
+                        fontSize: '32px',
+                        fontWeight: '800',
+                        fontFamily: 'var(--font-display)',
+                        border: '3px solid #CD7F32',
+                        boxShadow: '0 4px 12px rgba(205, 127, 50, 0.3)',
+                        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                        cursor: 'pointer',
+                        margin: '0 auto 12px'
+                      }}
+                    >
+                      {displayUsers[2].profiles.username.charAt(0).toUpperCase()}
+                    </a>
                     <div style={{
                       fontSize: '14px',
                       fontWeight: '700',
@@ -412,13 +467,13 @@ export default function LeaderboardClient({
                     <div style={{
                       fontSize: '12px',
                       fontWeight: '600',
-                      color: 'var(--text2)',
-                      backgroundColor: '#FEF3C7',
+                      color: '#fff',
+                      backgroundColor: getRankColor(getRankByElo(allUsers.find(u => u.user_id === displayUsers[2].user_id)?.elo || 0)),
                       padding: '4px 8px',
                       borderRadius: '4px',
                       display: 'inline-block'
                     }}>
-                      {getRankByElo(displayUsers[2].elo)}
+                      {getRankByElo(allUsers.find(u => u.user_id === displayUsers[2].user_id)?.elo || 0)}
                     </div>
                   </div>
                 </div>
@@ -435,7 +490,7 @@ export default function LeaderboardClient({
                 letterSpacing: '0.5px', 
                 textTransform: 'uppercase'
               }}>
-                Rank
+                Place
               </div>
               <div style={{ 
                 fontSize: '12px', 
@@ -456,7 +511,7 @@ export default function LeaderboardClient({
                 textTransform: 'uppercase',
                 textAlign: 'right'
               }}>
-                {activeTab === 'daily' || activeTab === 'monthly' ? 'Gain' : 'ELO'}
+                ELO
               </div>
               <div style={{ 
                 fontSize: '12px', 
@@ -467,168 +522,216 @@ export default function LeaderboardClient({
                 textTransform: 'uppercase',
                 textAlign: 'right'
               }}>
-                Total ELO
-              </div>
-              <div style={{ 
-                fontSize: '12px', 
-                fontWeight: '600', 
-                fontFamily: 'var(--font-display)', 
-                color: 'var(--text2)',
-                letterSpacing: '0.5px',
-                textTransform: 'uppercase',
-                textAlign: 'center'
-              }}>
                 Rank
               </div>
             </div>
 
-            {/* Rankings Table - Starting from 4th place */}
+            {/* Rankings Table - Always show ranks 4-10 */}
           <div className="leaderboard-sidebar">
-              {displayUsers.slice(3).map((user, index) => {
-                const actualRank = index + 4 // Start from 4th place
-                const isCurrentUser = currentUserId && user.user_id === currentUserId
-                const userRank = getRankByElo(user.elo)
-                const rankColor = getRankColor(userRank)
-                const totalElo = allUsers.find(u => u.user_id === user.user_id)?.elo || 0
+              {[4, 5, 6, 7, 8, 9, 10].map((rank) => {
+                const user = displayUsers.find(u => displayUsers.indexOf(u) + 1 === rank)
+                const isCurrentUser = currentUserId && user?.user_id === currentUserId
+                
+                if (user) {
+                  // Real user data
+                  const userRank = getRankByElo(user.elo)
+                  const rankColor = getRankColor(userRank)
+                  const totalElo = allUsers.find(u => u.user_id === user.user_id)?.elo || 0
 
-                return (
-                  <div
-                    key={user.user_id}
-                    className="leaderboard-row"
-                    style={{
-                      background: isCurrentUser ? getRankFaintColor(userRank) : getRankFaintColor(userRank),
-                      border: isCurrentUser ? '1px solid var(--green)' : '1px solid var(--border)',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    {/* Rank Number */}
-                    <div style={{
-                      fontSize: '16px',
-                      fontWeight: '800',
-                      fontFamily: 'var(--font-display)',
-                      color: 'var(--text2)',
-                      minWidth: '32px',
-                      textAlign: 'center'
-                    }}>
-                      {actualRank}
-                    </div>
-
-                    {/* User Info - Avatar + Username */}
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                      flex: 1
-                    }}>
-                      {/* Avatar */}
+                  return (
+                    <div
+                      key={user.user_id}
+                      className="leaderboard-row"
+                      style={{
+                        background: isCurrentUser ? getRankFaintColor(userRank) : getRankFaintColor(userRank),
+                        border: isCurrentUser ? '1px solid var(--green)' : '1px solid var(--border)',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
                       <div style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '10px',
-                        background: (() => {
-                          const avatarColors: Record<string, string> = {
-                            'avatar-1': '#6366F1', 'avatar-2': '#10B981', 'avatar-3': '#0EA5E9',
-                            'avatar-4': '#F43F5E', 'avatar-5': '#F59E0B', 'avatar-6': '#8B5CF6',
-                            'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
-                            'avatar-10': '#3B82F6'
-                          }
-                          return avatarColors[user.profiles.avatar] || '#6366F1'
-                        })(),
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#fff',
                         fontSize: '16px',
-                        fontWeight: '800',
-                        fontFamily: 'var(--font-display)'
+                        fontWeight: '700',
+                        fontFamily: 'var(--font-display)',
+                        color: 'var(--text)',
+                        minWidth: '32px',
+                        textAlign: 'center'
                       }}>
-                        {user.profiles.username.charAt(0).toUpperCase()}
+                        {rank}
                       </div>
 
-                      {/* Username */}
-                      <a
-                        href={`/profile/${user.profiles.username}`}
-                        style={{
-                          textDecoration: 'none',
+                      {/* User Info - Avatar + Username */}
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '12px',
+                        flex: 1
+                      }}>
+                        {/* Avatar */}
+                        <a
+                          href={`/profile/${user.profiles.username}`}
+                          style={{
+                            textDecoration: 'none',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '10px',
+                            background: (() => {
+                              const avatarColors: Record<string, string> = {
+                                'avatar-1': '#6366F1', 'avatar-2': '#10B981', 'avatar-3': '#0EA5E9',
+                                'avatar-4': '#F43F5E', 'avatar-5': '#F59E0B', 'avatar-6': '#8B5CF6',
+                                'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
+                                'avatar-10': '#3B82F6'
+                              }
+                              return avatarColors[user.profiles.avatar] || '#6366F1'
+                            })(),
+                            color: '#fff',
+                            fontSize: '16px',
+                            fontWeight: '800',
+                            fontFamily: 'var(--font-display)',
+                            transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                            cursor: 'pointer',
+                            flexShrink: 0
+                          }}
+                        >
+                          {user.profiles.username.charAt(0).toUpperCase()}
+                        </a>
+
+                        {/* Username */}
+                        <a
+                          href={`/profile/${user.profiles.username}`}
+                          style={{
+                            textDecoration: 'none',
+                            fontSize: '16px',
+                            fontWeight: '700',
+                            fontFamily: 'var(--font-display)',
+                            color: 'var(--text)',
+                            letterSpacing: '-0.1px'
+                          }}
+                        >
+                          {user.profiles.username}
+                          {isCurrentUser && (
+                            <span style={{
+                              marginLeft: '8px',
+                              fontSize: '12px',
+                              color: 'var(--green)',
+                              fontWeight: '600'
+                            }}>
+                              (You)
+                            </span>
+                          )}
+                          {user.current_streak > 0 && (
+                            <span style={{
+                              marginLeft: '8px',
+                              fontSize: '14px',
+                              color: 'var(--text2)',
+                              fontWeight: '600'
+                            }}>
+                              🔥 {user.current_streak}
+                            </span>
+                          )}
+                        </a>
+                      </div>
+
+                      {/* ELO (Period Gain) */}
+                      <div style={{
+                        fontSize: '16px',
+                        fontWeight: '800',
+                        fontFamily: 'var(--font-display)',
+                        color: (activeTab === 'daily' || activeTab === 'monthly') 
+                          ? (user.elo >= 0 ? 'var(--green)' : 'var(--red)') 
+                          : 'var(--green)',
+                        letterSpacing: '-0.2px',
+                        textAlign: 'right',
+                        minWidth: '80px'
+                      }}>
+                        {activeTab === 'daily' || activeTab === 'monthly' 
+                          ? `${user.elo >= 0 ? '+' : ''}${user.elo}` 
+                          : user.elo}
+                      </div>
+
+                      {/* Rank (Overall) */}
+                      <div style={{
+                        fontSize: '16px',
+                        fontWeight: '600',
+                        fontFamily: 'var(--font-display)',
+                        color: 'var(--text)',
+                        textAlign: 'right',
+                        minWidth: '80px'
+                      }}>
+                        {getRankByElo(allUsers.find(u => u.user_id === user.user_id)?.elo || 0)}
+                      </div>
+                    </div>
+                  )
+                } else {
+                  // Placeholder for empty position
+                  return (
+                    <div
+                      key={rank}
+                      className="leaderboard-row"
+                      style={{
+                        background: 'var(--card)',
+                        border: '1px solid var(--border)',
+                        opacity: 0.5
+                      }}
+                    >
+                      <div style={{
+                        fontSize: '16px',
+                        fontWeight: '700',
+                        fontFamily: 'var(--font-display)',
+                        color: 'var(--text2)',
+                        minWidth: '32px',
+                        textAlign: 'center'
+                      }}>
+                        {rank}
+                      </div>
+
+                      {/* User Info - Empty placeholder */}
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '12px',
+                        flex: 1
+                      }}>
+                        <div style={{
                           fontSize: '16px',
                           fontWeight: '700',
                           fontFamily: 'var(--font-display)',
-                          color: 'var(--text)',
+                          color: 'var(--text2)',
                           letterSpacing: '-0.1px'
-                        }}
-                      >
-                        {user.profiles.username}
-                        {isCurrentUser && (
-                          <span style={{
-                            marginLeft: '8px',
-                            fontSize: '12px',
-                            color: 'var(--green)',
-                            fontWeight: '600'
-                          }}>
-                            (You)
-                          </span>
-                        )}
-                        {user.current_streak > 0 && (
-                          <span style={{
-                            marginLeft: '8px',
-                            fontSize: '14px',
-                            color: 'var(--text2)',
-                            fontWeight: '600'
-                          }}>
-                            🔥 {user.current_streak}
-                          </span>
-                        )}
-                      </a>
-                    </div>
+                        }}>
+                          --
+                        </div>
+                      </div>
 
-                    {/* ELO Gain */}
-                    <div style={{
-                      fontSize: '16px',
-                      fontWeight: '800',
-                      fontFamily: 'var(--font-display)',
-                      color: (activeTab === 'daily' || activeTab === 'monthly') 
-                        ? (user.elo >= 0 ? 'var(--green)' : 'var(--red)') 
-                        : 'var(--green)',
-                      letterSpacing: '-0.2px',
-                      textAlign: 'right',
-                      minWidth: '80px'
-                    }}>
-                      {activeTab === 'daily' || activeTab === 'monthly' 
-                        ? `${user.elo >= 0 ? '+' : ''}${user.elo}` 
-                        : user.elo}
-                    </div>
+                      {/* ELO placeholder */}
+                      <div style={{
+                        fontSize: '16px',
+                        fontWeight: '800',
+                        fontFamily: 'var(--font-display)',
+                        color: 'var(--text2)',
+                        letterSpacing: '-0.2px',
+                        textAlign: 'right',
+                        minWidth: '80px'
+                      }}>
+                        --
+                      </div>
 
-                    {/* Total ELO */}
-                    <div style={{
-                      fontSize: '16px',
-                      fontWeight: '600',
-                      fontFamily: 'var(--font-display)',
-                      color: 'var(--text)',
-                      textAlign: 'right',
-                      minWidth: '80px'
-                    }}>
-                      {totalElo}
+                      {/* Rank placeholder */}
+                      <div style={{
+                        fontSize: '16px',
+                        fontWeight: '600',
+                        fontFamily: 'var(--font-display)',
+                        color: 'var(--text2)',
+                        textAlign: 'right',
+                        minWidth: '80px'
+                      }}>
+                        --
+                      </div>
                     </div>
-
-                    {/* Rank Title */}
-                    <div style={{
-                      fontSize: '13px',
-                      fontWeight: '600',
-                      fontFamily: 'var(--font-display)',
-                      padding: '4px 12px',
-                      borderRadius: '6px',
-                      background: getRankFaintColor(userRank),
-                      color: rankColor,
-                      border: `1px solid ${rankColor}20`,
-                      letterSpacing: '0.5px',
-                      textTransform: 'uppercase',
-                      textAlign: 'center',
-                      minWidth: '80px'
-                    }}>
-                      {userRank}
-                    </div>
-                  </div>
-                )
+                  )
+                }
               })}
 
               {/* Pinned User Position (if logged in and outside top 10) */}
@@ -682,29 +785,36 @@ export default function LeaderboardClient({
                           flex: 1
                         }}>
                           {/* Avatar */}
-                          <div style={{
-                            width: '40px',
-                            height: '40px',
-                            borderRadius: '10px',
-                            background: (() => {
-                              const avatarColors: Record<string, string> = {
-                                'avatar-1': '#6366F1', 'avatar-2': '#10B981', 'avatar-3': '#0EA5E9',
-                                'avatar-4': '#F43F5E', 'avatar-5': '#F59E0B', 'avatar-6': '#8B5CF6',
-                                'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
-                                'avatar-10': '#3B82F6'
-                              }
-                              return avatarColors[user.profiles.avatar] || '#6366F1'
-                            })(),
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: '#fff',
-                            fontSize: '16px',
-                            fontWeight: '800',
-                            fontFamily: 'var(--font-display)'
-                          }}>
+                          <a
+                            href={`/profile/${user.profiles.username}`}
+                            style={{
+                              textDecoration: 'none',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: '40px',
+                              height: '40px',
+                              borderRadius: '10px',
+                              background: (() => {
+                                const avatarColors: Record<string, string> = {
+                                  'avatar-1': '#6366F1', 'avatar-2': '#10B981', 'avatar-3': '#0EA5E9',
+                                  'avatar-4': '#F43F5E', 'avatar-5': '#F59E0B', 'avatar-6': '#8B5CF6',
+                                  'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
+                                  'avatar-10': '#3B82F6'
+                                }
+                                return avatarColors[user.profiles.avatar] || '#6366F1'
+                              })(),
+                              color: '#fff',
+                              fontSize: '16px',
+                              fontWeight: '800',
+                              fontFamily: 'var(--font-display)',
+                              transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                              cursor: 'pointer',
+                              flexShrink: 0
+                            }}
+                          >
                             {user.profiles.username.charAt(0).toUpperCase()}
-                          </div>
+                          </a>
 
                           {/* Username */}
                           <a
@@ -747,7 +857,7 @@ export default function LeaderboardClient({
                             : user.elo}
                         </div>
 
-                        {/* Total ELO */}
+                        {/* Rank (Overall) */}
                         <div style={{
                           fontSize: '16px',
                           fontWeight: '600',
@@ -756,25 +866,7 @@ export default function LeaderboardClient({
                           textAlign: 'right',
                           minWidth: '80px'
                         }}>
-                          {totalElo}
-                        </div>
-
-                        {/* Rank Title */}
-                        <div style={{
-                          fontSize: '13px',
-                          fontWeight: '600',
-                          fontFamily: 'var(--font-display)',
-                          padding: '4px 12px',
-                          borderRadius: '6px',
-                          background: getRankFaintColor(userRank),
-                          color: rankColor,
-                          border: `1px solid ${rankColor}20`,
-                          letterSpacing: '0.5px',
-                          textTransform: 'uppercase',
-                          textAlign: 'center',
-                          minWidth: '80px'
-                        }}>
-                          {userRank}
+                          {getRankByElo(allUsers.find(u => u.user_id === user.user_id)?.elo || 0)}
                         </div>
                       </div>
                     </>
@@ -786,7 +878,7 @@ export default function LeaderboardClient({
           </div>
 
           {/* Right Side - User Stats Panel */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginTop: '-16px' }}>
             
             {/* Current User Stats - Show breakdown if authenticated, CTA if logged out */}
             {currentUserId ? (

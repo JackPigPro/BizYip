@@ -1296,71 +1296,133 @@ export default function TopNavClient({
 
 
 
-        {/* Learn - Clickable with Sep badge */}
+        {/* Learn - Clickable with Sep badge for logged out users, disabled for logged in */}
 
-        <a
-
-          href="/#learn"
-
-          className="topnav-link"
-
-          onClick={(e) => {
-
-            e.preventDefault()
-
-            scrollToLandingSection('learn', 'center')
-
-          }}
-
-          onMouseEnter={() => setHoveredItem('learn')}
-
-          onMouseLeave={() => setHoveredItem(null)}
-
-          style={{
-
-            ...menuItemStyle,
-
-            cursor: 'pointer',
-
-            textDecoration: 'none',
-
-            color: 'var(--text2)',
-
-            ...(hoveredItem === 'learn' ? menuItemHoverStyle : {})
-
-          }}
-
-        >
-
-          Learn
+        {isLoggedIn ? (
 
           <span
 
+            className="topnav-link"
+
+            onMouseEnter={() => setHoveredItem('learn')}
+
+            onMouseLeave={() => setHoveredItem(null)}
+
             style={{
 
-              fontSize: '10px',
+              ...menuItemStyle,
 
-              background: 'var(--border)',
+              cursor: 'not-allowed',
 
-              color: 'var(--text2)',
+              textDecoration: 'none',
 
-              padding: '2px 6px',
+              color: 'var(--text3)',
 
-              borderRadius: '4px',
+              opacity: 0.6,
 
-              marginLeft: '6px',
-
-              fontWeight: 600
+              ...(hoveredItem === 'learn' ? menuItemHoverStyle : {})
 
             }}
 
           >
 
-            Coming Sep
+            Learn
+
+            <span
+
+              style={{
+
+                fontSize: '10px',
+
+                background: 'var(--border)',
+
+                color: 'var(--text3)',
+
+                padding: '2px 6px',
+
+                borderRadius: '4px',
+
+                marginLeft: '6px',
+
+                fontWeight: 600
+
+              }}
+
+            >
+
+              Coming Sep
+
+            </span>
 
           </span>
 
-        </a>
+        ) : (
+
+          <a
+
+            href="/#learn"
+
+            className="topnav-link"
+
+            onClick={(e) => {
+
+              e.preventDefault()
+
+              scrollToLandingSection('learn', 'center')
+
+            }}
+
+            onMouseEnter={() => setHoveredItem('learn')}
+
+            onMouseLeave={() => setHoveredItem(null)}
+
+            style={{
+
+              ...menuItemStyle,
+
+              cursor: 'pointer',
+
+              textDecoration: 'none',
+
+              color: 'var(--text2)',
+
+              ...(hoveredItem === 'learn' ? menuItemHoverStyle : {})
+
+            }}
+
+          >
+
+            Learn
+
+            <span
+
+              style={{
+
+                fontSize: '10px',
+
+                background: 'var(--border)',
+
+                color: 'var(--text2)',
+
+                padding: '2px 6px',
+
+                borderRadius: '4px',
+
+                marginLeft: '6px',
+
+                fontWeight: 600
+
+              }}
+
+            >
+
+              Coming Sep
+
+            </span>
+
+          </a>
+
+        )}
 
       </div>
 
