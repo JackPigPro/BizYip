@@ -36,7 +36,7 @@ export default function TopNavClient({
 
   const supabase = createClient()
 
-  const [open, setOpen] = useState<'connect' | 'compete' | 'settings' | null>(null)
+  const [open, setOpen] = useState<'connect' | 'compete' | 'create' | 'settings' | null>(null)
 
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
 
@@ -1094,71 +1094,183 @@ export default function TopNavClient({
 
 
 
-        {/* Create - Direct Link */}
+        {/* Create - Dropdown */}
 
-        <Link
+        <div
 
-          href={isLoggedIn ? "/connect/ideas" : "/login?mode=signup"}
+          style={hoverZoneStyle}
 
-          prefetch={isLoggedIn ? true : false}
+          onMouseEnter={() => setOpen('create')}
 
-          className="topnav-link"
-
-          style={{
-
-            ...menuItemStyle,
-
-            ...(hoveredItem === 'ideas' ? menuItemHoverStyle : {}),
-
-            ...(isActiveRoute('/connect/ideas') ? { background: 'var(--green)', color: 'white', fontWeight: 800 } : {})
-
-          }}
-
-          onClick={handleNavPageClick}
-
-          onMouseEnter={() => setHoveredItem('ideas')}
-
-          onMouseLeave={() => setHoveredItem(null)}
+          onMouseLeave={() => setOpen(null)}
 
         >
 
-          Create
+          <span 
 
-        </Link>
+            className="topnav-link" 
+
+            style={{ 
+
+              ...menuItemStyle, 
+
+              cursor: 'default',
+
+              ...(open === 'create' ? menuItemHoverStyle : {}),
+
+              ...(isActiveRoute('/connect/ideas') ? { background: 'var(--green)', color: 'white', fontWeight: 800 } : {})
+
+            }}
+
+          >
+
+            Create
+
+          </span>
+
+          <div
+
+            style={{
+
+              ...dropdownStyle,
+
+              opacity: open === 'create' ? 1 : 0,
+
+              transform:
+
+                open === 'create'
+
+                  ? 'translateY(0) scale(1)'
+
+                  : 'translateY(-4px) scale(.98)',
+
+              pointerEvents: open === 'create' ? 'auto' : 'none',
+
+            }}
+
+          >
+
+            <Link 
+
+              href={isLoggedIn ? "/connect/ideas" : "/login?mode=signup"} 
+
+              prefetch={true}
+
+              className="topnav-dropdown-link" 
+
+              style={getActiveStyle('/connect/ideas', {
+
+                ...dropdownLinkStyle, 
+
+                ...(hoveredItem === 'ideas' ? dropdownLinkHoverStyle : {})
+
+              })} 
+
+              onClick={handleNavPageClick}
+
+              onMouseEnter={() => setHoveredItem('ideas')}
+
+              onMouseLeave={() => setHoveredItem(null)}
+
+            >
+
+              Ideas
+
+            </Link>
+
+          </div>
+
+        </div>
 
 
 
-        {/* Connect - Direct Link */}
+        {/* Connect - Dropdown */}
 
-        <Link
+        <div
 
-          href={isLoggedIn ? "/connect/cofounder-match" : "/login?mode=signup"}
+          style={hoverZoneStyle}
 
-          prefetch={isLoggedIn ? true : false}
+          onMouseEnter={() => setOpen('connect')}
 
-          className="topnav-link"
-
-          style={{
-
-            ...menuItemStyle,
-
-            ...(hoveredItem === 'connect-direct' ? menuItemHoverStyle : {}),
-
-            ...(isActiveRoute('/connect/cofounder-match') ? { background: 'var(--green)', color: 'white', fontWeight: 800 } : {})
-
-          }}
-
-          onClick={handleNavPageClick}
-
-          onMouseEnter={() => setHoveredItem('connect-direct')}
-
-          onMouseLeave={() => setHoveredItem(null)}
+          onMouseLeave={() => setOpen(null)}
 
         >
 
-          Connect
+          <span 
 
-        </Link>
+            className="topnav-link" 
+
+            style={{ 
+
+              ...menuItemStyle, 
+
+              cursor: 'default',
+
+              ...(open === 'connect' ? menuItemHoverStyle : {}),
+
+              ...(isActiveRoute('/connect/cofounder-match') ? { background: 'var(--green)', color: 'white', fontWeight: 800 } : {})
+
+            }}
+
+          >
+
+            Connect
+
+          </span>
+
+          <div
+
+            style={{
+
+              ...dropdownStyle,
+
+              opacity: open === 'connect' ? 1 : 0,
+
+              transform:
+
+                open === 'connect'
+
+                  ? 'translateY(0) scale(1)'
+
+                  : 'translateY(-4px) scale(.98)',
+
+              pointerEvents: open === 'connect' ? 'auto' : 'none',
+
+            }}
+
+          >
+
+            <Link 
+
+              href={isLoggedIn ? "/connect/cofounder-match" : "/login?mode=signup"} 
+
+              prefetch={true}
+
+              className="topnav-dropdown-link" 
+
+              style={getActiveStyle('/connect/cofounder-match', {
+
+                ...dropdownLinkStyle, 
+
+                ...(hoveredItem === 'cofounder-match' ? dropdownLinkHoverStyle : {})
+
+              })} 
+
+              onClick={handleNavPageClick}
+
+              onMouseEnter={() => setHoveredItem('cofounder-match')}
+
+              onMouseLeave={() => setHoveredItem(null)}
+
+            >
+
+              Co-founder
+
+            </Link>
+
+          </div>
+
+        </div>
 
 
 
