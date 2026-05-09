@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
     if (!countError && allVotes && allVotes.length >= 5) {
       // Try to determine winner
       try {
-        const winnerResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/1v1/determine-winner`, {
+        const winnerResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/compete/live/determine-winner`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

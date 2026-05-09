@@ -68,7 +68,7 @@ export default function Hero({ onScrollTo, stats: serverStats }: HeroProps) {
           Play a live duel
         </Link>
         <Link 
-          href="/compete/leaderboard" 
+          href="/leaderboard" 
           className="btn-cta-ghost" 
           style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
         >

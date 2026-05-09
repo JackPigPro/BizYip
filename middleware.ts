@@ -92,18 +92,18 @@ export async function middleware(request: NextRequest) {
   
   // Allow access to specific public pages within protected routes
   const publicPages = [
-    '/compete/leaderboard',
-    '/compete/daily-battle',
-    '/compete/weekly-duel',
-    '/1v1',
-    '/connect/ideas',
-    '/connect/cofounder-match',
+    '/leaderboard',
+    '/compete/daily',
+    '/compete/weekly',
+    '/compete/live',
+    '/create/ideas',
+    '/connect/cofounders',
   ]
   
   const isPublicPage = publicPages.includes(pathname)
   
-  // Allow access to /compete/leaderboard without authentication
-  const isLeaderboardRoute = pathname === '/compete/leaderboard'
+  // Allow access to /leaderboard without authentication
+  const isLeaderboardRoute = pathname === '/leaderboard'
   
   // Allow access to user profile pages (/profile/[username]) without authentication
   const isUserProfileRoute = pathname.startsWith('/profile/') && 

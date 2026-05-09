@@ -120,12 +120,12 @@ export default function OneVOnePage() {
             
             if (updatedMatch.status === 'active' && updatedMatch.player2_id) {
               console.log('✅ All conditions met, redirecting to game room')
-              console.log('🎯 Redirect URL:', `/1v1/${updatedMatch.id}`)
-              router.push(`/1v1/${updatedMatch.id}`)
+              console.log('🎯 Redirect URL:', `/compete/live/${updatedMatch.id}`)
+              router.push(`/compete/live/${updatedMatch.id}`)
             } else if (updatedMatch.status === 'active') {
               console.log('⚠️ Match is active but player2_id missing, redirecting anyway')
-              console.log('🎯 Redirect URL:', `/1v1/${updatedMatch.id}`)
-              router.push(`/1v1/${updatedMatch.id}`)
+              console.log('🎯 Redirect URL:', `/compete/live/${updatedMatch.id}`)
+              router.push(`/compete/live/${updatedMatch.id}`)
             } else {
               console.log('❌ Redirect conditions not met - status is not active')
             }
@@ -589,7 +589,7 @@ export default function OneVOnePage() {
       const prompts = selectedGameMode === 'logo' ? LOGO_PROMPTS : BUSINESS_IDEA_PROMPTS
       const prompt = prompts[Math.floor(Math.random() * prompts.length)]
       
-      const response = await fetch('/api/1v1/create-room', {
+      const response = await fetch('/api/compete/live/create-room', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -632,7 +632,7 @@ export default function OneVOnePage() {
         return
       }
       
-      const response = await fetch('/api/1v1/join-room', {
+      const response = await fetch('/api/compete/live/join-room', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -678,7 +678,7 @@ export default function OneVOnePage() {
       const prompts = selectedGameMode === 'logo' ? LOGO_PROMPTS : BUSINESS_IDEA_PROMPTS
       const prompt = prompts[Math.floor(Math.random() * prompts.length)]
       
-      const response = await fetch('/api/1v1/join-queue', {
+      const response = await fetch('/api/compete/live/join-queue', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -715,7 +715,7 @@ export default function OneVOnePage() {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session?.access_token) return
       
-      await fetch('/api/1v1/cancel-match', {
+      await fetch('/api/compete/live/cancel-match', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

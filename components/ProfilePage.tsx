@@ -1113,7 +1113,7 @@ export default function ProfilePage({ profile: initialProfile, userStats, ideas,
                   {ideas.slice(0, 3).map(idea => (
                     <a 
                       key={idea.id}
-                      href="/connect/ideas"
+                      href="/create/ideas"
                       style={{
                         padding: '16px',
                         borderRadius: '12px',
@@ -1163,7 +1163,7 @@ export default function ProfilePage({ profile: initialProfile, userStats, ideas,
                       paddingTop: '16px'
                     }}>
                       <a 
-                        href="/connect/ideas"
+                        href="/create/ideas"
                         style={{
                           padding: '8px 16px',
                           borderRadius: '8px',

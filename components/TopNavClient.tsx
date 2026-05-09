@@ -378,7 +378,7 @@ export default function TopNavClient({
 
           <Link 
 
-            href="/compete/leaderboard" 
+            href="/leaderboard" 
 
             prefetch={true}
 
@@ -440,7 +440,7 @@ export default function TopNavClient({
 
               <Link 
 
-                href="/1v1" 
+                href="/compete/live" 
 
                 prefetch={true}
 
@@ -452,7 +452,7 @@ export default function TopNavClient({
 
                   marginBottom: '8px',
 
-                  ...(hoveredItem === '1v1' ? dropdownLinkHoverStyle : {})
+                  ...(hoveredItem === 'live' ? dropdownLinkHoverStyle : {})
 
                 }} 
 
@@ -464,7 +464,7 @@ export default function TopNavClient({
 
                 }}
 
-                onMouseEnter={() => setHoveredItem('1v1')}
+                onMouseEnter={() => setHoveredItem('live')}
 
                 onMouseLeave={() => setHoveredItem(null)}
 
@@ -476,7 +476,7 @@ export default function TopNavClient({
 
               <Link 
 
-                href="/compete/daily-battle" 
+                href="/compete/daily" 
 
                 prefetch={true}
 
@@ -488,7 +488,7 @@ export default function TopNavClient({
 
                   marginBottom: '8px',
 
-                  ...(hoveredItem === 'daily-battle' ? dropdownLinkHoverStyle : {})
+                  ...(hoveredItem === 'daily' ? dropdownLinkHoverStyle : {})
 
                 }} 
 
@@ -500,19 +500,19 @@ export default function TopNavClient({
 
                 }}
 
-                onMouseEnter={() => setHoveredItem('daily-battle')}
+                onMouseEnter={() => setHoveredItem('daily')}
 
                 onMouseLeave={() => setHoveredItem(null)}
 
               >
 
-                Daily
+                Daily Bellringer
 
               </Link>
 
               <Link 
 
-                href="/compete/weekly-duel" 
+                href="/compete/weekly" 
 
                 prefetch={true}
 
@@ -524,7 +524,7 @@ export default function TopNavClient({
 
                   marginBottom: '12px',
 
-                  ...(hoveredItem === 'weekly-duel' ? dropdownLinkHoverStyle : {})
+                  ...(hoveredItem === 'weekly' ? dropdownLinkHoverStyle : {})
 
                 }} 
 
@@ -536,7 +536,7 @@ export default function TopNavClient({
 
                 }}
 
-                onMouseEnter={() => setHoveredItem('weekly-duel')}
+                onMouseEnter={() => setHoveredItem('weekly')}
 
                 onMouseLeave={() => setHoveredItem(null)}
 
@@ -584,83 +584,115 @@ export default function TopNavClient({
 
 
 
-          {/* Create */}
+          {/* Create Section */}
 
-          <Link 
+          <div style={{ 
 
-            href={isLoggedIn ? "/connect/ideas" : "/connect/ideas"}
+            padding: '16px', 
 
-            prefetch={isLoggedIn ? true : false}
+            borderBottom: '1px solid var(--border)' 
 
-            style={{
+          }}>
 
-              ...dropdownLinkStyle,
+            <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text2)', marginBottom: '12px' }}>
 
-              display: 'block',
+              Create
 
-              marginBottom: '8px',
+            </div>
 
-              ...(hoveredItem === 'create' ? dropdownLinkHoverStyle : {})
+            <Link 
 
-            }} 
+              href="/create/ideas"
 
-            onClick={() => {
+              prefetch={true}
 
-              handleNavPageClick()
+              style={{
 
-              setMobileMenuOpen(false)
+                ...dropdownLinkStyle,
 
-            }}
+                display: 'block',
 
-            onMouseEnter={() => setHoveredItem('create')}
+                marginBottom: '8px',
 
-            onMouseLeave={() => setHoveredItem(null)}
+                ...(hoveredItem === 'ideas' ? dropdownLinkHoverStyle : {})
 
-          >
+              }} 
 
-            Create
+              onClick={() => {
 
-          </Link>
+                handleNavPageClick()
+
+                setMobileMenuOpen(false)
+
+              }}
+
+              onMouseEnter={() => setHoveredItem('ideas')}
+
+              onMouseLeave={() => setHoveredItem(null)}
+
+            >
+
+              Idea Board
+
+            </Link>
+
+          </div>
 
 
 
-          {/* Connect */}
+          {/* Connect Section */}
 
-          <Link 
+          <div style={{ 
 
-            href={isLoggedIn ? "/connect/cofounder-match" : "/connect/cofounder-match"}
+            padding: '16px', 
 
-            prefetch={isLoggedIn ? true : false}
+            borderBottom: '1px solid var(--border)' 
 
-            style={{
+          }}>
 
-              ...dropdownLinkStyle,
+            <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text2)', marginBottom: '12px' }}>
 
-              display: 'block',
+              Connect
 
-              marginBottom: '8px',
+            </div>
 
-              ...(hoveredItem === 'connect-direct' ? dropdownLinkHoverStyle : {})
+            <Link 
 
-            }} 
+              href={isLoggedIn ? "/connect/cofounders" : "/connect/cofounders"}
 
-            onClick={() => {
+              prefetch={isLoggedIn ? true : false}
 
-              handleNavPageClick()
+              style={{
 
-              setMobileMenuOpen(false)
+                ...dropdownLinkStyle,
 
-            }}
+                display: 'block',
 
-            onMouseEnter={() => setHoveredItem('connect-direct')}
+                marginBottom: '8px',
 
-            onMouseLeave={() => setHoveredItem(null)}
+                ...(hoveredItem === 'cofounders' ? dropdownLinkHoverStyle : {})
 
-          >
+              }} 
 
-            Connect
+              onClick={() => {
 
-          </Link>
+                handleNavPageClick()
+
+                setMobileMenuOpen(false)
+
+              }}
+
+              onMouseEnter={() => setHoveredItem('cofounders')}
+
+              onMouseLeave={() => setHoveredItem(null)}
+
+            >
+
+              Co-founder Match
+
+            </Link>
+
+          </div>
 
 
 
@@ -938,7 +970,7 @@ export default function TopNavClient({
 
         <Link
 
-          href="/compete/leaderboard"
+          href="/leaderboard"
 
           prefetch={true}
 
@@ -950,7 +982,7 @@ export default function TopNavClient({
 
             ...(hoveredItem === 'leaderboard' ? menuItemHoverStyle : {}),
 
-            ...(isActiveRoute('/compete/leaderboard') ? { background: 'var(--green)', color: 'white', fontWeight: 800 } : {})
+            ...(isActiveRoute('/leaderboard') ? { background: 'var(--green)', color: 'white', fontWeight: 800 } : {})
 
           }}
 
@@ -992,7 +1024,7 @@ export default function TopNavClient({
 
               ...(open === 'compete' ? menuItemHoverStyle : {}),
 
-              ...(isActiveRoute('/compete') && !isActiveRoute('/compete/leaderboard') ? { background: 'var(--green)', color: 'white', fontWeight: 800 } : {})
+              ...(isActiveRoute('/compete') && !isActiveRoute('/leaderboard') ? { background: 'var(--green)', color: 'white', fontWeight: 800 } : {})
 
             }}
 
@@ -1026,23 +1058,23 @@ export default function TopNavClient({
 
             <Link 
 
-              href={isLoggedIn ? "/1v1" : "/1v1"} 
+              href={isLoggedIn ? "/compete/live" : "/compete/live"} 
 
               prefetch={true}
 
               className="topnav-dropdown-link" 
 
-              style={getActiveStyle('/1v1', {
+              style={getActiveStyle('/compete/live', {
 
                 ...dropdownLinkStyle, 
 
-                ...(hoveredItem === '1v1' ? dropdownLinkHoverStyle : {})
+                ...(hoveredItem === 'live' ? dropdownLinkHoverStyle : {})
 
               })} 
 
               onClick={handleNavPageClick}
 
-              onMouseEnter={() => setHoveredItem('1v1')}
+              onMouseEnter={() => setHoveredItem('live')}
 
               onMouseLeave={() => setHoveredItem(null)}
 
@@ -1054,51 +1086,51 @@ export default function TopNavClient({
 
             <Link 
 
-              href={isLoggedIn ? "/compete/daily-battle" : "/compete/daily-battle"} 
+              href={isLoggedIn ? "/compete/daily" : "/compete/daily"} 
 
               prefetch={true}
 
               className="topnav-dropdown-link" 
 
-              style={getActiveStyle('/compete/daily-battle', {
+              style={getActiveStyle('/compete/daily', {
 
                 ...dropdownLinkStyle, 
 
-                ...(hoveredItem === 'daily-battle' ? dropdownLinkHoverStyle : {})
+                ...(hoveredItem === 'daily' ? dropdownLinkHoverStyle : {})
 
               })} 
 
               onClick={handleNavPageClick}
 
-              onMouseEnter={() => setHoveredItem('daily-battle')}
+              onMouseEnter={() => setHoveredItem('daily')}
 
               onMouseLeave={() => setHoveredItem(null)}
 
             >
 
-              Daily
+              Daily Bellringer
 
             </Link>
 
             <Link 
 
-              href={isLoggedIn ? "/compete/weekly-duel" : "/compete/weekly-duel"} 
+              href={isLoggedIn ? "/compete/weekly" : "/compete/weekly"} 
 
-              prefetch={isLoggedIn ? true : false}
+              prefetch={true}
 
               className="topnav-dropdown-link" 
 
-              style={getActiveStyle('/compete/weekly-duel', {
+              style={getActiveStyle('/compete/weekly', {
 
                 ...dropdownLinkStyle, 
 
-                ...(hoveredItem === 'weekly-duel' ? dropdownLinkHoverStyle : {})
+                ...(hoveredItem === 'weekly' ? dropdownLinkHoverStyle : {})
 
               })} 
 
               onClick={handleNavPageClick}
 
-              onMouseEnter={() => setHoveredItem('weekly-duel')}
+              onMouseEnter={() => setHoveredItem('weekly')}
 
               onMouseLeave={() => setHoveredItem(null)}
 
@@ -1138,7 +1170,7 @@ export default function TopNavClient({
 
               ...(open === 'create' ? menuItemHoverStyle : {}),
 
-              ...(isActiveRoute('/connect/ideas') ? { background: 'var(--green)', color: 'white', fontWeight: 800 } : {})
+              ...(isActiveRoute('/create/ideas') ? { background: 'var(--green)', color: 'white', fontWeight: 800 } : {})
 
             }}
 
@@ -1172,13 +1204,13 @@ export default function TopNavClient({
 
             <Link 
 
-              href={isLoggedIn ? "/connect/ideas" : "/connect/ideas"} 
+              href={isLoggedIn ? "/create/ideas" : "/create/ideas"} 
 
               prefetch={true}
 
               className="topnav-dropdown-link" 
 
-              style={getActiveStyle('/connect/ideas', {
+              style={getActiveStyle('/create/ideas', {
 
                 ...dropdownLinkStyle, 
 
@@ -1194,7 +1226,7 @@ export default function TopNavClient({
 
             >
 
-              Ideas
+              Idea Board
 
             </Link>
 
@@ -1228,7 +1260,7 @@ export default function TopNavClient({
 
               ...(open === 'connect' ? menuItemHoverStyle : {}),
 
-              ...(isActiveRoute('/connect/cofounder-match') ? { background: 'var(--green)', color: 'white', fontWeight: 800 } : {})
+              ...(isActiveRoute('/connect/cofounders') ? { background: 'var(--green)', color: 'white', fontWeight: 800 } : {})
 
             }}
 
@@ -1262,29 +1294,29 @@ export default function TopNavClient({
 
             <Link 
 
-              href={isLoggedIn ? "/connect/cofounder-match" : "/connect/cofounder-match"} 
+              href={isLoggedIn ? "/connect/cofounders" : "/connect/cofounders"} 
 
               prefetch={true}
 
               className="topnav-dropdown-link" 
 
-              style={getActiveStyle('/connect/cofounder-match', {
+              style={getActiveStyle('/connect/cofounders', {
 
                 ...dropdownLinkStyle, 
 
-                ...(hoveredItem === 'cofounder-match' ? dropdownLinkHoverStyle : {})
+                ...(hoveredItem === 'cofounders' ? dropdownLinkHoverStyle : {})
 
               })} 
 
               onClick={handleNavPageClick}
 
-              onMouseEnter={() => setHoveredItem('cofounder-match')}
+              onMouseEnter={() => setHoveredItem('cofounders')}
 
               onMouseLeave={() => setHoveredItem(null)}
 
             >
 
-              Co-founder
+              Co-founder Match
 
             </Link>
 

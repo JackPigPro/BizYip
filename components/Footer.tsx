@@ -117,7 +117,7 @@ export default function Footer({ onScrollTo, stats: serverStats }: FooterProps) 
 
           <div className="sf-col-links">
 
-            <Link href="/compete/leaderboard" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Leaderboard</Link>
+            <Link href="/leaderboard" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Leaderboard</Link>
 
             <a href="#platform" onClick={(e) => { e.preventDefault(); handleLandingNavigation('platform') }}>Compete</a>
 
