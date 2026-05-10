@@ -32,13 +32,21 @@ export default function ForgotPasswordComponent() {
       // First check if profile exists in our database
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
-        .select('id')
+        .select('id, auth_method')
         .eq('email', email.toLowerCase())
         .single()
 
       if (profileError || !profile) {
         console.log('No profile found for email:', email)
         setError('No account found with that email. Please sign up first.')
+        setLoading(false)
+        return
+      }
+
+      // Check auth method - forgot password only for email accounts
+      if (profile.auth_method === 'google') {
+        console.log('Google account trying to reset password:', email)
+        setError('This account was created with Google. Please sign in with Google.')
         setLoading(false)
         return
       }

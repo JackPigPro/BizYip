@@ -18,13 +18,26 @@ export async function GET(request: Request) {
       const { data: { user } } = await supabase.auth.getUser()
       
       if (user) {
-        const { data: profile } = await supabase
+        // Check if profile exists, create if not (for Google OAuth users)
+        const { data: existingProfile } = await supabase
           .from('profiles')
-          .select('onboarding_complete')
+          .select('id, onboarding_complete')
           .eq('id', user.id)
           .single()
 
-        const redirectTo = profile?.onboarding_complete ? next : '/onboarding'
+        if (!existingProfile) {
+          // Create profile for Google OAuth user
+          await supabase
+            .from('profiles')
+            .upsert({
+              id: user.id,
+              email: user.email?.toLowerCase() || '',
+              auth_method: 'google',
+              onboarding_complete: false,
+            })
+        }
+
+        const redirectTo = existingProfile?.onboarding_complete ? next : '/onboarding'
         return NextResponse.redirect(`${origin}${redirectTo}`)
       }
       

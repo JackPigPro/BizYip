@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { useSupabase } from '@/components/SupabaseProvider'
 import { useUser } from '@/hooks/useUser'
 import { createClient } from '@/utils/supabase/client'
-import ProfileCompletionPopup from '@/components/ProfileCompletionPopup'
 
 interface Notification {
   id: string
@@ -89,7 +88,6 @@ export default function DashboardClient({ initialProfile, initialStats, todayBat
   const [activityPage, setActivityPage] = useState(1)
   const [hasMoreActivity, setHasMoreActivity] = useState(true)
   const [loadingMoreActivity, setLoadingMoreActivity] = useState(false)
-  const [showProfileCompletionPopup, setShowProfileCompletionPopup] = useState(false)
 
   const userElo = elo?.elo || 0
   const userRank = getRankByElo(userElo)
@@ -102,110 +100,10 @@ export default function DashboardClient({ initialProfile, initialStats, todayBat
   useEffect(() => {
     if (isAuthenticated) {
       fetchActivity(1, true)
-      checkProfileCompletionNudge()
     } else if (!authLoading) {
       setNotificationsLoading(false)
     }
   }, [isAuthenticated, authLoading])
-
-  // Check if profile completion nudge should be shown
-  const checkProfileCompletionNudge = async () => {
-    try {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      
-      if (!user) return
-
-      // First check if we've already dismissed this popup in localStorage
-      const localStorageKey = `profile_completion_nudge_dismissed_${user.id}`
-      if (localStorage.getItem(localStorageKey)) {
-        return // Already dismissed in localStorage, don't show
-      }
-
-      // Try to check database field first, but handle the case where it doesn't exist
-      let profileData: any = null
-      let fieldExists = false
-
-      try {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('profile_completion_nudge_shown, created_at')
-          .eq('id', user.id)
-          .single()
-        
-        if (!error) {
-          profileData = data
-          fieldExists = true
-        }
-      } catch (err) {
-        // Field doesn't exist, will fall back to created_at only
-      }
-
-      if (!fieldExists) {
-        // Fall back to just checking account age
-        try {
-          const { data: fallbackData } = await supabase
-            .from('profiles')
-            .select('created_at')
-            .eq('id', user.id)
-            .single()
-
-          if (fallbackData) {
-            const createdAt = new Date(fallbackData.created_at)
-            const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-            
-            if (createdAt > sevenDaysAgo) {
-              setShowProfileCompletionPopup(true)
-            }
-          }
-        } catch (fallbackError) {
-          console.log('Could not fetch profile data for nudge check')
-        }
-        return
-      }
-
-      // If we have the database field, check it
-      if (profileData && !profileData.profile_completion_nudge_shown) {
-        // Check if user is relatively new (created within last 7 days)
-        const createdAt = new Date(profileData.created_at)
-        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-        
-        if (createdAt > sevenDaysAgo) {
-          setShowProfileCompletionPopup(true)
-        }
-      }
-    } catch (error) {
-      console.error('Error checking profile completion nudge:', error)
-    }
-  }
-
-  // Handle popup dismissal and update database (only if field exists)
-  const handleProfileCompletionPopupDismiss = async () => {
-    setShowProfileCompletionPopup(false)
-    
-    try {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      
-      if (user) {
-        // Always store in localStorage as backup
-        const localStorageKey = `profile_completion_nudge_dismissed_${user.id}`
-        localStorage.setItem(localStorageKey, 'true')
-        
-        // Try to update the nudge field in database
-        const { error } = await supabase
-          .from('profiles')
-          .update({ profile_completion_nudge_shown: true })
-          .eq('id', user.id)
-        
-        if (error) {
-          console.log('Could not update profile completion nudge flag (field may not exist yet):', error.message)
-        }
-      }
-    } catch (error) {
-      console.error('Error updating profile completion nudge flag:', error)
-    }
-  }
 
   const fetchActivity = async (page: number, reset: boolean = false) => {
     try {
@@ -801,13 +699,6 @@ export default function DashboardClient({ initialProfile, initialStats, todayBat
         </div>
       </div>
       
-      {/* Profile Completion Popup */}
-      {showProfileCompletionPopup && username && (
-        <ProfileCompletionPopup
-          onDismiss={handleProfileCompletionPopupDismiss}
-          username={username}
-        />
-      )}
     </div>
   )
 }

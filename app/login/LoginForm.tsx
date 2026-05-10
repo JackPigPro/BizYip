@@ -57,13 +57,21 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
       // First check if profile exists in our database
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
-        .select('id')
+        .select('id, auth_method')
         .eq('email', email.toLowerCase())
         .single()
 
       if (profileError || !profile) {
         console.log('No profile found for email:', email)
         setError('No account found with that email. Please sign up first.')
+        setLoading(false)
+        return
+      }
+
+      // Check auth method - magic links only for email accounts
+      if (profile.auth_method === 'google') {
+        console.log('Google account trying to use magic link:', email)
+        setError('This account was created with Google. Please sign in with Google.')
         setLoading(false)
         return
       }
@@ -138,6 +146,21 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
     setGoogleLoading(true)
     setError(null)
 
+    // Check if email exists and was created with email/password
+    if (email.trim()) {
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('id, auth_method')
+        .eq('email', email.toLowerCase())
+        .single()
+
+      if (profile && profile.auth_method === 'email') {
+        setError('This account was created with email and password. Please sign in with your email and password.')
+        setGoogleLoading(false)
+        return
+      }
+    }
+
     const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -201,6 +224,19 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
           })
         }, 1000)
       } else {
+        // Check auth method before signing in with password
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('id, auth_method')
+          .eq('email', email.toLowerCase())
+          .single()
+
+        if (profile && profile.auth_method === 'google') {
+          setError('This account was created with Google. Please sign in with Google.')
+          setLoading(false)
+          return
+        }
+
         // Sign in with password
         const { error: signInError } = await supabase.auth.signInWithPassword({
           email,
@@ -221,13 +257,13 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
         }
 
         // Check if user has completed onboarding
-        const { data: profile } = await supabase
+        const { data: onboardingProfile } = await supabase
           .from('profiles')
           .select('onboarding_complete')
           .eq('id', user.id)
           .single()
 
-        const redirectTo = profile?.onboarding_complete ? '/' : '/onboarding'
+        const redirectTo = onboardingProfile?.onboarding_complete ? '/' : '/onboarding'
         router.push(redirectTo)
         router.refresh()
       }
@@ -729,6 +765,26 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
               }}
             >
               Use password instead
+            </button>
+          </div>
+
+          <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+            <button
+              type="button"
+              onClick={() => {
+                router.push('/login?mode=signup')
+              }}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--text2)',
+                fontSize: '13px',
+                cursor: 'pointer',
+                textDecoration: 'none',
+                fontFamily: 'var(--font-display)',
+              }}
+            >
+              Create account
             </button>
           </div>
         </div>

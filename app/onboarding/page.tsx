@@ -162,6 +162,13 @@ export default function OnboardingPage() {
         return
       }
 
+      // Get current profile to preserve email and auth_method
+      const { data: currentProfile } = await supabase
+        .from('profiles')
+        .select('email, auth_method')
+        .eq('id', user.id)
+        .single()
+
       // Save all onboarding data
       await supabase
         .from('profiles')
@@ -173,6 +180,9 @@ export default function OnboardingPage() {
           skills: skills,
           agreed_to_terms: agreedToTerms,
           onboarding_complete: true,
+          // Preserve existing email and auth_method
+          email: currentProfile?.email || user.email?.toLowerCase() || '',
+          auth_method: currentProfile?.auth_method || 'email',
         })
 
       // Redirect to dashboard
@@ -591,15 +601,7 @@ export default function OnboardingPage() {
                   })}
                 </div>
                 
-                <p style={{ 
-                  color: 'var(--text2)', 
-                  fontSize: '12px', 
-                  marginBottom: '20px',
-                  textAlign: 'center' 
-                }}>
-                  {skills.length}/3 skills selected (optional)
-                </p>
-              </div>
+                              </div>
             </>
           )}
 

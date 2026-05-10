@@ -21,6 +21,31 @@ export default function SignupForm() {
     setError(null)
     setSuccess(null)
 
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address.')
+      setLoading(false)
+      return
+    }
+
+    // Check if email already exists in profiles table
+    try {
+      const { data: existingProfile, error: profileCheckError } = await supabase
+        .from('profiles')
+        .select('id, email')
+        .eq('email', email.toLowerCase())
+        .single()
+
+      if (existingProfile && !profileCheckError) {
+        setError('An account with this email already exists. Please sign in instead.')
+        setLoading(false)
+        return
+      }
+    } catch (checkError) {
+      // Continue with signup if check fails
+    }
+
     const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
@@ -36,9 +61,42 @@ export default function SignupForm() {
       return
     }
 
-    if (data.session) {
-      router.push('/dashboard')
-      router.refresh()
+    if (data.user && !data.session) {
+      // Email confirmation required - create profile with email and auth_method
+      try {
+        await supabase
+          .from('profiles')
+          .upsert({
+            id: data.user.id,
+            email: email.toLowerCase(),
+            auth_method: 'email',
+            onboarding_complete: false,
+          })
+        setSuccess('Check your email to verify your account, then sign in.')
+      } catch (profileError) {
+        console.error('Error creating profile during signup:', profileError)
+        setError('Account created but profile setup failed. Please sign in to complete setup.')
+      }
+      return
+    }
+
+    if (data.session && data.user) {
+      // User is signed in, create profile and redirect to onboarding
+      try {
+        await supabase
+          .from('profiles')
+          .upsert({
+            id: data.user.id,
+            email: email.toLowerCase(),
+            auth_method: 'email',
+            onboarding_complete: false,
+          })
+        router.push('/onboarding')
+        router.refresh()
+      } catch (profileError) {
+        console.error('Error creating profile during signup:', profileError)
+        setError('Account created but profile setup failed. Please try signing in.')
+      }
       return
     }
 
@@ -53,7 +111,7 @@ export default function SignupForm() {
     const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+        redirectTo: `${window.location.origin}/auth/callback?next=/onboarding`,
       },
     })
 
