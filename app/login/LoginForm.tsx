@@ -40,6 +40,14 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
   const [showVerificationScreen, setShowVerificationScreen] = useState(false)
   const [resendCooldown, setResendCooldown] = useState(0)
 
+  // Force password mode when in signup mode (no magic links for signup)
+  useEffect(() => {
+    if (mode === 'signup' && authMode === 'magic') {
+      setAuthMode('password')
+      setStep('email')
+    }
+  }, [mode, authMode])
+
   // Listen for auth state changes when verification screen is showing
   useEffect(() => {
     if (!showVerificationScreen) return
@@ -764,8 +772,8 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
         </div>
       )}
 
-      {/* Magic Link Mode */}
-      {authMode === 'magic' && step === 'email' && (
+      {/* Magic Link Mode - Only show for login mode */}
+      {authMode === 'magic' && step === 'email' && mode === 'login' && (
         <div style={{
           transition: 'opacity 0.2s ease-in-out, transform 0.2s ease-in-out',
           opacity: 1,
@@ -817,6 +825,9 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
                 setAuthMode('password')
                 setError(null)
                 setSuccess(null)
+                setStep('email')
+                // Navigate to login mode
+                router.push('/login?mode=login')
               }}
               style={{
                 background: 'none',
@@ -828,29 +839,10 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
                 fontFamily: 'var(--font-display)',
               }}
             >
-              Use password instead
+              Login with password instead
             </button>
           </div>
 
-          <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-            <button
-              type="button"
-              onClick={() => {
-                router.push('/login?mode=signup')
-              }}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'var(--text2)',
-                fontSize: '13px',
-                cursor: 'pointer',
-                textDecoration: 'none',
-                fontFamily: 'var(--font-display)',
-              }}
-            >
-              Create account
-            </button>
-          </div>
         </div>
       )}
 
