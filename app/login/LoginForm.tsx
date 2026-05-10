@@ -201,6 +201,21 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
           return
         }
 
+        // Check if email already exists in profiles table before signup
+        console.log('🔍 Checking if email exists in profiles:', email)
+        const { data: existingProfile, error: profileCheckError } = await supabase
+          .from('profiles')
+          .select('email')
+          .eq('email', email.toLowerCase())
+          .single()
+        
+        if (existingProfile) {
+          console.log('❌ Email already exists in profiles:', email)
+          setError('An account with this email already exists. Please sign in instead.')
+          setLoading(false)
+          return
+        }
+
         // Sign up with password
         const { error: signUpError, data } = await supabase.auth.signUp({
           email,
