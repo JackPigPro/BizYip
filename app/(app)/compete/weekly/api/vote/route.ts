@@ -38,22 +38,22 @@ export async function POST(request: NextRequest) {
     if (!allowed) return NextResponse.json({ error: 'Too many requests, please slow down' }, { status: 429 })
 
     // Get user's current ELO
-    const { data: userStats } = await supabase
-      .from('user_stats')
+    const { data: userProfile } = await supabase
+      .from('profiles')
       .select('elo')
-      .eq('user_id', user.id)
+      .eq('id', user.id)
       .single()
 
-    if (!userStats) {
+    if (!userProfile) {
       return NextResponse.json(
-        { error: 'User stats not found' },
+        { error: 'User profile not found' },
         { status: 404 }
       )
     }
 
     // Get voter's vote weight based on ELO
-    const { data: voteWeight } = userStats.elo ? await supabase
-      .rpc('get_vote_weight', { voter_elo: userStats.elo })
+    const { data: voteWeight } = userProfile.elo ? await supabase
+      .rpc('get_vote_weight', { voter_elo: userProfile.elo })
       .single() : { data: null }
 
     if (!voteWeight) {
@@ -110,9 +110,9 @@ export async function POST(request: NextRequest) {
 
     // Award voter +1 ELO for voting
     const { error: eloUpdateError } = await supabase
-      .from('user_stats')
-      .update({ elo: userStats.elo + 1 })
-      .eq('user_id', user.id)
+      .from('profiles')
+      .update({ elo: userProfile.elo + 1 })
+      .eq('id', user.id)
 
     if (eloUpdateError) {
       return NextResponse.json(
@@ -127,7 +127,7 @@ export async function POST(request: NextRequest) {
       .insert({
         user_id: user.id,
         elo_change: 1,
-        new_elo: userStats.elo + 1,
+        new_elo: userProfile.elo + 1,
         reason: 'duel_vote'
       })
 
@@ -142,7 +142,7 @@ export async function POST(request: NextRequest) {
       { 
         success: true,
         elo_change: data?.elo_change || 1,
-        new_elo: userStats.elo + 1
+        new_elo: userProfile.elo + 1
       },
       { status: 200 }
     )

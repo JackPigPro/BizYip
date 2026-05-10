@@ -145,16 +145,6 @@ export async function POST(request: Request) {
           return NextResponse.json({ error: 'Failed to delete profile' }, { status: 500 })
         }
 
-        // Delete user stats if they exist
-        const { error: deleteStatsError } = await supabase
-          .from('user_stats')
-          .delete()
-          .eq('user_id', user.id)
-
-        if (deleteStatsError) {
-          console.error('User stats deletion error:', deleteStatsError)
-          // Don't fail the whole operation if stats deletion fails
-        }
 
         // Delete daily streaks if they exist
         const { error: deleteStreaksError } = await supabase

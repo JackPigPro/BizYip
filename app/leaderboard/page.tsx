@@ -19,12 +19,12 @@ export default async function LeaderboardPage() {
   // Check if user is authenticated (optional now)
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Step 1: Fetch all rows from user_stats
+  // Step 1: Fetch all rows from profiles with elo
   const { data: userStats, error: statsError } = await supabase
-    .from('user_stats')
-    .select('user_id, elo, rank, weekly_duel_entered')
+    .from('profiles')
+    .select('id, username, elo')
     .order('elo', { ascending: false })
-    .order('user_id', { ascending: true })
+    .order('id', { ascending: true })
 
   if (statsError) {
     console.error('Error fetching user stats:', statsError)
@@ -39,26 +39,27 @@ export default async function LeaderboardPage() {
     console.error('Error fetching daily streaks:', streaksError)
   }
 
-  // Step 2: Fetch all rows from profiles
-  const { data: profiles, error: profilesError } = await supabase
-    .from('profiles')
-    .select('id, username, avatar')
+  // Step 2: Fetch weekly duel entries count
+  const { data: weeklyEntries } = await supabase
+    .from('duel_submissions')
+    .select('user_id')
+  
+  const weeklyEntriesCount = weeklyEntries?.reduce((acc, entry) => {
+    acc[entry.user_id] = (acc[entry.user_id] || 0) + 1
+    return acc
+  }, {} as Record<string, number>) || {}
 
-  if (profilesError) {
-    console.error('Error fetching profiles:', profilesError)
-  }
-
-  // Step 3: Manual JavaScript join - match by user_stats.user_id === profiles.id
+  // Step 3: Transform data - combine profiles with streaks and weekly entries
   const transformedAllUsers = (userStats || []).map(stat => {
-    const profile = (profiles || []).find(p => p.id === stat.user_id)
-    const dailyStreak = (dailyStreaks || []).find(s => s.user_id === stat.user_id)
+    const dailyStreak = (dailyStreaks || []).find(s => s.user_id === stat.id)
     return {
       elo: stat.elo || 0,
-      user_id: stat.user_id,
+      user_id: stat.id,
       rank_label: getRankLabel(stat.elo || 0),
+      weekly_duel_entered: weeklyEntriesCount[stat.id] || 0,
       profiles: {
-        username: profile?.username || 'Unknown',
-        avatar: profile?.avatar || 'avatar-1'
+        username: stat.username || 'Unknown',
+        avatar: 'avatar-1'
       },
       current_streak: dailyStreak?.current_streak || 0
     }
@@ -191,11 +192,11 @@ export default async function LeaderboardPage() {
   
   if (user) {
     const { data } = await supabase
-      .from('user_stats')
-      .select('elo, rank')
-      .eq('user_id', user.id)
+      .from('profiles')
+      .select('elo')
+      .eq('id', user.id)
       .single()
-    currentUserStats = data
+    currentUserStats = data ? { elo: data.elo, rank: '' } : null
     currentUserId = user.id
   }
 

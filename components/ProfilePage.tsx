@@ -8,14 +8,13 @@ import 'flag-icons/css/flag-icons.min.css'
 interface Profile {
   id: string
   username: string
-  location?: string
+  country?: string
   bio?: string
-  stage?: string
+  project_stage?: string
   skills?: string[]
   status_tags?: string[]
   twitter?: string
   linkedin?: string
-  github?: string
   is_teacher?: boolean
   created_at: string
 }
@@ -58,14 +57,13 @@ export default function ProfilePage({ profile: initialProfile, userStats, ideas,
   const [usernameError, setUsernameError] = useState<string | null>(null)
   const [editData, setEditData] = useState({
     username: initialProfile.username || '',
-    location: initialProfile.location || '',
+    country: initialProfile.country || '',
     bio: initialProfile.bio || '',
-    stage: initialProfile.stage || '',
+    project_stage: initialProfile.project_stage || '',
     skills: initialProfile.skills || [],
     status_tags: initialProfile.status_tags || [],
     twitter: initialProfile.twitter || '',
-    linkedin: initialProfile.linkedin || '',
-    github: initialProfile.github || ''
+    linkedin: initialProfile.linkedin || ''
   })
 
   // Classes state
@@ -178,14 +176,13 @@ export default function ProfilePage({ profile: initialProfile, userStats, ideas,
     if (isEditing) {
       setEditData({
         username: currentProfile.username || '',
-        location: currentProfile.location || '',
+        country: currentProfile.country || '',
         bio: currentProfile.bio || '',
-        stage: currentProfile.stage || '',
+        project_stage: currentProfile.project_stage || '',
         skills: currentProfile.skills || [],
         status_tags: currentProfile.status_tags || [],
         twitter: currentProfile.twitter || '',
         linkedin: currentProfile.linkedin || '',
-        github: currentProfile.github || ''
       })
     }
   }, [isEditing, currentProfile])
@@ -221,14 +218,13 @@ export default function ProfilePage({ profile: initialProfile, userStats, ideas,
         },
         body: JSON.stringify({
           username: editData.username,
-          location: editData.location,
+          country: editData.country,
           bio: editData.bio,
-          stage: editData.stage,
+          project_stage: editData.project_stage,
           skills: editData.skills,
           status_tags: editData.status_tags,
           twitter: editData.twitter,
-          linkedin: editData.linkedin,
-          github: editData.github
+          linkedin: editData.linkedin
         })
       })
 
@@ -243,14 +239,13 @@ export default function ProfilePage({ profile: initialProfile, userStats, ideas,
       setCurrentProfile(prev => ({
         ...prev,
         username: editData.username,
-        location: editData.location,
+        country: editData.country,
         bio: editData.bio,
-        stage: editData.stage,
+        project_stage: editData.project_stage,
         skills: editData.skills,
         status_tags: editData.status_tags,
         twitter: editData.twitter,
-        linkedin: editData.linkedin,
-        github: editData.github
+        linkedin: editData.linkedin
       }))
       
       // Scroll to top after successful save
@@ -391,8 +386,8 @@ export default function ProfilePage({ profile: initialProfile, userStats, ideas,
                     Location
                   </label>
                   <CountryDropdown
-                    value={editData.location}
-                    onChange={(value) => setEditData(prev => ({ ...prev, location: value }))}
+                    value={editData.country}
+                    onChange={(value) => setEditData(prev => ({ ...prev, country: value }))}
                   />
                 </div>
 
@@ -423,8 +418,8 @@ export default function ProfilePage({ profile: initialProfile, userStats, ideas,
                     Project Stage
                   </label>
                   <select
-                    value={editData.stage}
-                    onChange={(e) => setEditData(prev => ({ ...prev, stage: e.target.value }))}
+                    value={editData.project_stage}
+                    onChange={(e) => setEditData(prev => ({ ...prev, project_stage: e.target.value }))}
                     style={{
                       width: '100%',
                       padding: '12px',
@@ -526,26 +521,6 @@ export default function ProfilePage({ profile: initialProfile, userStats, ideas,
                       value={editData.linkedin}
                       onChange={(e) => setEditData(prev => ({ ...prev, linkedin: e.target.value }))}
                       placeholder="linkedin.com/in/username"
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        border: '1px solid var(--border)',
-                        borderRadius: '8px',
-                        background: 'var(--bg)',
-                        color: 'var(--text)'
-                      }}
-                    />
-                  </div>
-
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text)', fontWeight: '500' }}>
-                      GitHub
-                    </label>
-                    <input
-                      type="text"
-                      value={editData.github}
-                      onChange={(e) => setEditData(prev => ({ ...prev, github: e.target.value }))}
-                      placeholder="github.com/username"
                       style={{
                         width: '100%',
                         padding: '12px',
@@ -669,7 +644,7 @@ export default function ProfilePage({ profile: initialProfile, userStats, ideas,
                   }}>
                     {currentProfile.username}
                   </h1>
-                  {currentProfile.stage && (
+                  {currentProfile.project_stage && (
                     <span style={{
                       padding: '8px 16px',
                       borderRadius: '20px',
@@ -681,13 +656,13 @@ export default function ProfilePage({ profile: initialProfile, userStats, ideas,
                       letterSpacing: '0.5px',
                       boxShadow: 'var(--shadow-sm)'
                     }}>
-                      {currentProfile.stage}
+                      {currentProfile.project_stage}
                     </span>
                   )}
                 </div>
 
                 {/* Location */}
-                {currentProfile.location && (
+                {currentProfile.country && (
                   <div style={{ 
                     fontSize: '16px', 
                     color: 'var(--text2)', 
@@ -698,10 +673,10 @@ export default function ProfilePage({ profile: initialProfile, userStats, ideas,
                     alignItems: 'center',
                     gap: '8px'
                   }}>
-                    {getCountryFlag(currentProfile.location) && (
-                      <span className={`fi fi-${getCountryFlag(currentProfile.location)!.toLowerCase()}`}></span>
+                    {getCountryFlag(currentProfile.country) && (
+                      <span className={`fi fi-${getCountryFlag(currentProfile.country)!.toLowerCase()}`}></span>
                     )}
-                    {countries.find(c => c.code === currentProfile.location)?.name || currentProfile.location}
+                    {countries.find(c => c.code === currentProfile.country)?.name || currentProfile.country}
                   </div>
                 )}
 
@@ -777,7 +752,7 @@ export default function ProfilePage({ profile: initialProfile, userStats, ideas,
             </div>
 
             {/* Social Links - Bottom Right */}
-            {(currentProfile.twitter || currentProfile.linkedin || currentProfile.github) && (
+            {(currentProfile.twitter || currentProfile.linkedin) && (
               <div style={{ 
                 position: 'absolute',
                 bottom: '24px',
@@ -862,45 +837,6 @@ export default function ProfilePage({ profile: initialProfile, userStats, ideas,
                     }}
                   >
                     in
-                  </a>
-                )}
-                {currentProfile.github && (
-                  <a 
-                    href={`https://github.com/${currentProfile.github}`} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '48px',
-                      height: '48px',
-                      borderRadius: '12px',
-                      background: 'var(--card2)',
-                      border: '1px solid var(--border2)',
-                      color: 'var(--text2)',
-                      textDecoration: 'none',
-                      fontSize: '18px',
-                      fontWeight: '700',
-                      transition: 'all 0.2s ease',
-                      boxShadow: 'var(--shadow-sm)'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = '#333'
-                      e.currentTarget.style.color = '#fff'
-                      e.currentTarget.style.borderColor = '#333'
-                      e.currentTarget.style.transform = 'translateY(-2px)'
-                      e.currentTarget.style.boxShadow = 'var(--shadow)'
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'var(--card2)'
-                      e.currentTarget.style.color = 'var(--text2)'
-                      e.currentTarget.style.borderColor = 'var(--border2)'
-                      e.currentTarget.style.transform = 'translateY(0)'
-                      e.currentTarget.style.boxShadow = 'var(--shadow-sm)'
-                    }}
-                  >
-                    ⚡
                   </a>
                 )}
               </div>

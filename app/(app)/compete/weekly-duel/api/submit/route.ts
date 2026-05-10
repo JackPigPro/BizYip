@@ -111,11 +111,11 @@ export async function POST(request: NextRequest) {
     try {
       console.log('Granting +10 ELO for weekly duel submission to user:', user.id)
       
-      // Update user_stats.elo
+      // Update profiles.elo
       const { data: updatedStats, error: eloUpdateError } = await supabase
-        .from('user_stats')
+        .from('profiles')
         .update({ elo: supabase.rpc('increment', { amount: 10 }) })
-        .eq('user_id', user.id)
+        .eq('id', user.id)
         .select('elo')
         .single()
 

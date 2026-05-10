@@ -23,25 +23,11 @@ async function ProfileContent({ username }: { username: string }) {
     return <ProfileNotFound username={username} />
   }
 
-  // Fetch user stats
-  const { data: userStats, error: statsError } = await supabase
-    .from('user_stats')
-    .select('elo, rank, weekly_duel_entered')
-    .eq('user_id', profile.id)
-    .single()
-
-  // Fetch user's ideas
-  const { data: ideas, error: ideasError } = await supabase
-    .from('ideas')
-    .select('*')
-    .eq('user_id', profile.id)
-    .order('created_at', { ascending: false })
-
   // Fetch all-time rank (count users with higher ELO)
   const { count: allTimeRankCount } = await supabase
-    .from('user_stats')
+    .from('profiles')
     .select('*', { count: 'exact', head: true })
-    .gt('elo', userStats?.elo || 0)
+    .gt('elo', profile?.elo || 0)
   const allTimeRank = allTimeRankCount !== null ? allTimeRankCount + 1 : null
 
   // Fetch daily rank using same approach as leaderboard
@@ -49,8 +35,8 @@ async function ProfileContent({ username }: { username: string }) {
   
   // Get all user stats for daily ranking
   const { data: allUserStats, error: allStatsError } = await supabase
-    .from('user_stats')
-    .select('user_id, elo')
+    .from('profiles')
+    .select('id, elo')
     .order('elo', { ascending: false })
 
   // Get all daily history
@@ -64,11 +50,11 @@ async function ProfileContent({ username }: { username: string }) {
   if (allUserStats && dailyHistory) {
     // Create complete daily list with all users and their gains
     const completeDailyList = allUserStats.map(user => {
-      const userDailyEntries = dailyHistory.filter(entry => entry.user_id === user.user_id)
+      const userDailyEntries = dailyHistory.filter(entry => entry.user_id === user.id)
       const totalDailyGain = userDailyEntries.reduce((sum, entry) => sum + (entry.elo_change || 0), 0)
       
       return {
-        user_id: user.user_id,
+        user_id: user.id,
         dailyGain: totalDailyGain
       }
     }).sort((a, b) => {
@@ -86,7 +72,12 @@ async function ProfileContent({ username }: { username: string }) {
     }
   }
 
-  // Fetch weekly duels entered count
+  // Fetch user's ideas
+  const { data: ideas, error: ideasError } = await supabase
+    .from('ideas')
+    .select('*')
+    .eq('user_id', profile.id)
+    .order('created_at', { ascending: false })
   const { count: weeklyDuelsCount } = await supabase
     .from('duel_submissions')
     .select('*', { count: 'exact', head: true })
@@ -127,7 +118,7 @@ async function ProfileContent({ username }: { username: string }) {
   return (
     <ProfilePage
       profile={profile}
-      userStats={userStats || undefined}
+      userStats={{ elo: profile?.elo || 0, rank: allTimeRank?.toString(), weekly_duel_entered: weeklyDuelsCount || 0 }}
       ideas={ideas || []}
       isOwnProfile={isOwnProfile}
       allTimeRank={allTimeRank}

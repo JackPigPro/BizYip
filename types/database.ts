@@ -83,16 +83,12 @@ export interface Database {
         Row: {
           id: string
           username: string
-          display_name?: string
-          location?: string
           bio?: string
-          stage?: string
+          project_stage?: string
           skills?: string[]
           status_tags?: string[]
           twitter?: string
           linkedin?: string
-          github?: string
-          message_preference?: 'anyone' | 'cofounders_only' | 'nobody'
           theme_preference?: 'light' | 'dark'
           onboarding_complete?: boolean
           created_at: string
@@ -100,16 +96,12 @@ export interface Database {
         Insert: {
           id?: string
           username: string
-          display_name?: string
-          location?: string
           bio?: string
-          stage?: string
+          project_stage?: string
           skills?: string[]
           status_tags?: string[]
           twitter?: string
           linkedin?: string
-          github?: string
-          message_preference?: 'anyone' | 'cofounders_only' | 'nobody'
           theme_preference?: 'light' | 'dark'
           onboarding_complete?: boolean
           created_at?: string
@@ -117,16 +109,12 @@ export interface Database {
         Update: {
           id?: string
           username?: string
-          display_name?: string
-          location?: string
           bio?: string
-          stage?: string
+          project_stage?: string
           skills?: string[]
           status_tags?: string[]
           twitter?: string
           linkedin?: string
-          github?: string
-          message_preference?: 'anyone' | 'cofounders_only' | 'nobody'
           theme_preference?: 'light' | 'dark'
           onboarding_complete?: boolean
           created_at?: string
@@ -146,7 +134,6 @@ export interface IdeaWithDetails {
   created_at: string
   profiles: {
     username: string
-    display_name?: string
   }
   idea_likes: Array<{
     id: string
@@ -177,7 +164,6 @@ export interface CommentWithProfile {
   created_at: string
   profiles: {
     username: string
-    display_name?: string
   }
   replies?: CommentWithProfile[]
 }

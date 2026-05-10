@@ -51,13 +51,14 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    // Update profile
+    // Update profile with ELO
     const { error: profileError } = await supabase
       .from('profiles')
       .upsert({
         id: user.id,
         username: username.trim(),
         onboarding_complete: true,
+        elo: 500
       })
 
     if (profileError) {
@@ -67,22 +68,6 @@ export async function POST(request: NextRequest) {
       }, { status: 500 })
     }
 
-    // Create user_stats
-    const { error: statsError } = await supabase
-      .from('user_stats')
-      .upsert({
-        user_id: user.id,
-        elo: 500,
-        rank: 'Builder',
-        weekly_duel_entered: false
-      })
-
-    if (statsError) {
-      console.error('Stats error:', statsError)
-      return NextResponse.json({ 
-        error: 'Failed to create user stats' 
-      }, { status: 500 })
-    }
 
     return NextResponse.json({ 
       success: true,

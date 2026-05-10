@@ -56,14 +56,13 @@ export async function POST(request: Request) {
       .from('profiles')
       .update({
         username: profileData.username,
-        location: profileData.location,
+        country: profileData.country,
         bio: profileData.bio,
-        stage: profileData.stage,
+        project_stage: profileData.project_stage,
         skills: profileData.skills,
         status_tags: profileData.status_tags,
         twitter: profileData.twitter || null,
-        linkedin: profileData.linkedin || null,
-        github: profileData.github || null
+        linkedin: profileData.linkedin || null
       })
       .eq('id', user.id)
       .select()

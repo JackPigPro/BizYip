@@ -34,7 +34,6 @@ export function useUser() {
 
   // Convenience properties
   const username = profile?.username
-  const display_name = profile?.display_name
   const status_tags = profile?.status_tags
 
   useEffect(() => {
@@ -141,24 +140,12 @@ export function useUser() {
       // Fetch fresh data
       const profileResult = await supabase
         .from('profiles')
-        .select('id, username, display_name, status_tags, onboarding_complete, is_teacher, teacher_verified, created_at')
+        .select('id, username, status_tags, onboarding_complete, created_at, elo')
         .eq('id', userId)
         .single()
 
-      let eloResult = null
-      try {
-        eloResult = await supabase
-          .from('user_stats')
-          .select('elo')
-          .eq('user_id', userId)
-          .single()
-      } catch (err) {
-        // user_stats table doesn't exist, that's okay
-        console.log('user_stats table not found, skipping ELO fetch')
-      }
-
       const newProfile = profileResult.data || null
-      const newElo = eloResult?.data || null
+      const newElo = newProfile?.elo ? { elo: newProfile.elo } : null
 
       // Update cache
       userCache.set(userId, {
@@ -200,7 +187,6 @@ export function useUser() {
     
     // Convenience properties
     username,
-    display_name,
     status_tags,
     
     // State
