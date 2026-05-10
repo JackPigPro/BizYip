@@ -55,10 +55,31 @@ export async function GET(request: Request) {
         }
 
         const redirectTo = existingProfile?.onboarding_complete ? next : '/onboarding'
-        return NextResponse.redirect(`${origin}${redirectTo}`)
+        
+        // Add small delay to ensure session is fully established
+        await new Promise(resolve => setTimeout(resolve, 100))
+        
+        // Use client-side redirect to ensure browser fully reloads with new session
+        return new NextResponse(null, {
+          status: 302,
+          headers: {
+            'Location': `${origin}${redirectTo}`,
+            'Set-Cookie': 'auth-redirect=true; Path=/; HttpOnly; SameSite=Lax'
+          }
+        })
       }
       
-      return NextResponse.redirect(`${origin}${next}`)
+      // Add small delay to ensure session is fully established
+        await new Promise(resolve => setTimeout(resolve, 100))
+        
+        // Use client-side redirect to ensure browser fully reloads with new session
+        return new NextResponse(null, {
+          status: 302,
+          headers: {
+            'Location': `${origin}${next}`,
+            'Set-Cookie': 'auth-redirect=true; Path=/; HttpOnly; SameSite=Lax'
+          }
+        })
     }
   }
 
@@ -85,10 +106,31 @@ export async function GET(request: Request) {
           .single()
 
         const redirectTo = profile?.onboarding_complete ? next : '/onboarding'
-        return NextResponse.redirect(`${origin}${redirectTo}`)
+        
+        // Add small delay to ensure session is fully established
+        await new Promise(resolve => setTimeout(resolve, 100))
+        
+        // Use client-side redirect to ensure browser fully reloads with new session
+        return new NextResponse(null, {
+          status: 302,
+          headers: {
+            'Location': `${origin}${redirectTo}`,
+            'Set-Cookie': 'auth-redirect=true; Path=/; HttpOnly; SameSite=Lax'
+          }
+        })
       }
       
-      return NextResponse.redirect(`${origin}${next}`)
+      // Add small delay to ensure session is fully established
+        await new Promise(resolve => setTimeout(resolve, 100))
+        
+        // Use client-side redirect to ensure browser fully reloads with new session
+        return new NextResponse(null, {
+          status: 302,
+          headers: {
+            'Location': `${origin}${next}`,
+            'Set-Cookie': 'auth-redirect=true; Path=/; HttpOnly; SameSite=Lax'
+          }
+        })
     }
   }
 

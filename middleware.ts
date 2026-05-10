@@ -6,11 +6,11 @@ export async function middleware(request: NextRequest) {
   
   // Skip middleware for API routes entirely
   if (pathname.startsWith('/api/')) {
-    const { response } = updateSession(request)
+    const { response } = await updateSession(request)
     return response
   }
   
-  const { supabase, response } = updateSession(request)
+  const { supabase, response } = await updateSession(request)
   const { data } = await supabase.auth.getUser()
   const user = data.user
   const { search } = request.nextUrl

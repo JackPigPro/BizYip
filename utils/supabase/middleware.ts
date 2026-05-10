@@ -1,8 +1,12 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export function updateSession(request: NextRequest) {
-  const response = NextResponse.next({ request })
+export async function updateSession(request: NextRequest) {
+  const response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -21,6 +25,10 @@ export function updateSession(request: NextRequest) {
       },
     }
   )
+
+  // IMPORTANT: Call getUser() to refresh and propagate session tokens
+  // This ensures the session is properly updated and available to the client
+  await supabase.auth.getUser()
 
   return { supabase, response }
 }
