@@ -112,10 +112,6 @@ export default function SignupForm() {
       provider: 'google',
       options: {
         redirectTo: `${window.location.origin}/auth/callback?next=/onboarding`,
-        queryParams: {
-          access_type: 'online',
-          prompt: 'select_account',
-        },
       },
     })
 

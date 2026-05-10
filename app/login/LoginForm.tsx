@@ -183,10 +183,6 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
       provider: 'google',
       options: {
         redirectTo: `${window.location.origin}/auth/callback?next=/`,
-        queryParams: {
-          access_type: 'online',
-          prompt: 'select_account',
-        },
       },
     })
 
