@@ -18,22 +18,42 @@ export async function GET(request: Request) {
     if (!listError && users) {
       const user = users.find((u: any) => u.email?.toLowerCase() === email.toLowerCase())
       if (user) {
-        // If user has identities, check them
+        // 1. Check app_metadata.provider first (most reliable)
+        if (user.app_metadata?.provider) {
+          if (user.app_metadata.provider === 'google') {
+            return NextResponse.json({ authMethod: 'google' })
+          }
+          if (user.app_metadata.provider === 'email') {
+            return NextResponse.json({ authMethod: 'email' })
+          }
+        }
+        
+        // 2. If no app_metadata, check identities array
         if (user.identities && user.identities.length > 0) {
           const hasGoogleIdentity = user.identities.some((identity: any) => identity.provider === 'google')
           const hasEmailIdentity = user.identities.some((identity: any) => identity.provider === 'email')
           
           if (hasGoogleIdentity) return NextResponse.json({ authMethod: 'google' })
           if (hasEmailIdentity) return NextResponse.json({ authMethod: 'email' })
-        } else {
-          // User exists but has NO identities - default to 'email'
-          // This handles the case where profiles table data might be wrong
-          return NextResponse.json({ authMethod: 'email' })
         }
+        
+        // 3. If no identities, check profiles table auth_method
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('auth_method')
+          .eq('email', email.toLowerCase())
+          .single()
+        
+        if (profile?.auth_method) {
+          return NextResponse.json({ authMethod: profile.auth_method })
+        }
+        
+        // 4. If all sources are empty, default to 'email'
+        return NextResponse.json({ authMethod: 'email' })
       }
     }
     
-    // Fallback: check profiles table
+    // Fallback: check profiles table if user not found in auth
     const { data: profile } = await supabase
       .from('profiles')
       .select('auth_method')
@@ -44,7 +64,8 @@ export async function GET(request: Request) {
       return NextResponse.json({ authMethod: profile.auth_method })
     }
     
-    return NextResponse.json({ authMethod: null })
+    // Default to 'email' if no information found
+    return NextResponse.json({ authMethod: 'email' })
   } catch (error) {
     console.error('Auth method check error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
