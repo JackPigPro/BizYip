@@ -115,7 +115,6 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
       }
 
       setStep('code')
-      setSuccess('We sent a 6-digit code to your email.')
     } catch (unexpectedError) {
       console.error('Unexpected error during OTP sign in:', unexpectedError)
       setError('An unexpected error occurred. Please try again.')
