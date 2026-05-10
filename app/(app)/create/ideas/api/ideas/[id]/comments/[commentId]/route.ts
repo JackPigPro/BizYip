@@ -6,21 +6,21 @@ export async function PUT(
   { params }: { params: Promise<{ id: string; commentId: string }> }
 ) {
   try {
-    const { id, commentId } = await params
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    
+
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = await request.json()
-    const { content } = body
+    const { content } = await request.json()
 
-    if (!content || content.trim() === '') {
-      return NextResponse.json({ error: 'Content is required' }, { status: 400 })
+    if (!content || content.trim().length === 0) {
+      return NextResponse.json({ error: 'Comment content cannot be empty' }, { status: 400 })
     }
 
+    // Get existing comment
+    const { id, commentId } = await params
     const { data: existingComment, error: fetchError } = await supabase
       .from('idea_comments')
       .select('user_id')
@@ -45,7 +45,7 @@ export async function PUT(
       .eq('id', commentId)
       .select(`
         *,
-        profiles(username, display_name)
+        profiles(username)
       `)
       .single()
 

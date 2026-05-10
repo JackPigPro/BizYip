@@ -76,7 +76,7 @@ export async function PUT(
     // Fetch profile for the updated idea
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('id, username, display_name')
+      .select('id, username')
       .eq('id', user.id)
       .single()
 
@@ -88,7 +88,7 @@ export async function PUT(
     // Add counts and profile to the response
     const ideaWithProfile = {
       ...data,
-      profiles: profile || { username: 'unknown', display_name: 'Unknown User' },
+      profiles: profile || { username: 'unknown' },
       _count: {
         idea_likes: data.idea_likes?.length || 0,
         idea_comments: data.idea_comments?.length || 0

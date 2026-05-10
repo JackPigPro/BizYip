@@ -30,7 +30,6 @@ interface Submission {
   id: string
   content: string
   username: string
-  display_name: string
   created_at: string
   likes: number
   user_liked: boolean

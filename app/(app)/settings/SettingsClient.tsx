@@ -9,7 +9,6 @@ import { containsBannedWord } from '@/lib/moderation'
 interface Profile {
   id: string
   username: string
-  display_name?: string
 }
 
 

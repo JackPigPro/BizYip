@@ -42,7 +42,7 @@ export async function GET(
     const profileMap = new Map(profiles?.map(p => [p.id, p]) || [])
     const commentsWithProfiles = data?.map(comment => ({
       ...comment,
-      profiles: profileMap.get(comment.user_id) || { username: 'unknown', display_name: 'Unknown User' }
+      profiles: profileMap.get(comment.user_id) || { username: 'unknown' }
     })) || []
 
     // Organize comments into nested structure

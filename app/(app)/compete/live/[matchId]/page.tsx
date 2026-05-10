@@ -23,8 +23,8 @@ interface Match {
   room_code: string | null
   is_private: boolean
   winner_id: string | null
-  player1?: { username: string; display_name?: string }
-  player2?: { username: string; display_name?: string }
+  player1?: { username: string }
+  player2?: { username: string }
 }
 
 interface MatchSubmission {
@@ -51,7 +51,7 @@ export default function GameRoomPage() {
   const [timeLeft, setTimeLeft] = useState<number>(0)
   const [error, setError] = useState('')
   const [moderationError, setModerationError] = useState<string | null>(null)
-  const [opponent, setOpponent] = useState<{ username: string; display_name?: string } | null>(null)
+  const [opponent, setOpponent] = useState<{ username: string } | null>(null)
 
   // Fetch match data
   useEffect(() => {
@@ -449,7 +449,7 @@ export default function GameRoomPage() {
               Opponent
             </div>
             <div style={{ fontSize: '18px', fontWeight: 600, fontFamily: 'var(--font-display)', color: 'var(--text)' }}>
-              {opponent?.display_name || opponent?.username || 'Waiting...'}
+              {opponent?.username || 'Waiting...'}
             </div>
           </div>
         </div>

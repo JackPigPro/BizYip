@@ -107,7 +107,7 @@ export default function WeeklyDuelPage() {
           const userIds = [...new Set(winners.map(w => w.user_id))]
           const { data: profiles } = await supabase
             .from('profiles')
-            .select('id, username, display_name')
+            .select('id, username')
             .in('id', userIds)
 
           // 4. Merge in JavaScript
@@ -121,7 +121,6 @@ export default function WeeklyDuelPage() {
               rank: w.rank,
               elo_awarded: w.elo_awarded,
               duel_id: w.duel_id,
-              display_name: profile?.display_name || 'Unknown',
               prompt: duel?.prompt || '',
               user_id: {
                 username: profile?.username || 'Unknown'

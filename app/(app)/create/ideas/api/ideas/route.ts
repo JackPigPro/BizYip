@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
     const profileMap = new Map(profiles?.map(p => [p.id, p]) || [])
     const ideasWithProfiles = ideas?.map(idea => ({
       ...idea,
-      profiles: profileMap.get(idea.user_id) || { username: 'unknown', display_name: 'Unknown User' },
+      profiles: profileMap.get(idea.user_id) || { username: 'unknown' },
       _count: {
         idea_likes: idea.idea_likes?.length || 0,
         idea_comments: idea.idea_comments?.length || 0

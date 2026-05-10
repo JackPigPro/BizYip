@@ -22,8 +22,8 @@ interface Match {
   room_code: string | null
   is_private: boolean
   winner_id: string | null
-  player1?: { username: string; display_name?: string }
-  player2?: { username: string; display_name?: string }
+  player1?: { username: string }
+  player2?: { username: string }
 }
 
 interface MatchSubmission {
@@ -33,7 +33,7 @@ interface MatchSubmission {
   content: string | null
   image_url: string | null
   created_at: string
-  user?: { username: string; display_name?: string }
+  user?: { username: string }
 }
 
 interface MatchVote {
@@ -530,7 +530,7 @@ export default function ResultsPage() {
                 color: 'var(--text)',
                 paddingRight: '100px'
               }}>
-                {player1Submission.user?.display_name || player1Submission.user?.username || 'Player 1'}
+                {player1Submission.user?.username || 'Player 1'}
               </h3>
 
               {match.game_mode === 'logo' ? (
@@ -623,7 +623,7 @@ export default function ResultsPage() {
                 color: 'var(--text)',
                 paddingRight: '100px'
               }}>
-                {player2Submission.user?.display_name || player2Submission.user?.username || 'Player 2'}
+                {player2Submission.user?.username || 'Player 2'}
               </h3>
 
               {match.game_mode === 'logo' ? (

@@ -68,7 +68,7 @@ export async function GET(request: Request) {
     const userIds = submissions.map(s => s.user_id)
     const { data: profiles, error: profilesError } = await supabase
       .from('profiles')
-      .select('id, username, display_name')
+      .select('id, username')
       .in('id', userIds)
 
     if (profilesError) {
@@ -112,7 +112,6 @@ export async function GET(request: Request) {
         id: submission.id,
         content: submission.content,
         username: profile?.username || 'unknown',
-        display_name: profile?.display_name || profile?.username || 'Unknown',
         created_at: submission.created_at,
         likes: likeCounts[submission.id] || 0,
         user_liked: userLikes[submission.id] || false,
