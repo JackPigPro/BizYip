@@ -75,19 +75,12 @@ export async function GET() {
     ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
      .slice(0, 10) // Get latest 10 activities
 
-    // Get ELO rating if it exists
-    const { data: eloData } = await supabase
-      .from('user_stats')
-      .select('elo, rank')
-      .eq('user_id', user.id)
-      .single()
-
     const stats = {
       ideas_count: ideas?.length || 0,
       likes_received: likes?.length || 0,
       comments_count: comments?.length || 0,
-      elo: eloData?.elo || 500,
-      rank: eloData?.rank || 'Trainee'
+      elo: profile?.elo || 500,
+      rank: 'Builder'
     }
 
     return NextResponse.json({
