@@ -30,7 +30,7 @@ export async function GET(
     const userIds = [...new Set(data?.map(comment => comment.user_id) || [])]
     const { data: profiles, error: profilesError } = await supabase
       .from('profiles')
-      .select('id, username, display_name')
+      .select('id, username')
       .in('id', userIds)
 
     if (profilesError) {
@@ -132,7 +132,7 @@ export async function POST(
     // Fetch profile for the created comment
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('id, username, display_name')
+      .select('id, username')
       .eq('id', user.id)
       .single()
 
@@ -144,7 +144,7 @@ export async function POST(
     // Add profile to the response
     const commentWithProfile = {
       ...data,
-      profiles: profile || { username: 'unknown', display_name: 'Unknown User' }
+      profiles: profile || { username: 'unknown' }
     }
 
     // Get idea owner to send notification

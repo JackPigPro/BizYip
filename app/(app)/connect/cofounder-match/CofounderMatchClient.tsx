@@ -7,7 +7,6 @@ import { useUser } from '@/hooks/useUser'
 interface Profile {
   id: string
   username: string
-  display_name?: string
   status_tags?: string[]
   created_at: string
   bio?: string
@@ -219,7 +218,7 @@ export default function CofounderMatchClient({
                       fontFamily: 'var(--font-display)',
                       flexShrink: 0
                     }}>
-                      {(profile.display_name || profile.username || 'Unknown').charAt(0)}
+                      {profile.username.charAt(0)}
                     </div>
                     
                     <div style={{ flex: 1, minWidth: 0 }}>
@@ -233,7 +232,7 @@ export default function CofounderMatchClient({
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap'
                       }}>
-                        {profile.display_name || profile.username || 'Unknown'}
+                        {profile.username}
                       </div>
                       <div style={{
                         fontSize: '14px',
@@ -465,7 +464,7 @@ export default function CofounderMatchClient({
         fontFamily: 'var(--font-display)',
         flexShrink: 0
       }}>
-        {(profile.display_name || profile.username || 'Unknown').charAt(0)}
+        {(profile.username).charAt(0)}
       </div>
       
       <div style={{ flex: 1, minWidth: 0 }}>
@@ -482,7 +481,7 @@ export default function CofounderMatchClient({
           alignItems: 'center',
           gap: '8px'
         }}>
-          {profile.display_name || profile.username || 'Unknown'}
+          {profile.username}
           {isCurrentUser && (
             <span style={{
               fontSize: '12px',
@@ -650,7 +649,7 @@ export default function CofounderMatchClient({
         fontFamily: 'var(--font-display)',
         flexShrink: 0
       }}>
-        {(profile.display_name || profile.username || 'Unknown').charAt(0)}
+        {(profile.username).charAt(0)}
       </div>
       
       <div style={{ flex: 1, minWidth: 0 }}>
@@ -664,7 +663,7 @@ export default function CofounderMatchClient({
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap'
         }}>
-          {profile.display_name || profile.username || 'Unknown'}
+          {profile.username}
         </div>
         <div style={{
           fontSize: '14px',

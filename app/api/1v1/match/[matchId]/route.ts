@@ -20,8 +20,8 @@ export async function GET(
       .from('matches')
       .select(`
         *,
-        player1:profiles!matches_player1_id_fkey (username, display_name),
-        player2:profiles!matches_player2_id_fkey (username, display_name)
+        player1:profiles!matches_player1_id_fkey (username),
+        player2:profiles!matches_player2_id_fkey (username)
       `)
       .eq('id', matchId)
       .single()

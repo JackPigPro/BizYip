@@ -5,7 +5,6 @@ import CofounderMatchClient from './CofounderMatchClient'
 type Profile = {
   id: string
   username: string
-  display_name?: string
   status_tags?: string[]
   created_at: string
   bio?: string

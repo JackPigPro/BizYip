@@ -21,7 +21,7 @@ export async function GET(
       .from('match_submissions')
       .select(`
         *,
-        user:profiles!match_submissions_user_id_fkey (username, display_name)
+        user:profiles!match_submissions_user_id_fkey (username)
       `)
       .eq('match_id', matchId)
 

@@ -11,6 +11,6 @@ export default async function TopNav({ forceLoggedOut }: { forceLoggedOut?: bool
   // 3. User exists but needs onboarding (hasn't completed it)
   const showLoggedOutNav = forceLoggedOut || !user || needsOnboarding
 
-  return <TopNavClient user={user ? { email: user.email, name: profile?.display_name, username: profile?.username } : null} forceLoggedOut={showLoggedOutNav} />
+  return <TopNavClient user={user ? { email: user.email, name: profile?.username, username: profile?.username } : null} forceLoggedOut={showLoggedOutNav} />
 }
 

@@ -4,10 +4,10 @@ import type { User } from '@supabase/supabase-js'
 export interface UserProfile {
   id: string
   username: string
-  display_name?: string
   status_tags?: string[]
   onboarding_complete?: boolean
   created_at: string
+  elo?: number
 }
 
 export interface AuthResult {
@@ -74,7 +74,7 @@ export async function getAuthState(): Promise<AuthResult> {
   try {
     const result = await supabase
       .from('profiles')
-      .select('id, username, display_name, status_tags, onboarding_complete, created_at')
+      .select('id, username, status_tags, onboarding_complete, created_at')
       .eq('id', user.id)
       .single()
     

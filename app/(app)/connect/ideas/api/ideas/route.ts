@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
     const userIds = [...new Set(ideas?.map(idea => idea.user_id) || [])]
     const { data: profiles, error: profilesError } = await supabase
       .from('profiles')
-      .select('id, username, display_name')
+      .select('id, username')
       .in('id', userIds)
 
     if (profilesError) {
@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
     const profileMap = new Map(profiles?.map(p => [p.id, p]) || [])
     const ideasWithProfiles = ideas?.map(idea => ({
       ...idea,
-      profiles: profileMap.get(idea.user_id) || { username: 'unknown', display_name: 'Unknown User' },
+      profiles: profileMap.get(idea.user_id) || { username: 'unknown' },
       _count: {
         idea_likes: idea.idea_likes?.length || 0,
         idea_comments: idea.idea_comments?.length || 0
@@ -142,7 +142,7 @@ export async function POST(request: NextRequest) {
     // Fetch profile for the created idea
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('id, username, display_name')
+      .select('id, username')
       .eq('id', user.id)
       .single()
 
@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
     // Add counts and profile to the response
     const ideaWithProfile = {
       ...idea,
-      profiles: profile || { username: 'unknown', display_name: 'Unknown User' },
+      profiles: profile || { username: 'unknown' },
       _count: {
         idea_likes: idea.idea_likes?.length || 0,
         idea_comments: idea.idea_comments?.length || 0

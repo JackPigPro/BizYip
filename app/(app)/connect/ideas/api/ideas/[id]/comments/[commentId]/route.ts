@@ -45,7 +45,7 @@ export async function PUT(
       .eq('id', commentId)
       .select(`
         *,
-        profiles(username, display_name)
+        profiles(username)
       `)
       .single()
 

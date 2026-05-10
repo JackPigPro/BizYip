@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     const profileData = await request.json()
     
     // Input validation for profile update
-    const { username, display_name, bio } = profileData
+    const { username, bio } = profileData
     
     if (username !== undefined) {
       if (typeof username !== 'string' || username.trim() === '') {
@@ -31,15 +31,6 @@ export async function POST(request: Request) {
       }
     }
     
-    if (display_name !== undefined) {
-      if (typeof display_name !== 'string' || display_name.trim() === '') {
-        return NextResponse.json({ error: 'Display name must be a non-empty string' }, { status: 400 })
-      }
-      
-      if (display_name.length > 50) {
-        return NextResponse.json({ error: 'Display name must be at most 50 characters' }, { status: 400 })
-      }
-    }
     
     if (bio !== undefined) {
       if (typeof bio !== 'string') {
