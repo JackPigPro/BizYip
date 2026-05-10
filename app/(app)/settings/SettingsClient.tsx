@@ -201,7 +201,8 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
 
 
   const handleDeleteAccount = async () => {
-    if (!deletePassword) {
+    // For email users, require password. For Google users, no password needed.
+    if (user?.app_metadata?.provider === 'email' && !deletePassword) {
       showMessage('error', 'Please enter your password')
       return
     }
@@ -218,16 +219,17 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
         })
       })
 
-      const result = await response.json()
-      
-      if (result.success) {
-        // Redirect to home after successful deletion
-        window.location.href = '/'
-      } else {
-        showMessage('error', result.error || 'Failed to delete account')
-        setDeleteModalOpen(false)
-        setDeletePassword('')
+      // Check if response is a redirect (successful deletion)
+      if (response.redirected) {
+        // Server will handle redirect, just wait for it
+        return
       }
+      
+      // If not redirected, handle error response
+      const result = await response.json()
+      showMessage('error', result.error || 'Failed to delete account')
+      setDeleteModalOpen(false)
+      setDeletePassword('')
     } catch (err) {
       showMessage('error', 'Failed to delete account')
       setDeleteModalOpen(false)
@@ -924,32 +926,46 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
               Are you sure? This permanently deletes your account and all data. This cannot be undone.
             </p>
             
-            <div style={{ marginBottom: '24px' }}>
-              <label style={{ 
-                display: 'block', 
-                fontSize: '14px', 
-                fontWeight: 500, 
-                color: 'var(--text)',
-                marginBottom: '8px'
-              }}>
-                Enter your password to confirm
-              </label>
-              <input
-                type="password"
-                value={deletePassword}
-                onChange={(e) => setDeletePassword(e.target.value)}
-                placeholder="Enter password"
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  border: '1px solid var(--border)',
-                  borderRadius: '8px',
-                  fontSize: '14px',
-                  background: 'var(--bg)',
-                  color: 'var(--text)'
-                }}
-              />
-            </div>
+            {user?.app_metadata?.provider === 'email' && (
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{ 
+                  display: 'block', 
+                  fontSize: '14px', 
+                  fontWeight: 500, 
+                  color: 'var(--text)',
+                  marginBottom: '8px'
+                }}>
+                  Enter your password to confirm
+                </label>
+                <input
+                  type="password"
+                  value={deletePassword}
+                  onChange={(e) => setDeletePassword(e.target.value)}
+                  placeholder="Enter password"
+                  style={{
+                    width: '100%',
+                    padding: '12px 16px',
+                    border: '1px solid var(--border)',
+                    borderRadius: '8px',
+                    fontSize: '14px',
+                    background: 'var(--bg)',
+                    color: 'var(--text)'
+                  }}
+                />
+              </div>
+            )}
+            
+            {user?.app_metadata?.provider === 'google' && (
+              <div style={{ marginBottom: '24px', padding: '12px 16px', background: 'var(--surface)', borderRadius: '8px' }}>
+                <p style={{ 
+                  fontSize: '13px', 
+                  color: 'var(--text2)',
+                  margin: 0
+                }}>
+                  Since you created your account with Google, no password is required for deletion.
+                </p>
+              </div>
+            )}
 
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
               <button

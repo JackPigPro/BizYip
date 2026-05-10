@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
+import { createServiceClient } from '@/utils/supabase/service'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
@@ -105,34 +106,79 @@ export async function POST(request: Request) {
       case 'delete_account':
         const { password } = data
 
-        // Verify password before deletion
-        const { error: verifyDeleteError } = await supabase.auth.signInWithPassword({
-          email: user.email!,
-          password
-        })
+        // For email users, verify password before deletion
+        if (user.app_metadata?.provider === 'email') {
+          if (!password) {
+            return NextResponse.json({ error: 'Password is required for account deletion' }, { status: 400 })
+          }
 
-        if (verifyDeleteError) {
-          return NextResponse.json({ error: 'Password is incorrect' }, { status: 400 })
+          const { error: verifyDeleteError } = await supabase.auth.signInWithPassword({
+            email: user.email!,
+            password
+          })
+
+          if (verifyDeleteError) {
+            return NextResponse.json({ error: 'Password is incorrect' }, { status: 400 })
+          }
         }
 
-        // Delete user's profile
+        // Delete user's profile first
         const { error: deleteProfileError } = await supabase
           .from('profiles')
           .delete()
           .eq('id', user.id)
 
         if (deleteProfileError) {
+          console.error('Profile deletion error:', deleteProfileError)
           return NextResponse.json({ error: 'Failed to delete profile' }, { status: 500 })
         }
 
-        // Delete user's auth account
-        const { error: deleteAuthError } = await supabase.auth.admin.deleteUser(user.id)
+        // Delete user stats if they exist
+        const { error: deleteStatsError } = await supabase
+          .from('user_stats')
+          .delete()
+          .eq('user_id', user.id)
+
+        if (deleteStatsError) {
+          console.error('User stats deletion error:', deleteStatsError)
+          // Don't fail the whole operation if stats deletion fails
+        }
+
+        // Delete daily streaks if they exist
+        const { error: deleteStreaksError } = await supabase
+          .from('daily_streaks')
+          .delete()
+          .eq('user_id', user.id)
+
+        if (deleteStreaksError) {
+          console.error('Daily streaks deletion error:', deleteStreaksError)
+          // Don't fail the whole operation if streaks deletion fails
+        }
+
+        // Delete ELO history if they exist
+        const { error: deleteEloHistoryError } = await supabase
+          .from('elo_history')
+          .delete()
+          .eq('user_id', user.id)
+
+        if (deleteEloHistoryError) {
+          console.error('ELO history deletion error:', deleteEloHistoryError)
+          // Don't fail the whole operation if ELO history deletion fails
+        }
+
+        // Create a service client with admin privileges for auth deletion
+        const serviceClient = createServiceClient()
+
+        // Delete user's auth account using admin API
+        const { error: deleteAuthError } = await serviceClient.auth.admin.deleteUser(user.id)
 
         if (deleteAuthError) {
+          console.error('Auth deletion error:', deleteAuthError)
           return NextResponse.json({ error: 'Failed to delete account' }, { status: 500 })
         }
 
-        return NextResponse.json({ success: true })
+        // Return redirect to home page instead of JSON response
+        return NextResponse.redirect(new URL('/', request.url))
 
       default:
         return NextResponse.json({ error: 'Invalid request type' }, { status: 400 })
