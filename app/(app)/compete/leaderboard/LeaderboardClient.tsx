@@ -212,7 +212,19 @@ export default function LeaderboardClient({
           {/* Left Side - Leaderboard List */}
           <div className="leaderboard-main" style={{ marginTop: '-16px' }}>
             {/* Podium Section - Top 3 */}
-            {displayUsers.length >= 3 && (
+            {(() => {
+              const podiumUsers = activeTab === 'alltime' 
+                ? displayUsers.slice(0, 3)
+                : displayUsers.filter(user => user.elo !== 0).slice(0, 3)
+              
+              // Create array of exactly 3 users, filling with placeholders if needed
+              const finalPodiumUsers = [
+                podiumUsers[0] || null,
+                podiumUsers[1] || null,
+                podiumUsers[2] || null
+              ]
+              
+              return (
               <div style={{ 
                 marginBottom: '32px',
                 padding: '24px',
@@ -246,7 +258,7 @@ export default function LeaderboardClient({
                       2nd
                     </div>
                     <a
-                      href={`/profile/${displayUsers[1].profiles.username}`}
+                      href={finalPodiumUsers[1] ? `/profile/${finalPodiumUsers[1].profiles.username}` : '#'}
                       style={{
                         textDecoration: 'none',
                         display: 'flex',
@@ -262,7 +274,7 @@ export default function LeaderboardClient({
                             'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
                             'avatar-10': '#3B82F6'
                           }
-                          return avatarColors[displayUsers[1]?.profiles?.avatar] || '#6366F1'
+                          return avatarColors[finalPodiumUsers[1]?.profiles?.avatar] || '#6366F1'
                         })(),
                         color: '#fff',
                         fontSize: '32px',
@@ -275,10 +287,10 @@ export default function LeaderboardClient({
                         margin: '0 auto 12px'
                       }}
                     >
-                      {displayUsers[1].profiles.username.charAt(0).toUpperCase()}
+                      {finalPodiumUsers[1] ? finalPodiumUsers[1].profiles.username.charAt(0).toUpperCase() : '--'}
                     </a>
                     <a
-                      href={`/profile/${displayUsers[1].profiles.username}`}
+                      href={finalPodiumUsers[1] ? `/profile/${finalPodiumUsers[1].profiles.username}` : '#'}
                       style={{
                         textDecoration: 'none',
                         fontSize: '14px',
@@ -290,7 +302,7 @@ export default function LeaderboardClient({
                         cursor: 'pointer'
                       }}
                     >
-                      {displayUsers[1].profiles.username}
+                      {finalPodiumUsers[1] ? finalPodiumUsers[1].profiles.username : '--'}
                     </a>
                     <div style={{
                       fontSize: '20px',
@@ -300,19 +312,19 @@ export default function LeaderboardClient({
                       marginBottom: '4px'
                     }}>
                       {activeTab === 'daily' || activeTab === 'monthly' 
-                        ? `${displayUsers[1].elo >= 0 ? '+' : ''}${displayUsers[1].elo}`
-                        : displayUsers[1].elo}
+                        ? `${finalPodiumUsers[1]?.elo >= 0 ? '+' : ''}${finalPodiumUsers[1]?.elo || 0}`
+                        : finalPodiumUsers[1]?.elo || 0}
                     </div>
                     <div style={{
                       fontSize: '12px',
                       fontWeight: '600',
                       color: '#fff',
-                      backgroundColor: getRankColor(getRankByElo(allUsers.find(u => u.user_id === displayUsers[1].user_id)?.elo || 0)),
+                      backgroundColor: getRankColor(getRankByElo(allUsers.find(u => u.user_id === finalPodiumUsers[1]?.user_id)?.elo || 0)),
                       padding: '4px 8px',
                       borderRadius: '4px',
                       display: 'inline-block'
                     }}>
-                      {getRankByElo(allUsers.find(u => u.user_id === displayUsers[1].user_id)?.elo || 0)}
+                      {getRankByElo(allUsers.find(u => u.user_id === finalPodiumUsers[1]?.user_id)?.elo || 0)}
                     </div>
                   </div>
 
@@ -336,7 +348,7 @@ export default function LeaderboardClient({
                       1st
                     </div>
                     <a
-                      href={`/profile/${displayUsers[0].profiles.username}`}
+                      href={finalPodiumUsers[0] ? `/profile/${finalPodiumUsers[0].profiles.username}` : '#'}
                       style={{
                         textDecoration: 'none',
                         display: 'flex',
@@ -352,7 +364,7 @@ export default function LeaderboardClient({
                             'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
                             'avatar-10': '#3B82F6'
                           }
-                          return avatarColors[displayUsers[0]?.profiles?.avatar] || '#6366F1'
+                          return avatarColors[finalPodiumUsers[0]?.profiles?.avatar] || '#6366F1'
                         })(),
                         color: '#fff',
                         fontSize: '40px',
@@ -365,10 +377,10 @@ export default function LeaderboardClient({
                         margin: '0 auto 12px'
                       }}
                     >
-                      {displayUsers[0].profiles.username.charAt(0).toUpperCase()}
+                      {finalPodiumUsers[0] ? finalPodiumUsers[0].profiles.username.charAt(0).toUpperCase() : '--'}
                     </a>
                     <a
-                      href={`/profile/${displayUsers[0].profiles.username}`}
+                      href={finalPodiumUsers[0] ? `/profile/${finalPodiumUsers[0].profiles.username}` : '#'}
                       style={{
                         textDecoration: 'none',
                         fontSize: '16px',
@@ -380,8 +392,8 @@ export default function LeaderboardClient({
                         cursor: 'pointer'
                       }}
                     >
-                      {displayUsers[0].profiles.username}
-                    {currentUserId && displayUsers[0]?.user_id === currentUserId && (
+                      {finalPodiumUsers[0] ? finalPodiumUsers[0].profiles.username : '--'}
+                    {currentUserId && finalPodiumUsers[0]?.user_id === currentUserId && (
                       <span style={{
                         marginLeft: '8px',
                         fontSize: '12px',
@@ -400,19 +412,19 @@ export default function LeaderboardClient({
                       marginBottom: '4px'
                     }}>
                       {activeTab === 'daily' || activeTab === 'monthly' 
-                        ? `${displayUsers[0].elo >= 0 ? '+' : ''}${displayUsers[0].elo}`
-                        : displayUsers[0].elo}
+                        ? `${finalPodiumUsers[0]?.elo >= 0 ? '+' : ''}${finalPodiumUsers[0]?.elo || 0}`
+                        : finalPodiumUsers[0]?.elo || 0}
                     </div>
                     <div style={{
                       fontSize: '12px',
                       fontWeight: '600',
                       color: '#fff',
-                      backgroundColor: getRankColor(getRankByElo(allUsers.find(u => u.user_id === displayUsers[0].user_id)?.elo || 0)),
+                      backgroundColor: getRankColor(getRankByElo(allUsers.find(u => u.user_id === finalPodiumUsers[0]?.user_id)?.elo || 0)),
                       padding: '4px 8px',
                       borderRadius: '4px',
                       display: 'inline-block'
                     }}>
-                      {getRankByElo(allUsers.find(u => u.user_id === displayUsers[0].user_id)?.elo || 0)}
+                      {getRankByElo(allUsers.find(u => u.user_id === finalPodiumUsers[0]?.user_id)?.elo || 0)}
                     </div>
                   </div>
 
@@ -435,7 +447,7 @@ export default function LeaderboardClient({
                       3rd
                     </div>
                     <a
-                      href={`/profile/${displayUsers[2].profiles.username}`}
+                      href={finalPodiumUsers[2] ? `/profile/${finalPodiumUsers[2].profiles.username}` : '#'}
                       style={{
                         textDecoration: 'none',
                         display: 'flex',
@@ -451,7 +463,7 @@ export default function LeaderboardClient({
                             'avatar-7': '#14B8A6', 'avatar-8': '#F97316', 'avatar-9': '#EC4899',
                             'avatar-10': '#3B82F6'
                           }
-                          return avatarColors[displayUsers[2]?.profiles?.avatar] || '#6366F1'
+                          return avatarColors[finalPodiumUsers[2]?.profiles?.avatar] || '#6366F1'
                         })(),
                         color: '#fff',
                         fontSize: '32px',
@@ -464,10 +476,10 @@ export default function LeaderboardClient({
                         margin: '0 auto 12px'
                       }}
                     >
-                      {displayUsers[2].profiles.username.charAt(0).toUpperCase()}
+                      {finalPodiumUsers[2] ? finalPodiumUsers[2].profiles.username.charAt(0).toUpperCase() : '--'}
                     </a>
                     <a
-                      href={`/profile/${displayUsers[2].profiles.username}`}
+                      href={finalPodiumUsers[2] ? `/profile/${finalPodiumUsers[2].profiles.username}` : '#'}
                       style={{
                         textDecoration: 'none',
                         fontSize: '14px',
@@ -479,8 +491,8 @@ export default function LeaderboardClient({
                         cursor: 'pointer'
                       }}
                     >
-                      {displayUsers[2].profiles.username}
-                    {currentUserId && displayUsers[2]?.user_id === currentUserId && (
+                      {finalPodiumUsers[2] ? finalPodiumUsers[2].profiles.username : '--'}
+                    {currentUserId && finalPodiumUsers[2]?.user_id === currentUserId && (
                       <span style={{
                         marginLeft: '8px',
                         fontSize: '12px',
@@ -499,24 +511,24 @@ export default function LeaderboardClient({
                       marginBottom: '4px'
                     }}>
                       {activeTab === 'daily' || activeTab === 'monthly' 
-                        ? `${displayUsers[2].elo >= 0 ? '+' : ''}${displayUsers[2].elo}`
-                        : displayUsers[2].elo}
+                        ? `${finalPodiumUsers[2]?.elo >= 0 ? '+' : ''}${finalPodiumUsers[2]?.elo || 0}`
+                        : finalPodiumUsers[2]?.elo || 0}
                     </div>
                     <div style={{
                       fontSize: '12px',
                       fontWeight: '600',
                       color: '#fff',
-                      backgroundColor: getRankColor(getRankByElo(allUsers.find(u => u.user_id === displayUsers[2].user_id)?.elo || 0)),
+                      backgroundColor: getRankColor(getRankByElo(allUsers.find(u => u.user_id === finalPodiumUsers[2]?.user_id)?.elo || 0)),
                       padding: '4px 8px',
                       borderRadius: '4px',
                       display: 'inline-block'
                     }}>
-                      {getRankByElo(allUsers.find(u => u.user_id === displayUsers[2].user_id)?.elo || 0)}
+                      {getRankByElo(allUsers.find(u => u.user_id === finalPodiumUsers[2]?.user_id)?.elo || 0)}
                     </div>
                   </div>
                 </div>
               </div>
-            )}
+            )})()}
 
             {/* Column Headers */}
             <div className="leaderboard-table-headers">
