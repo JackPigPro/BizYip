@@ -160,6 +160,11 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
   const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault()
     
+    if (newPassword.length < 6) {
+      showMessage('error', 'Password must be at least 6 characters')
+      return
+    }
+    
     if (newPassword !== confirmPassword) {
       showMessage('error', 'Passwords do not match')
       return
@@ -388,15 +393,44 @@ export default function SettingsClient({ initialProfile }: { initialProfile: Pro
                 padding: '32px',
                 boxShadow: 'var(--shadow)'
               }}>
-                <h2 style={{ 
-                  fontSize: '24px', 
-                  fontWeight: 700, 
-                  fontFamily: 'var(--font-display)',
-                  color: 'var(--text)',
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center',
                   marginBottom: '24px'
                 }}>
-                  Account
-                </h2>
+                  <h2 style={{ 
+                    fontSize: '24px', 
+                    fontWeight: 700, 
+                    fontFamily: 'var(--font-display)',
+                    color: 'var(--text)',
+                    margin: 0
+                  }}>
+                    Account
+                  </h2>
+                  {user?.app_metadata?.provider === 'google' && (
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '6px 12px',
+                      background: 'var(--surface)',
+                      border: '1px solid var(--border)',
+                      borderRadius: '8px',
+                      fontSize: '13px',
+                      color: 'var(--text2)',
+                      fontWeight: 500
+                    }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill="#EA4335" d="M12 10.2v3.9h5.4c-.2 1.2-.9 2.2-1.9 2.9v2.4h3.1c1.8-1.7 2.9-4.2 2.9-7.1 0-.7-.1-1.4-.2-2H12Z" />
+                        <path fill="#34A853" d="M12 21c2.6 0 4.7-.9 6.2-2.3l-3.1-2.4c-.9.6-1.9.9-3.1.9-2.4 0-4.5-1.6-5.2-3.9H3.6v2.5A9.4 9.4 0 0 0 12 21Z" />
+                        <path fill="#4A90E2" d="M6.8 13.3a5.7 5.7 0 0 1 0-3.6V7.2H3.6a9.4 9.4 0 0 0 0 8.5l3.2-2.4Z" />
+                        <path fill="#FBBC05" d="M12 6.8c1.4 0 2.6.5 3.5 1.4l2.6-2.6A9.2 9.2 0 0 0 12 3 9.4 9.4 0 0 0 3.6 7.2l3.2 2.5c.7-2.3 2.8-3.9 5.2-3.9Z" />
+                      </svg>
+                      Created account with Google
+                    </div>
+                  )}
+                </div>
 
                 {/* Email */}
                 <div style={{ marginBottom: '24px' }}>
