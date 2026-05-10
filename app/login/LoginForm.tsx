@@ -43,13 +43,38 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
     setError(null)
     setSuccess(null)
 
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address.')
+      setLoading(false)
+      return
+    }
+
     try {
-      console.log('Attempting OTP sign in for email:', email)
+      console.log('Checking if profile exists for email:', email)
       
+      // First check if profile exists in our database
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('email', email.toLowerCase())
+        .single()
+
+      if (profileError || !profile) {
+        console.log('No profile found for email:', email)
+        setError('No account found with that email. Please sign up first.')
+        setLoading(false)
+        return
+      }
+
+      console.log('Profile found, sending magic link for email:', email)
+      
+      // Send magic link with correct options (don't create user)
       const { error: otpError, data } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          shouldCreateUser: true,
+          shouldCreateUser: false, // Don't create new users
         },
       })
 
@@ -103,15 +128,9 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
       return
     }
 
-    // Check if user has completed onboarding
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('onboarding_complete')
-      .eq('id', user.id)
-      .single()
-
-    const redirectTo = profile?.onboarding_complete ? '/' : '/onboarding'
-    router.push(redirectTo)
+    // Magic link users are existing accounts - go directly to dashboard
+    // No need to check onboarding since they've already completed it
+    router.push('/')
     router.refresh()
   }
 
