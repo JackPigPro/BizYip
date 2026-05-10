@@ -132,7 +132,7 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
     const { error: verifyError } = await supabase.auth.verifyOtp({
       email,
       token: code,
-      type: 'email',
+      type: 'magiclink',
     })
 
     setLoading(false)
