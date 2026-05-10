@@ -45,7 +45,7 @@ interface MatchVote {
 }
 
 export default function ResultsPage() {
-  const { isAuthenticated, authLoading, username, display_name } = useUser()
+  const { isAuthenticated, authLoading, username, user, profile } = useUser()
   const params = useParams()
   const router = useRouter()
   const supabase = createClient()
