@@ -93,8 +93,7 @@ export default function DashboardClient({ initialProfile, initialStats, todayBat
   const userRank = getRankByElo(userElo)
   const rankColor = getRankColor(userRank)
   const isAuthenticated = !!user
-  const username = userProfile?.username || profile?.username
-  const display_name = userProfile?.display_name || profile?.display_name
+  const username = userProfile?.username || profile?.username || 'User'
 
   // Fetch notifications with pagination
   useEffect(() => {
@@ -373,11 +372,6 @@ export default function DashboardClient({ initialProfile, initialStats, todayBat
               <div style={{ marginBottom: '8px' }}>
                 <strong>Username:</strong> @{username}
               </div>
-              {display_name && (
-                <div style={{ marginBottom: '8px' }}>
-                  <strong>Display Name:</strong> {display_name}
-                </div>
-              )}
               <div>
                 <strong>Member Since:</strong> {profile?.created_at ? formatDate(profile.created_at) : (
                   <span style={{
