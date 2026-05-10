@@ -64,8 +64,8 @@ export async function GET(request: Request) {
       return NextResponse.json({ authMethod: profile.auth_method })
     }
     
-    // Default to 'email' if no information found
-    return NextResponse.json({ authMethod: 'email' })
+    // Return null if no user found at all
+    return NextResponse.json({ authMethod: null })
   } catch (error) {
     console.error('Auth method check error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
