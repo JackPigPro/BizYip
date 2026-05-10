@@ -44,7 +44,6 @@ export default function IdeaModal({ idea, onClose, onUpdate, onDelete, currentUs
         setComments(data || [])
       }
     } catch (err) {
-      console.error('Error fetching comments:', err)
     } finally {
       setLoadingComments(false)
     }
@@ -79,7 +78,6 @@ export default function IdeaModal({ idea, onClose, onUpdate, onDelete, currentUs
         setLikeCount(prev => liked ? prev + 1 : prev - 1)
       }
     } catch (err) {
-      console.error('Error toggling like:', err)
     }
   }
 
@@ -108,7 +106,6 @@ export default function IdeaModal({ idea, onClose, onUpdate, onDelete, currentUs
         throw new Error(errorData.error || 'Failed to update idea')
       }
     } catch (err) {
-      console.error('Error updating idea:', err)
       alert(`Failed to update idea: ${err instanceof Error ? err.message : 'Unknown error'}`)
     } finally {
       setEditing(false)
@@ -132,7 +129,6 @@ export default function IdeaModal({ idea, onClose, onUpdate, onDelete, currentUs
         throw new Error('Failed to delete idea')
       }
     } catch (err) {
-      console.error('Error deleting idea:', err)
       alert('Failed to delete idea. Please try again.')
     }
   }
@@ -174,7 +170,6 @@ export default function IdeaModal({ idea, onClose, onUpdate, onDelete, currentUs
         alert(`Failed to submit comment: ${errorData.error || 'Unknown error'}`)
       }
     } catch (err) {
-      console.error('Error submitting comment:', err)
       alert(`Failed to submit comment: ${err instanceof Error ? err.message : 'Unknown error'}`)
     } finally {
       setSubmittingComment(false)
@@ -236,7 +231,6 @@ export default function IdeaModal({ idea, onClose, onUpdate, onDelete, currentUs
         setReplyingTo(null)
       }
     } catch (err) {
-      console.error('Error submitting reply:', err)
       alert('Failed to submit reply. Please try again.')
     }
   }
@@ -290,7 +284,6 @@ export default function IdeaModal({ idea, onClose, onUpdate, onDelete, currentUs
         setEditCommentContent('')
       }
     } catch (err) {
-      console.error('Error editing comment:', err)
       alert('Failed to edit comment. Please try again.')
     }
   }
@@ -320,7 +313,6 @@ export default function IdeaModal({ idea, onClose, onUpdate, onDelete, currentUs
         setComments(prev => removeComment(prev))
       }
     } catch (err) {
-      console.error('Error deleting comment:', err)
       alert('Failed to delete comment. Please try again.')
     }
   }

@@ -75,7 +75,6 @@ export async function POST(request: Request) {
       .single()
 
     if (submissionError) {
-      console.error('Submission error:', submissionError)
       return NextResponse.json(
         { error: 'Failed to submit' },
         { status: 500 }
@@ -87,10 +86,8 @@ export async function POST(request: Request) {
       p_user_id: user.id
     })
     
-    console.log('ELO gained:', eloGained, 'Error:', streakError)
 
     if (streakError) {
-      console.error('Streak update error:', streakError)
       // Don't fail the submission if streak update fails
     }
 
@@ -109,7 +106,6 @@ export async function POST(request: Request) {
     })
 
   } catch (error) {
-    console.error('Submit API error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

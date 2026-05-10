@@ -23,7 +23,6 @@ export async function GET() {
       .single()
 
     if (profileError) {
-      console.error('Error fetching profile:', profileError)
       return NextResponse.json(
         { error: 'Failed to fetch profile' },
         { status: 500 }
@@ -32,7 +31,6 @@ export async function GET() {
 
     return NextResponse.json({ profile })
   } catch (error) {
-    console.error('Profile API error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

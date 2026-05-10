@@ -64,12 +64,10 @@ export default function AdminDuelManager() {
         setDuels(result.duels || [])
         return result.duels || []
       } else {
-        console.error('Failed to fetch duels:', result.error)
         setError(result.error || 'Failed to fetch duels')
         return []
       }
     } catch (error) {
-      console.error('Fetch duels error:', error)
       setError('Error fetching duels')
       return []
     }
@@ -84,7 +82,6 @@ export default function AdminDuelManager() {
         .order('vote_score', { ascending: false })
 
       if (submissionsError) {
-        console.error('Error fetching submissions:', submissionsError)
         return
       }
 
@@ -99,7 +96,6 @@ export default function AdminDuelManager() {
           .in('id', userIds)
         
         if (profilesError) {
-          console.error('Error fetching profiles:', profilesError)
         } else {
           profilesMap = (profiles || []).reduce((acc, profile) => {
             acc[profile.id] = profile.username || 'Unknown'
@@ -123,7 +119,6 @@ export default function AdminDuelManager() {
 
       setDuelSubmissions(transformedSubmissions)
     } catch (error) {
-      console.error('Fetch duel details error:', error)
     }
   }
 
@@ -216,7 +211,6 @@ export default function AdminDuelManager() {
               setSelectedWeek(prev => prev ? { ...prev, duel: result.duel } : null)
             }
           } catch (error) {
-            console.error('Error updating state after duel update:', error)
             setError('Duel updated but there was an error updating the display')
           }
         } else {
@@ -225,7 +219,6 @@ export default function AdminDuelManager() {
       }
     } catch (error) {
       setError('Error saving duel')
-      console.error('Save duel error:', error)
     } finally {
       setLoading(false)
     }
@@ -264,7 +257,6 @@ export default function AdminDuelManager() {
       }
     } catch (error) {
       setError('Error deleting duel')
-      console.error('Delete duel error:', error)
     } finally {
       setLoading(false)
     }
@@ -303,7 +295,6 @@ export default function AdminDuelManager() {
       }
     } catch (error) {
       setError('Error finalizing duel')
-      console.error('Finalize duel error:', error)
     } finally {
       setLoading(false)
     }

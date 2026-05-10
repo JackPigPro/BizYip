@@ -26,7 +26,6 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (fetchError && fetchError.code !== 'PGRST116') {
-      console.error('Error checking existing like:', fetchError)
       return NextResponse.json({ error: 'Failed to check like status' }, { status: 500 })
     }
 
@@ -39,7 +38,6 @@ export async function POST(request: NextRequest) {
         .eq('user_id', user.id)
 
       if (deleteError) {
-        console.error('Error unliking idea:', deleteError)
         return NextResponse.json({ error: 'Failed to unlike idea' }, { status: 500 })
       }
 
@@ -54,7 +52,6 @@ export async function POST(request: NextRequest) {
         })
 
       if (insertError) {
-        console.error('Error liking idea:', insertError)
         return NextResponse.json({ error: 'Failed to like idea' }, { status: 500 })
       }
 
@@ -79,7 +76,6 @@ export async function POST(request: NextRequest) {
           })
 
         if (notificationError) {
-          console.error('Error creating notification:', notificationError)
           // Don't fail the request if notification fails
         }
       }
@@ -87,7 +83,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ liked: true })
     }
   } catch (error) {
-    console.error('Error in POST /api/ideas/like:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

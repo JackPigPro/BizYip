@@ -69,7 +69,6 @@ export async function PUT(
       .single()
 
     if (error) {
-      console.error('Error updating idea:', error)
       return NextResponse.json({ error: 'Failed to update idea' }, { status: 500 })
     }
 
@@ -81,7 +80,6 @@ export async function PUT(
       .single()
 
     if (profileError) {
-      console.error('Error fetching profile:', profileError)
       return NextResponse.json({ error: 'Failed to fetch profile' }, { status: 500 })
     }
 
@@ -97,7 +95,6 @@ export async function PUT(
 
     return NextResponse.json({ data: ideaWithProfile })
   } catch (error) {
-    console.error('Error in PUT /api/ideas/[id]:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -135,13 +132,11 @@ export async function DELETE(
       .eq('id', id)
 
     if (error) {
-      console.error('Error deleting idea:', error)
       return NextResponse.json({ error: 'Failed to delete idea' }, { status: 500 })
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Error in DELETE /api/ideas/[id]:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

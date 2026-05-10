@@ -148,7 +148,6 @@ export async function POST(request: NextRequest) {
     )
 
   } catch (catchError) {
-    console.error('Vote error:', catchError)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

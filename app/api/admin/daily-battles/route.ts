@@ -48,7 +48,6 @@ export async function GET() {
       .order('date', { ascending: false })
 
     if (battlesError) {
-      console.error('Daily battles fetch error:', battlesError)
       return NextResponse.json(
         { error: 'Failed to fetch daily battles' },
         { status: 500 }
@@ -66,7 +65,6 @@ export async function GET() {
         .in('battle_id', battleIds)
 
       if (submissionsError) {
-        console.error('Submissions count error:', submissionsError)
       } else {
         submissions?.forEach(submission => {
           submissionCounts[submission.battle_id] = (submissionCounts[submission.battle_id] || 0) + 1
@@ -86,7 +84,6 @@ export async function GET() {
     })
 
   } catch (error) {
-    console.error('Daily battles API error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

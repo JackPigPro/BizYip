@@ -50,13 +50,11 @@ export async function PUT(
       .single()
 
     if (error) {
-      console.error('Error updating comment:', error)
       return NextResponse.json({ error: 'Failed to update comment' }, { status: 500 })
     }
 
     return NextResponse.json({ data })
   } catch (error) {
-    console.error('Error in PUT /api/ideas/[id]/comments/[commentId]:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -95,13 +93,11 @@ export async function DELETE(
       .eq('id', commentId)
 
     if (error) {
-      console.error('Error deleting comment:', error)
       return NextResponse.json({ error: 'Failed to delete comment' }, { status: 500 })
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Error in DELETE /api/ideas/[id]/comments/[commentId]:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

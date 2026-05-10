@@ -23,13 +23,11 @@ export async function GET(
       .single()
 
     if (error) {
-      console.error('Error fetching profile:', error)
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 })
     }
 
     return NextResponse.json({ data: profile })
   } catch (error) {
-    console.error('Error in GET /api/profiles/[id]:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

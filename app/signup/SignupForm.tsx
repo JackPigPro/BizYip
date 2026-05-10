@@ -74,7 +74,6 @@ export default function SignupForm() {
           })
         setSuccess('Check your email to verify your account, then sign in.')
       } catch (profileError) {
-        console.error('Error creating profile during signup:', profileError)
         setError('Account created but profile setup failed. Please sign in to complete setup.')
       }
       return
@@ -94,7 +93,6 @@ export default function SignupForm() {
         router.push('/onboarding')
         router.refresh()
       } catch (profileError) {
-        console.error('Error creating profile during signup:', profileError)
         setError('Account created but profile setup failed. Please try signing in.')
       }
       return

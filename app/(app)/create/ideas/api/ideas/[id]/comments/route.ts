@@ -22,7 +22,6 @@ export async function GET(
       .order('created_at', { ascending: true })
 
     if (error) {
-      console.error('Error fetching comments:', error)
       return NextResponse.json({ error: 'Failed to fetch comments' }, { status: 500 })
     }
 
@@ -34,7 +33,6 @@ export async function GET(
       .in('id', userIds)
 
     if (profilesError) {
-      console.error('Error fetching profiles:', profilesError)
       return NextResponse.json({ error: 'Failed to fetch profiles' }, { status: 500 })
     }
 
@@ -67,7 +65,6 @@ export async function GET(
 
     return NextResponse.json({ data: rootComments })
   } catch (error) {
-    console.error('Error in GET /api/ideas/[id]/comments:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -125,7 +122,6 @@ export async function POST(
       .single()
 
     if (error) {
-      console.error('Error creating comment:', error)
       return NextResponse.json({ error: 'Failed to create comment' }, { status: 500 })
     }
 
@@ -137,7 +133,6 @@ export async function POST(
       .single()
 
     if (profileError) {
-      console.error('Error fetching profile:', profileError)
       return NextResponse.json({ error: 'Failed to fetch profile' }, { status: 500 })
     }
 
@@ -172,7 +167,6 @@ export async function POST(
         })
 
       if (notificationError) {
-        console.error('Error creating notification:', notificationError)
         // Don't fail the request if notification fails
       }
     }
@@ -199,7 +193,6 @@ export async function POST(
           })
 
         if (replyNotificationError) {
-          console.error('Error creating reply notification:', replyNotificationError)
           // Don't fail the request if notification fails
         }
       }
@@ -207,7 +200,6 @@ export async function POST(
 
     return NextResponse.json({ data: { ...commentWithProfile, replies: [] } })
   } catch (error) {
-    console.error('Error in POST /api/ideas/[id]/comments:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

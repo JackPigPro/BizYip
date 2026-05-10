@@ -27,7 +27,6 @@ export default function ForgotPasswordComponent() {
     }
 
     try {
-      console.log('Checking if profile exists for email:', email)
       
       // First check if profile exists in our database
       const { data: profile, error: profileError } = await supabase
@@ -37,7 +36,6 @@ export default function ForgotPasswordComponent() {
         .single()
 
       if (profileError || !profile) {
-        console.log('No profile found for email:', email)
         setError('No account found with that email. Please sign up first.')
         setLoading(false)
         return
@@ -45,13 +43,11 @@ export default function ForgotPasswordComponent() {
 
       // Check auth method - forgot password only for email accounts
       if (profile.auth_method === 'google') {
-        console.log('Google account trying to reset password:', email)
         setError('This account was created with Google. Please sign in with Google.')
         setLoading(false)
         return
       }
 
-      console.log('Profile found, sending password reset for email:', email)
       
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password`,
@@ -64,7 +60,6 @@ export default function ForgotPasswordComponent() {
 
       setSuccess('Password reset link sent! Check your email for instructions.')
     } catch (unexpectedError) {
-      console.error('Unexpected error during password reset:', unexpectedError)
       setError('An unexpected error occurred. Please try again.')
     } finally {
       setLoading(false)

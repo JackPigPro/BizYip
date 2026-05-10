@@ -43,13 +43,11 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (error) {
-      console.error('Create room error:', error)
       return NextResponse.json({ error: 'Failed to create room' }, { status: 500 })
     }
 
     return NextResponse.json({ success: true, data: match })
   } catch (error) {
-    console.error('Create room error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

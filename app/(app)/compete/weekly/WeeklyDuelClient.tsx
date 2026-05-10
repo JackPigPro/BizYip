@@ -88,7 +88,6 @@ export default function WeeklyDuelClient({
   // Get current state (admin override or real state)
   const displayState = isAdmin ? adminPreviewState : currentState
   const displayUserSubmission = isAdmin && hasSubmittedPreview ? { id: 'preview', content: 'Preview submission', vote_score: 0, vote_count: 0, created_at: new Date().toISOString() } as UserSubmission : localUserSubmission
-  console.log('displayUserSubmission:', displayUserSubmission, 'userSubmission:', userSubmission)
 
   // Countdown timers
   useEffect(() => {
@@ -281,11 +280,9 @@ export default function WeeklyDuelClient({
           onSubmissionSuccess(newSubmission)
         }
       } else {
-        console.error('Submit failed:', result.error)
         setValidationError(result.error || 'Failed to submit. Please try again.')
       }
     } catch (error) {
-      console.error('Submit error:', error)
       setValidationError('Network error. Please try again.')
     }
   }
@@ -353,11 +350,9 @@ export default function WeeklyDuelClient({
           onSubmissionSuccess(updatedSubmission)
         }
       } else {
-        console.error('Update failed:', result.error)
         setEditValidationError(result.error || 'Failed to update. Please try again.')
       }
     } catch (error) {
-      console.error('Update error:', error)
       setEditValidationError('Network error. Please try again.')
     }
   }
@@ -406,10 +401,8 @@ export default function WeeklyDuelClient({
           setVoteCooldown(30)
         }
       } else {
-        console.error('Vote failed:', result.error)
       }
     } catch (error) {
-      console.error('Vote error:', error)
     }
   }
 

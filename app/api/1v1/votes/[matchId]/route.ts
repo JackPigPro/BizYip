@@ -22,13 +22,11 @@ export async function GET(
       .eq('match_id', matchId)
 
     if (error) {
-      console.error('Fetch votes error:', error)
       return NextResponse.json({ error: 'Failed to fetch votes' }, { status: 500 })
     }
 
     return NextResponse.json({ success: true, data: votes })
   } catch (error) {
-    console.error('Fetch votes error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

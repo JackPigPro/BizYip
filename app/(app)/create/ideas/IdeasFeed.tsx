@@ -85,7 +85,6 @@ export default function IdeasFeed({
 
       onIdeaDelete(ideaId)
     } catch (err) {
-      console.error('Error deleting idea:', err)
       alert('Failed to delete idea. Please try again.')
     }
   }

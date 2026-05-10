@@ -47,13 +47,11 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (updateError) {
-      console.error('Join room error:', updateError)
       return NextResponse.json({ error: 'Failed to join room' }, { status: 500 })
     }
 
     return NextResponse.json({ success: true, data: updatedMatch })
   } catch (error) {
-    console.error('Join room error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

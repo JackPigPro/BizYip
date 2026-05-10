@@ -12,7 +12,6 @@ export function useLiveStats() {
     async function fetchStats() {
       try {
         setLoading(true)
-        console.log('Fetching stats from client...')
         const response = await fetch('/api/stats', {
           cache: 'no-store', // Disable caching
           headers: {
@@ -23,11 +22,9 @@ export function useLiveStats() {
           throw new Error(`Failed to fetch stats: ${response.status}`)
         }
         const data = await response.json()
-        console.log('Client stats received:', data)
         setStats(data)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error')
-        console.error('Failed to fetch live stats:', err)
       } finally {
         setLoading(false)
       }

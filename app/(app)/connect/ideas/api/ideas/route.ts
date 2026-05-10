@@ -44,7 +44,6 @@ export async function GET(request: NextRequest) {
     const { data: ideas, error } = await query
 
     if (error) {
-      console.error('Error fetching ideas:', error)
       return NextResponse.json({ error: 'Failed to fetch ideas' }, { status: 500 })
     }
 
@@ -56,7 +55,6 @@ export async function GET(request: NextRequest) {
       .in('id', userIds)
 
     if (profilesError) {
-      console.error('Error fetching profiles:', profilesError)
       return NextResponse.json({ error: 'Failed to fetch profiles' }, { status: 500 })
     }
 
@@ -78,7 +76,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ data: ideasWithProfiles })
   } catch (error) {
-    console.error('Error in GET /api/ideas:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -135,7 +132,6 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (error) {
-      console.error('Error creating idea:', error)
       return NextResponse.json({ error: 'Failed to create idea' }, { status: 500 })
     }
 
@@ -147,7 +143,6 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (profileError) {
-      console.error('Error fetching profile:', profileError)
       return NextResponse.json({ error: 'Failed to fetch profile' }, { status: 500 })
     }
 
@@ -163,7 +158,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ data: ideaWithProfile })
   } catch (error) {
-    console.error('Error in POST /api/ideas:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

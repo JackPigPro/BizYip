@@ -54,7 +54,6 @@ export async function getAuthState(): Promise<AuthResult> {
         continue
       }
       // For other errors, treat as no user
-      console.log('Auth error, treating as logged out:', err.message)
       break
     }
   }
@@ -81,7 +80,6 @@ export async function getAuthState(): Promise<AuthResult> {
     profile = result.data
   } catch (err) {
     // Profile fetch failed, continue with null profile
-    console.log('Profile fetch failed, treating as incomplete onboarding')
   }
 
   const isFullyAuthenticated = !!(profile?.onboarding_complete === true)

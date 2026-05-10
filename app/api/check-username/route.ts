@@ -58,7 +58,6 @@ export async function GET(request: NextRequest) {
     const { data, error } = await query.single()
 
     if (error && error.code !== 'PGRST116') { // PGRST116 is "not found"
-      console.error('Error checking username:', error)
       return NextResponse.json({ 
         available: false, 
         error: 'Failed to check username availability' 
@@ -70,7 +69,6 @@ export async function GET(request: NextRequest) {
       username: username.trim()
     })
   } catch (error) {
-    console.error('Unexpected error:', error)
     return NextResponse.json({ 
       available: false, 
       error: 'Server error' 

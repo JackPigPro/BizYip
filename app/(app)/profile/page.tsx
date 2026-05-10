@@ -33,7 +33,6 @@ export default function ProfilePage() {
           router.replace('/login')
         }
       } catch (error) {
-        console.error('Error redirecting to profile:', error)
         router.replace('/')
       }
     }

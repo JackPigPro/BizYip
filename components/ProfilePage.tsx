@@ -105,7 +105,6 @@ export default function ProfilePage({ profile: initialProfile, userStats, ideas,
         }
       }
     } catch (error) {
-      console.error('Error fetching classes data:', error)
     } finally {
       setClassesLoading(false)
     }
@@ -253,7 +252,6 @@ export default function ProfilePage({ profile: initialProfile, userStats, ideas,
       
       setIsEditing(false)
     } catch (error) {
-      console.error('Error saving profile:', error)
       alert('Error saving profile. Please try again.')
     }
   }

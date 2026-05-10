@@ -43,7 +43,6 @@ export async function POST(request: Request) {
     })
 
     if (prizeError) {
-      console.error('Error distributing prizes:', prizeError)
       return NextResponse.json({ error: 'Failed to distribute prizes', details: prizeError }, { status: 500 })
     }
 
@@ -56,7 +55,6 @@ export async function POST(request: Request) {
       .limit(1)
 
     if (activateError) {
-      console.error('Error activating next duel:', activateError)
       // Don't return error here, just log it since prizes were distributed
     }
 
@@ -68,7 +66,6 @@ export async function POST(request: Request) {
     })
 
   } catch (error) {
-    console.error('Error in force-finalize API:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

@@ -322,7 +322,6 @@ export default function CofounderMatchClient({
       // Refresh page to show updated data
       window.location.reload()
     } catch (err) {
-      console.error('Error toggling listing:', err)
       alert('Failed to update listing status. Please try again.')
     }
   }
@@ -343,7 +342,6 @@ export default function CofounderMatchClient({
       // Refresh page to show updated state
       window.location.reload()
     } catch (err) {
-      console.error('Error sending request:', err)
       alert('Failed to send request. Please try again.')
     }
   }
@@ -363,7 +361,6 @@ export default function CofounderMatchClient({
       // Refresh page to show updated state
       window.location.reload()
     } catch (err) {
-      console.error(`Error ${action}ing request:`, err)
       alert(`Failed to ${action} request. Please try again.`)
     }
   }
@@ -383,7 +380,6 @@ export default function CofounderMatchClient({
       // Refresh page to show updated state
       window.location.reload()
     } catch (err) {
-      console.error('Error canceling request:', err)
       alert('Failed to cancel request. Please try again.')
     }
   }

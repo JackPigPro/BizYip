@@ -75,7 +75,6 @@ export default function DailyBattleClient({ battle, userSubmission, userStreak, 
       const data = await response.json()
       setSubmissions(data)
     } catch (error) {
-      console.error('Error fetching submissions:', error)
     } finally {
       setLoading(false)
     }
@@ -140,7 +139,6 @@ export default function DailyBattleClient({ battle, userSubmission, userStreak, 
       setSubmission('')
       setTimeout(() => fetchSubmissions(), 1000)
     } catch (error) {
-      console.error('Error submitting:', error)
     } finally {
       setSubmitting(false)
     }
@@ -170,7 +168,6 @@ export default function DailyBattleClient({ battle, userSubmission, userStreak, 
 
       // API succeeded - optimistic update remains
     } catch (error) {
-      console.error('Error updating like:', error)
       // Revert optimistic update on network error
       setSubmissions(originalSubmissions)
     }
@@ -665,7 +662,6 @@ export default function DailyBattleClient({ battle, userSubmission, userStreak, 
                   return filteredSubmissions.length > 0 ? (
                     <div className="daily-battle-submissions-grid">
                       {submissions.filter(s => {
-                    console.log('Filtering submission:', s.user_id, 'vs userId:', userId, 'match:', s.user_id === userId)
                     return s.user_id !== userId
                   }).map(submission => (
                         <div key={submission.id} style={{

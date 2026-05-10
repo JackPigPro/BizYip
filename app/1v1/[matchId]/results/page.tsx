@@ -109,7 +109,6 @@ export default function ResultsPage() {
           setHasVoted(!!userVote)
         }
       } catch (err) {
-        console.error('Fetch data error:', err)
         setError('Failed to load battle data')
       }
     }
@@ -290,13 +289,11 @@ export default function ResultsPage() {
 
       if (response.ok) {
         const result = await response.json()
-        console.log('Vote successful:', result)
       } else {
         const errorData = await response.json()
         setError(errorData.error || 'Failed to vote')
       }
     } catch (err) {
-      console.error('Vote error:', err)
       setError('Network error. Please try again.')
     } finally {
       setIsVoting(false)

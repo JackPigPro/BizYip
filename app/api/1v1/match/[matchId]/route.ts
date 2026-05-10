@@ -37,7 +37,6 @@ export async function GET(
 
     return NextResponse.json({ success: true, data: match })
   } catch (error) {
-    console.error('Fetch match error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

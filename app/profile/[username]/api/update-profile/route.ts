@@ -60,13 +60,11 @@ export async function POST(request: Request) {
       .single()
 
     if (error) {
-      console.error('Profile update error:', error)
       return NextResponse.json({ error: error.message }, { status: 400 })
     }
 
     return NextResponse.json({ success: true, data })
   } catch (error) {
-    console.error('API route error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

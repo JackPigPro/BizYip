@@ -27,7 +27,6 @@ export default async function LeaderboardPage() {
     .order('id', { ascending: true })
 
   if (statsError) {
-    console.error('Error fetching user stats:', statsError)
   }
 
   // Fetch all daily streaks
@@ -36,7 +35,6 @@ export default async function LeaderboardPage() {
     .select('user_id, current_streak, longest_streak')
 
   if (streaksError) {
-    console.error('Error fetching daily streaks:', streaksError)
   }
 
   // Step 2: Fetch weekly duel entries count
@@ -78,7 +76,6 @@ export default async function LeaderboardPage() {
     .order('new_elo', { ascending: false })
 
   if (dailyError) {
-    console.error('Error fetching daily history:', dailyError)
   }
 
 
@@ -95,7 +92,6 @@ export default async function LeaderboardPage() {
     .order('new_elo', { ascending: false })
 
   if (weeklyError) {
-    console.error('Error fetching weekly history:', weeklyError)
   }
 
   // Fetch monthly leaderboard (from 1st of current month in Eastern Time)
@@ -115,7 +111,6 @@ export default async function LeaderboardPage() {
     .order('new_elo', { ascending: false })
 
   if (monthlyError) {
-    console.error('Error fetching monthly history:', monthlyError)
   }
 
 

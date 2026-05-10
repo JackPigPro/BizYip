@@ -90,7 +90,6 @@ export default function OneVOnePage() {
       return undefined
     }
 
-    console.log('Setting up realtime subscription for match:', currentMatch.id)
 
     const channel = supabase
       .channel('matches_changes')
@@ -99,44 +98,29 @@ export default function OneVOnePage() {
         schema: 'public',
         table: 'matches'
       }, (payload) => {
-        console.log('Realtime event received:', payload)
         
         // Handle different event types
         if (payload.eventType === 'UPDATE') {
           const updatedMatch = payload.new as Match
-          console.log('UPDATE event for match:', updatedMatch.id, 'status:', updatedMatch.status)
           
           // Only process updates for our specific match
           if (updatedMatch.id === currentMatch.id) {
-            console.log('Processing update for our match:', currentMatch.id)
             setCurrentMatch(updatedMatch)
             
             // If match became active, redirect to game room
-            console.log('Checking redirect conditions:')
-            console.log('- updatedMatch.status:', updatedMatch.status)
-            console.log('- updatedMatch.player2_id:', updatedMatch.player2_id)
-            console.log('- status === active:', updatedMatch.status === 'active')
-            console.log('- player2_id exists:', !!updatedMatch.player2_id)
             
             if (updatedMatch.status === 'active' && updatedMatch.player2_id) {
-              console.log('✅ All conditions met, redirecting to game room')
-              console.log('🎯 Redirect URL:', `/1v1/${updatedMatch.id}`)
               router.push(`/1v1/${updatedMatch.id}`)
             } else if (updatedMatch.status === 'active') {
-              console.log('⚠️ Match is active but player2_id missing, redirecting anyway')
-              console.log('🎯 Redirect URL:', `/1v1/${updatedMatch.id}`)
               router.push(`/1v1/${updatedMatch.id}`)
             } else {
-              console.log('❌ Redirect conditions not met - status is not active')
             }
           }
         } else if (payload.eventType === 'INSERT') {
           const newMatch = payload.new as Match
-          console.log('INSERT event for match:', newMatch.id)
           
           // Only process inserts for our specific match
           if (newMatch.id === currentMatch.id) {
-            console.log('Processing insert for our match:', currentMatch.id)
             setCurrentMatch(newMatch)
           }
         }
@@ -144,7 +128,6 @@ export default function OneVOnePage() {
       .subscribe()
 
     return () => {
-      console.log('Cleaning up realtime subscription for match:', currentMatch.id)
       supabase.removeChannel(channel)
     }
   }, [currentMatch, username, router])
@@ -612,7 +595,6 @@ export default function OneVOnePage() {
         setError(result.error || 'Failed to create room')
       }
     } catch (err) {
-      console.error('Create room error:', err)
       setError('Network error. Please try again.')
     } finally {
       setIsCreatingRoom(false)
@@ -654,7 +636,6 @@ export default function OneVOnePage() {
         setError(result.error || 'Failed to join room')
       }
     } catch (err) {
-      console.error('Join room error:', err)
       setError('Network error. Please try again.')
     } finally {
       setIsJoiningPrivate(false)
@@ -701,7 +682,6 @@ export default function OneVOnePage() {
         setError(result.error || 'Failed to join queue')
       }
     } catch (err) {
-      console.error('Join queue error:', err)
       setError('Network error. Please try again.')
     } finally {
       setIsJoiningRanked(false)
@@ -730,7 +710,6 @@ export default function OneVOnePage() {
       setWaitingForOpponent(false)
       setGeneratedRoomCode('')
     } catch (err) {
-      console.error('Cancel queue error:', err)
     }
   }
 

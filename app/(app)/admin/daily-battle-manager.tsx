@@ -59,11 +59,9 @@ export default function DailyBattleManager() {
       if (result.success) {
         setBattles(result.battles || [])
       } else {
-        console.error('Failed to fetch daily battles:', result.error)
         setError(result.error || 'Failed to fetch daily battles')
       }
     } catch (error) {
-      console.error('Fetch daily battles error:', error)
       setError('Error fetching daily battles')
     }
   }
@@ -109,7 +107,6 @@ export default function DailyBattleManager() {
       }
     } catch (error) {
       setError('Error publishing daily battle')
-      console.error('Publish daily battle error:', error)
     } finally {
       setLoading(false)
     }

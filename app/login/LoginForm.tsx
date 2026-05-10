@@ -15,14 +15,12 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
       const response = await fetch(`/api/auth/check-method?email=${encodeURIComponent(email.toLowerCase())}`)
       
       if (!response.ok) {
-        console.error('Failed to check auth method:', response.statusText)
         return null
       }
       
       const data = await response.json()
       return data.authMethod as 'email' | 'google' | null
     } catch (error) {
-      console.error('Error checking auth method:', error)
       return null
     }
   }
@@ -78,14 +76,11 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
     }
 
     try {
-      console.log('Checking auth method for email:', email)
       
       // Check auth method using our new helper function
       const authMethod = await getAuthMethodForEmail(email)
-      console.log('🔍 Auth method result for', email, ':', authMethod)
       
       if (authMethod === null) {
-        console.log('No account found for email:', email)
         setError('No account found with that email. Please sign up first.')
         setLoading(false)
         return
@@ -93,13 +88,11 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
 
       // Check auth method - magic links only for email accounts
       if (authMethod === 'google') {
-        console.log('Google account trying to use magic link:', email)
         setError('This account was created with Google. Please sign in with Google.')
         setLoading(false)
         return
       }
 
-      console.log('Profile found, sending magic link for email:', email)
       
       // Send magic link with correct options (don't create user)
       const { error: otpError, data } = await supabase.auth.signInWithOtp({
@@ -109,23 +102,14 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
         },
       })
 
-      console.log('OTP response:', { error: otpError, data })
 
       if (otpError) {
-        console.error('OTP Error details:', {
-          message: otpError.message,
-          status: otpError.status,
-          code: otpError.code,
-          name: otpError.name,
-          stack: otpError.stack
-        })
         setError(otpError.message)
         return
       }
 
       setStep('code')
     } catch (unexpectedError) {
-      console.error('Unexpected error during OTP sign in:', unexpectedError)
       setError('An unexpected error occurred. Please try again.')
     } finally {
       setLoading(false)
@@ -210,7 +194,6 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
         }
 
         // Check if email already exists in profiles table before signup
-        console.log('🔍 Checking if email exists in profiles:', email)
         const { data: existingProfile, error: profileCheckError } = await supabase
           .from('profiles')
           .select('email')
@@ -218,7 +201,6 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
           .single()
         
         if (existingProfile) {
-          console.log('❌ Email already exists in profiles:', email)
           setError('An account with this email already exists. Please sign in instead.')
           setLoading(false)
           return
@@ -267,36 +249,26 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
         }
 
         // Sign in with password
-        console.log('🔑 Attempting password sign in for:', email)
         const { error: signInError } = await supabase.auth.signInWithPassword({
           email,
           password,
         })
 
         if (signInError) {
-          console.error('❌ Sign in error:', signInError)
           setError(signInError.message)
           setLoading(false)
           return
         }
 
-        console.log('✅ Sign in successful, getting user data...')
-        console.log('📍 About to call supabase.auth.getUser()...')
         // Get current user and check onboarding
         const { data: { user }, error: userError } = await supabase.auth.getUser()
-        console.log('📍 supabase.auth.getUser() completed')
         
         if (userError || !user) {
-          console.log('📍 Entering user error branch')
-          console.error('❌ Error getting user after sign in:', userError)
           setError('Authentication error')
           setLoading(false)
           return
         }
-        console.log('📍 Passed user error check')
 
-        console.log('✅ User data retrieved:', user.id)
-        console.log('📍 About to query onboarding status...')
         // Check if user has completed onboarding with timeout
         let onboardingProfile, onboardingError
         try {
@@ -315,32 +287,21 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
           onboardingProfile = result.data
           onboardingError = result.error
         } catch (error) {
-          console.error('❌ Onboarding query failed or timed out:', error)
           onboardingError = error
           onboardingProfile = null
         }
-        console.log('📍 Onboarding query completed')
 
         if (onboardingError) {
-          console.log('📍 Entering onboarding error branch')
-          console.error('❌ Error checking onboarding status:', onboardingError)
           setError('Error checking profile status')
           setLoading(false)
           return
         }
-        console.log('📍 Passed onboarding error check')
 
         const redirectTo = onboardingProfile?.onboarding_complete ? '/' : '/onboarding'
-        console.log('🔄 About to redirect to:', redirectTo, 'onboarding_complete:', onboardingProfile?.onboarding_complete)
-        console.log('📍 About to call router.push()...')
         router.push(redirectTo)
-        console.log('📍 router.push() completed')
-        console.log('📍 About to call router.refresh()...')
         router.refresh()
-        console.log('📍 router.refresh() completed')
       }
     } catch (unexpectedError) {
-      console.error('Unexpected error during password auth:', unexpectedError)
       setError('An unexpected error occurred. Please try again.')
     } finally {
       setLoading(false)
@@ -396,7 +357,6 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
       setSuccess('Verification email resent!')
       setTimeout(() => setSuccess(null), 3000)
     } catch (unexpectedError) {
-      console.error('Unexpected error during resend:', unexpectedError)
       setError('An unexpected error occurred. Please try again.')
     } finally {
       setLoading(false)

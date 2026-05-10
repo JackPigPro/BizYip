@@ -54,7 +54,6 @@ export async function getAuthStateClient(): Promise<AuthResult> {
       needsOnboarding
     }
   } catch (error) {
-    console.error('Auth error:', error)
     return {
       user: null,
       profile: null,

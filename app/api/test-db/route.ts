@@ -3,7 +3,6 @@ import { createAdminClient } from '@/utils/supabase/admin'
 
 export async function GET() {
   try {
-    console.log('Testing database connection...')
     const supabase = createAdminClient()
     
     // Test profiles table
@@ -30,7 +29,6 @@ export async function GET() {
       requests: { data: requests, error: requestsError?.message },
     })
   } catch (error) {
-    console.error('Test endpoint error:', error)
     return NextResponse.json(
       { error: 'Database test failed' },
       { status: 500 }

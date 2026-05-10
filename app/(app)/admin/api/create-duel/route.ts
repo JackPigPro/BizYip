@@ -49,16 +49,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Call the updated Supabase function with new parameters
-    console.log('Calling create_weekly_duel function with prompt_text:', prompt_text.trim(), 'start_date:', start_date, 'end_date:', end_date)
     const { data, error } = await supabase.rpc('create_weekly_duel', {
       prompt_text: prompt_text.trim(),
       start_date: start_date,
       end_date: end_date
     })
 
-    console.log('RPC call params:', { prompt_text: prompt_text.trim(), start_date, end_date })
-    console.log('RPC data:', data)
-    console.log('RPC error:', JSON.stringify(error))
     
     if (error) {
       return NextResponse.json({ 
@@ -87,7 +83,6 @@ export async function POST(request: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Create duel error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

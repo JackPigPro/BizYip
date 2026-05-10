@@ -62,7 +62,6 @@ export async function POST(request: NextRequest) {
       })
 
     if (profileError) {
-      console.error('Profile error:', profileError)
       return NextResponse.json({ 
         error: 'Failed to update profile' 
       }, { status: 500 })
@@ -75,7 +74,6 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Onboarding completion error:', error)
     return NextResponse.json({ 
       error: 'Server error during onboarding' 
     }, { status: 500 })

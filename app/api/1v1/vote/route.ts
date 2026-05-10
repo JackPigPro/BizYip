@@ -70,7 +70,6 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (voteError) {
-      console.error('Vote error:', voteError)
       return NextResponse.json({ error: 'Failed to vote' }, { status: 500 })
     }
 
@@ -94,17 +93,14 @@ export async function POST(request: NextRequest) {
         
         if (winnerResponse.ok) {
           const winnerResult = await winnerResponse.json()
-          console.log('Winner determined:', winnerResult)
         }
       } catch (error) {
-        console.error('Auto-determine winner error:', error)
         // Don't fail the vote request if winner determination fails
       }
     }
 
     return NextResponse.json({ success: true, data: vote })
   } catch (error) {
-    console.error('Vote error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

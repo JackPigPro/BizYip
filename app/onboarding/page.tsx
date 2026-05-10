@@ -160,7 +160,6 @@ export default function OnboardingPage() {
   // Save Step 1 data (username and terms)
   const saveStep1Data = async () => {
     try {
-      console.log('💾 Saving Step 1 data...')
       
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('User not authenticated')
@@ -193,27 +192,11 @@ export default function OnboardingPage() {
         })
 
       if (error) {
-        console.error('❌ Step 1 save failed:', error)
-        console.error('❌ SQL Error Details:', {
-          message: error.message,
-          details: error.details,
-          hint: error.hint,
-          code: error.code
-        })
-        console.error('❌ Data being saved:', {
-          id: user.id,
-          username: username.trim(),
-          agreed_to_terms: agreedToTerms,
-          email: currentProfile?.email || user.email?.toLowerCase() || '',
-          auth_method: currentProfile?.auth_method || 'email',
-        })
         return false
       }
       
-      console.log('✅ Step 1 data saved successfully')
       return true
     } catch (err) {
-      console.error('💥 Step 1 save error:', err)
       return false
     }
   }
@@ -221,7 +204,6 @@ export default function OnboardingPage() {
   // Save Step 2 data (avatar and theme)
   const saveStep2Data = async () => {
     try {
-      console.log('💾 Saving Step 2 data...')
       
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('User not authenticated')
@@ -235,14 +217,11 @@ export default function OnboardingPage() {
         })
 
       if (error) {
-        console.error('❌ Step 2 save failed:', error)
         return false
       }
       
-      console.log('✅ Step 2 data saved successfully')
       return true
     } catch (err) {
-      console.error('💥 Step 2 save error:', err)
       return false
     }
   }
@@ -250,7 +229,6 @@ export default function OnboardingPage() {
   // Load existing progress on mount
   const loadExistingProgress = async () => {
     try {
-      console.log('🔄 Loading existing onboarding progress...')
       
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
@@ -262,7 +240,6 @@ export default function OnboardingPage() {
         .single()
 
       if (profile) {
-        console.log('📋 Found existing profile data:', profile)
         
         // Restore form data if exists
         if (profile.username) {
@@ -276,7 +253,6 @@ export default function OnboardingPage() {
         
         // If onboarding is already complete, redirect to dashboard
         if (profile.onboarding_complete) {
-          console.log('✅ Onboarding already complete, redirecting to dashboard')
           router.push('/dashboard')
           return
         }
@@ -288,11 +264,9 @@ export default function OnboardingPage() {
         
         if (stepToShow > currentStep) {
           setCurrentStep(stepToShow)
-          console.log(`📍 Advanced to step ${stepToShow} based on existing progress`)
         }
       }
     } catch (err) {
-      console.error('💥 Error loading progress:', err)
     }
   }
 
@@ -308,22 +282,18 @@ export default function OnboardingPage() {
     setError(null)
 
     try {
-      console.log('🚀 Starting onboarding final submission...')
       
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('User not authenticated')
       
-      console.log('✅ User authenticated:', user.id)
 
       // Final moderation check before saving
       const moderationResult = await validateAndLogContent(user.id, username, 'username')
       if (!moderationResult.isValid) {
-        console.log('❌ Moderation failed:', moderationResult.error)
         setError(moderationResult.error || 'Inappropriate content. Please rewrite.')
         setLoading(false)
         return
       }
-      console.log('✅ Moderation passed')
 
       // Save Step 3 data (skills) and complete onboarding
       const profileData = {
@@ -332,25 +302,20 @@ export default function OnboardingPage() {
         onboarding_complete: true,
       }
       
-      console.log('💾 Saving Step 3 data and completing onboarding:', profileData)
       
       const { error: saveError } = await supabase
         .from('profiles')
         .upsert(profileData)
 
       if (saveError) {
-        console.error('❌ Final save failed:', saveError)
         throw new Error(`Failed to complete onboarding: ${saveError.message}`)
       }
       
-      console.log('✅ Onboarding completed successfully!')
-      console.log('🔄 Redirecting to dashboard...')
 
       // Redirect to dashboard
       router.push('/dashboard')
       router.refresh()
     } catch (err) {
-      console.error('💥 Onboarding submission error:', err)
       setError(err instanceof Error ? err.message : 'An error occurred')
       setLoading(false)
     }

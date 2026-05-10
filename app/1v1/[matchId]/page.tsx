@@ -93,7 +93,6 @@ export default function GameRoomPage() {
           }
         }
       } catch (err) {
-        console.error('Fetch match error:', err)
         setError('Failed to load match')
       }
     }
@@ -302,12 +301,10 @@ export default function GameRoomPage() {
       if (response.ok) {
         // Submission successful, wait for opponent or redirect
         const result = await response.json()
-        console.log('Submission successful:', result)
       } else {
         setError('Failed to submit')
       }
     } catch (err) {
-      console.error('Submit error:', err)
       setError('Network error. Please try again.')
     } finally {
       setIsSubmitting(false)

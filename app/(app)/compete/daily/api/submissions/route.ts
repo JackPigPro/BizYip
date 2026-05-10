@@ -53,7 +53,6 @@ export async function GET(request: Request) {
       .order('created_at', { ascending: false })
 
     if (submissionsError) {
-      console.error('Submissions fetch error:', submissionsError)
       return NextResponse.json(
         { error: 'Failed to fetch submissions' },
         { status: 500 }
@@ -72,7 +71,6 @@ export async function GET(request: Request) {
       .in('id', userIds)
 
     if (profilesError) {
-      console.error('Profiles fetch error:', profilesError)
       return NextResponse.json(
         { error: 'Failed to fetch user profiles' },
         { status: 500 }
@@ -87,7 +85,6 @@ export async function GET(request: Request) {
       .in('submission_id', submissionIds)
 
     if (likesError) {
-      console.error('Likes fetch error:', likesError)
       return NextResponse.json(
         { error: 'Failed to fetch likes' },
         { status: 500 }
@@ -122,7 +119,6 @@ export async function GET(request: Request) {
     return NextResponse.json(mergedSubmissions)
 
   } catch (error) {
-    console.error('Submissions API error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

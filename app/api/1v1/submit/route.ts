@@ -48,7 +48,6 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (submissionError) {
-      console.error('Submit error:', submissionError)
       return NextResponse.json({ error: 'Failed to submit' }, { status: 500 })
     }
 
@@ -62,7 +61,6 @@ export async function POST(request: NextRequest) {
       .eq('id', match_id)
 
     if (updateError) {
-      console.error('Update match error:', updateError)
       return NextResponse.json({ error: 'Failed to update match' }, { status: 500 })
     }
 
@@ -86,7 +84,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, data: submission })
   } catch (error) {
-    console.error('Submit error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

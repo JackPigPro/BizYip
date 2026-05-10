@@ -56,7 +56,6 @@ export default function AdminTabs() {
 
       setTeacherVerifications(verificationsWithUsernames)
     } catch (error) {
-      console.error('Error fetching teacher verifications:', error)
     } finally {
       setLoading(false)
     }
@@ -83,7 +82,6 @@ export default function AdminTabs() {
       // Refresh data
       await fetchTeacherVerifications()
     } catch (error) {
-      console.error('Error verifying teacher:', error)
     }
   }
 
@@ -111,7 +109,6 @@ export default function AdminTabs() {
       // Refresh data
       await fetchTeacherVerifications()
     } catch (error) {
-      console.error('Error revoking teacher:', error)
     }
   }
 
@@ -139,7 +136,6 @@ export default function AdminTabs() {
       // Refresh data
       await fetchTeacherVerifications()
     } catch (error) {
-      console.error('Error declining teacher:', error)
     }
   }
 

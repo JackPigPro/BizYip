@@ -50,7 +50,6 @@ export async function POST(request: Request) {
       .maybeSingle()
 
     if (checkError) {
-      console.error('Like check error:', checkError)
       return NextResponse.json(
         { error: 'Failed to check like status' },
         { status: 500 }
@@ -89,7 +88,6 @@ export async function POST(request: Request) {
       .single()
 
     if (likeError) {
-      console.error('Like error:', likeError)
       return NextResponse.json(
         { error: 'Failed to like submission' },
         { status: 500 }
@@ -102,7 +100,6 @@ export async function POST(request: Request) {
     })
 
   } catch (error) {
-    console.error('Like POST error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -157,7 +154,6 @@ export async function DELETE(request: Request) {
       .eq('user_id', user.id)
 
     if (deleteError) {
-      console.error('Unlike error:', deleteError)
       return NextResponse.json(
         { error: 'Failed to unlike submission' },
         { status: 500 }
@@ -169,7 +165,6 @@ export async function DELETE(request: Request) {
     })
 
   } catch (error) {
-    console.error('Like DELETE error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

@@ -29,7 +29,6 @@ export async function GET(
 
     return NextResponse.json({ classId: prompt.class_id })
   } catch (error) {
-    console.error('Error getting class route:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

@@ -55,7 +55,6 @@ export async function POST(request: NextRequest) {
       .eq('duel_id', duelId)
 
     if (submissionsError) {
-      console.error('Delete submissions error:', submissionsError)
       return NextResponse.json(
         { error: 'Failed to delete submissions' },
         { status: 500 }
@@ -69,7 +68,6 @@ export async function POST(request: NextRequest) {
       .eq('duel_id', duelId)
 
     if (winnersError) {
-      console.error('Delete winners error:', winnersError)
       return NextResponse.json(
         { error: 'Failed to delete winners' },
         { status: 500 }
@@ -83,7 +81,6 @@ export async function POST(request: NextRequest) {
       .eq('id', duelId)
 
     if (duelError) {
-      console.error('Delete duel error:', duelError)
       return NextResponse.json(
         { error: duelError.message || 'Failed to delete duel' },
         { status: 500 }
@@ -99,7 +96,6 @@ export async function POST(request: NextRequest) {
     )
 
   } catch (error) {
-    console.error('Delete duel error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

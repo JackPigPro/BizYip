@@ -48,7 +48,6 @@ export async function POST(request: Request) {
       .single()
 
     if (updateError) {
-      console.error('Error updating duel:', updateError)
       return NextResponse.json({ error: 'Failed to update duel', details: updateError }, { status: 500 })
     }
 
@@ -59,7 +58,6 @@ export async function POST(request: Request) {
     })
 
   } catch (error) {
-    console.error('Error in update-duel API:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

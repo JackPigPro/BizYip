@@ -50,7 +50,6 @@ export async function POST(request: NextRequest) {
       .eq('match_id', match_id)
 
     if (votesError) {
-      console.error('Fetch votes error:', votesError)
       return NextResponse.json({ error: 'Failed to fetch votes' }, { status: 500 })
     }
 
@@ -76,7 +75,6 @@ export async function POST(request: NextRequest) {
       .in('id', [match.player1_id, match.player2_id])
 
     if (profilesError) {
-      console.error('Fetch profiles error:', profilesError)
       return NextResponse.json({ error: 'Failed to fetch user profiles' }, { status: 500 })
     }
 
@@ -104,7 +102,6 @@ export async function POST(request: NextRequest) {
       .eq('id', match_id)
 
     if (updateMatchError) {
-      console.error('Update match error:', updateMatchError)
       return NextResponse.json({ error: 'Failed to update match' }, { status: 500 })
     }
 
@@ -115,7 +112,6 @@ export async function POST(request: NextRequest) {
       .eq('id', winnerId)
 
     if (updateWinnerError) {
-      console.error('Update winner error:', updateWinnerError)
       return NextResponse.json({ error: 'Failed to update winner ELO' }, { status: 500 })
     }
 
@@ -126,7 +122,6 @@ export async function POST(request: NextRequest) {
       .eq('id', loserId)
 
     if (updateLoserError) {
-      console.error('Update loser error:', updateLoserError)
       return NextResponse.json({ error: 'Failed to update loser ELO' }, { status: 500 })
     }
 
@@ -143,7 +138,6 @@ export async function POST(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('Determine winner error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

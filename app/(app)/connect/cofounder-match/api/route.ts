@@ -21,7 +21,6 @@ export async function GET(request: NextRequest) {
       .eq('open_to_cofounder', true)
 
     if (profilesError) {
-      console.error('Error fetching profiles:', profilesError)
       return NextResponse.json({ error: 'Failed to fetch profiles' }, { status: 500 })
     }
 
@@ -32,7 +31,6 @@ export async function GET(request: NextRequest) {
       .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
 
     if (requestsError) {
-      console.error('Error fetching cofounder requests:', requestsError)
       return NextResponse.json({ error: 'Failed to fetch cofounder requests' }, { status: 500 })
     }
 
@@ -103,7 +101,6 @@ export async function GET(request: NextRequest) {
       incomingRequestProfiles
     })
   } catch (error) {
-    console.error('Error in GET /api/cofounder-match:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -147,7 +144,6 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (requestError) {
-      console.error('Error creating cofounder request:', requestError)
       return NextResponse.json({ error: 'Failed to create cofounder request' }, { status: 500 })
     }
 
@@ -164,13 +160,11 @@ export async function POST(request: NextRequest) {
       })
 
     if (notificationError) {
-      console.error('Error creating notification:', notificationError)
       // Don't fail the request if notification fails
     }
 
     return NextResponse.json(newRequest)
   } catch (error) {
-    console.error('Error in POST /api/cofounder-match:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -200,7 +194,6 @@ export async function PATCH(request: NextRequest) {
         .eq('id', user.id)
 
       if (updateError) {
-        console.error('Error updating profile:', updateError)
         return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 })
       }
 
@@ -233,7 +226,6 @@ export async function PATCH(request: NextRequest) {
       .eq('id', request_id)
 
     if (updateError) {
-      console.error('Error updating request:', updateError)
       return NextResponse.json({ error: 'Failed to update request' }, { status: 500 })
     }
 
@@ -251,14 +243,12 @@ export async function PATCH(request: NextRequest) {
         })
 
       if (notificationError) {
-        console.error('Error creating notification:', notificationError)
         // Don't fail the request if notification fails
       }
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Error in PATCH /api/cofounder-match:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -287,13 +277,11 @@ export async function DELETE(request: NextRequest) {
       .eq('sender_id', user.id) // Explicit ownership verification - prevents deleting requests you didn't send
 
     if (deleteError) {
-      console.error('Error deleting cofounder request:', deleteError)
       return NextResponse.json({ error: 'Failed to delete cofounder request' }, { status: 500 })
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Error in DELETE /api/cofounder-match:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

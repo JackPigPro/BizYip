@@ -31,7 +31,6 @@ export async function PATCH(request: Request) {
       .eq('id', user.id)
 
     if (updateError) {
-      console.error('Error updating theme preference:', updateError)
       return NextResponse.json(
         { error: 'Failed to update theme preference' },
         { status: 500 }
@@ -40,7 +39,6 @@ export async function PATCH(request: Request) {
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Theme API error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

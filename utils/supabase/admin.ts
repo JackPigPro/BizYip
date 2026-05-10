@@ -10,7 +10,6 @@ export function createAdminClient() {
   }
   
   if (!serviceRoleKey) {
-    console.warn('SUPABASE_SERVICE_ROLE_KEY is not set, falling back to anon key for stats')
   }
   
   return createClient(

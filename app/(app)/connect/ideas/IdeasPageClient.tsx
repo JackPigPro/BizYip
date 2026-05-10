@@ -30,7 +30,6 @@ export default function IdeasPageClient() {
           setIdeas(data)
         }
       } catch (err) {
-        console.error('Error parsing cached ideas:', err)
       }
     }
   }, [activeTab])
@@ -65,7 +64,6 @@ export default function IdeasPageClient() {
       
       // Remove setIdeasLoaded(true) - no blocking loading
     } catch (err) {
-      console.error('Error fetching ideas:', err)
       setError('Failed to load ideas')
       // Remove setIdeasLoaded(true) - no blocking loading
     }
@@ -86,7 +84,6 @@ export default function IdeasPageClient() {
       const { data } = await response.json()
       setIdeas(prev => [data, ...prev])
     } catch (err) {
-      console.error('Error creating idea:', err)
       throw err
     }
   }

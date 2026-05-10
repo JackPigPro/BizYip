@@ -61,12 +61,6 @@ export async function GET(request: NextRequest) {
     )
 
   } catch (error) {
-    console.error('Get duels error:', {
-      error: error,
-      message: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : 'No stack trace',
-      timestamp: new Date().toISOString()
-    })
     return NextResponse.json(
       { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }

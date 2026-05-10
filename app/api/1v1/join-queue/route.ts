@@ -42,7 +42,6 @@ export async function POST(request: NextRequest) {
         .single()
 
       if (updateError) {
-        console.error('Join queue error:', updateError)
         return NextResponse.json({ error: 'Failed to join match' }, { status: 500 })
       }
 
@@ -64,13 +63,11 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (createError) {
-      console.error('Create match error:', createError)
       return NextResponse.json({ error: 'Failed to create match' }, { status: 500 })
     }
 
     return NextResponse.json({ success: true, data: newMatch })
   } catch (error) {
-    console.error('Join queue error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

@@ -92,15 +92,6 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (submissionError || !submission) {
-      console.error('Submission insert error:', {
-        error: submissionError,
-        message: submissionError?.message,
-        details: submissionError?.details,
-        hint: submissionError?.hint,
-        code: submissionError?.code,
-        user_id: user.id,
-        duel_id: duel_id
-      })
       return NextResponse.json(
         { error: 'Failed to submit idea', details: submissionError?.message },
         { status: 500 }
@@ -109,7 +100,6 @@ export async function POST(request: NextRequest) {
 
     // Grant +10 ELO immediately for weekly duel submission
     try {
-      console.log('Granting +10 ELO for weekly duel submission to user:', user.id)
       
       // Update profiles.elo
       const { data: updatedStats, error: eloUpdateError } = await supabase
@@ -120,7 +110,6 @@ export async function POST(request: NextRequest) {
         .single()
 
       if (eloUpdateError) {
-        console.error('ELO update error:', eloUpdateError)
         // Don't fail the submission, just log the error
       } else {
         // Log to elo_history
@@ -134,13 +123,10 @@ export async function POST(request: NextRequest) {
           })
 
         if (historyError) {
-          console.error('ELO history logging error:', historyError)
         }
 
-        console.log('Successfully granted +10 ELO for weekly duel submission')
       }
     } catch (eloError) {
-      console.error('Unexpected error during ELO grant:', eloError)
       // Don't fail the submission for ELO issues
     }
 
@@ -158,7 +144,6 @@ export async function POST(request: NextRequest) {
     )
 
   } catch (error) {
-    console.error('Submit submission error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -243,7 +228,6 @@ export async function PUT(request: NextRequest) {
     }
 
     // Check if duel is still in active status (allow editing only during active phase)
-    console.log('Checking duel status for duel_id:', duel_id)
     
     const { data: duel, error: duelError } = await supabase
       .from('weekly_duel')
@@ -251,17 +235,8 @@ export async function PUT(request: NextRequest) {
       .eq('id', duel_id)
       .single()
 
-    console.log('Duel query result:', { duel, duelError })
 
     if (duelError) {
-      console.error('Duel status check error:', {
-        error: duelError,
-        message: duelError?.message,
-        details: duelError?.details,
-        hint: duelError?.hint,
-        code: duelError?.code,
-        duel_id: duel_id
-      })
       return NextResponse.json(
         { error: 'Failed to verify duel status', details: duelError?.message },
         { status: 500 }
@@ -269,17 +244,14 @@ export async function PUT(request: NextRequest) {
     }
 
     if (!duel) {
-      console.error('Duel not found with ID:', duel_id)
       return NextResponse.json(
         { error: 'Duel not found' },
         { status: 404 }
       )
     }
 
-    console.log('Duel found:', { id: duel.id, status: duel.status })
 
     if (duel.status !== 'active') {
-      console.log('Duel edit blocked - status not active:', duel.status)
       return NextResponse.json(
         { error: `Can only edit submissions while duel is in active status. Current status: ${duel.status}` },
         { status: 400 }
@@ -297,14 +269,6 @@ export async function PUT(request: NextRequest) {
       .single()
 
     if (updateError || !updatedSubmission) {
-      console.error('Submission update error:', {
-        error: updateError,
-        message: updateError?.message,
-        details: updateError?.details,
-        hint: updateError?.hint,
-        code: updateError?.code,
-        submission_id: existingSubmission.id
-      })
       return NextResponse.json(
         { error: 'Failed to update submission', details: updateError?.message },
         { status: 500 }
@@ -324,7 +288,6 @@ export async function PUT(request: NextRequest) {
     )
 
   } catch (error) {
-    console.error('Update submission error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

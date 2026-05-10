@@ -33,7 +33,6 @@ export async function GET() {
       .order('start_date', { ascending: false })
 
     if (duelsError) {
-      console.error('Error fetching duels:', duelsError)
       return NextResponse.json({ error: 'Failed to fetch duels' }, { status: 500 })
     }
 
@@ -65,7 +64,6 @@ export async function GET() {
     })
 
   } catch (error) {
-    console.error('Error in get-duels API:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

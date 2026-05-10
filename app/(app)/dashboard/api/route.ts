@@ -21,7 +21,6 @@ export async function GET() {
       .single()
 
     if (profileError && profileError.code !== 'PGRST116') {
-      console.error('Profile error:', profileError)
       return NextResponse.json({ error: 'Failed to fetch profile' }, { status: 500 })
     }
 
@@ -32,7 +31,6 @@ export async function GET() {
       .eq('user_id', user.id)
 
     if (ideasError) {
-      console.error('Ideas error:', ideasError)
       return NextResponse.json({ error: 'Failed to fetch ideas' }, { status: 500 })
     }
 
@@ -42,7 +40,6 @@ export async function GET() {
       .in('idea_id', ideas?.map((i: any) => i.id) || [])
 
     if (likesError) {
-      console.error('Likes error:', likesError)
       return NextResponse.json({ error: 'Failed to fetch likes' }, { status: 500 })
     }
 
@@ -53,7 +50,6 @@ export async function GET() {
       .neq('user_id', user.id) // Exclude user's own comments
 
     if (commentsError) {
-      console.error('Comments error:', commentsError)
       return NextResponse.json({ error: 'Failed to fetch comments' }, { status: 500 })
     }
 
@@ -90,7 +86,6 @@ export async function GET() {
     })
 
   } catch (error) {
-    console.error('Dashboard API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

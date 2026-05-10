@@ -26,13 +26,11 @@ export async function GET(
       .eq('match_id', matchId)
 
     if (error) {
-      console.error('Fetch submissions error:', error)
       return NextResponse.json({ error: 'Failed to fetch submissions' }, { status: 500 })
     }
 
     return NextResponse.json({ success: true, data: submissions })
   } catch (error) {
-    console.error('Fetch submissions error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

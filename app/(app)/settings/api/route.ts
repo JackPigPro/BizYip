@@ -31,7 +31,6 @@ export async function GET(request: Request) {
       isEmailUser: user.app_metadata?.provider === 'email'
     })
   } catch (error) {
-    console.error('Settings API error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -141,7 +140,6 @@ export async function POST(request: Request) {
           .eq('id', user.id)
 
         if (deleteProfileError) {
-          console.error('Profile deletion error:', deleteProfileError)
           return NextResponse.json({ error: 'Failed to delete profile' }, { status: 500 })
         }
 
@@ -153,7 +151,6 @@ export async function POST(request: Request) {
           .eq('user_id', user.id)
 
         if (deleteStreaksError) {
-          console.error('Daily streaks deletion error:', deleteStreaksError)
           // Don't fail the whole operation if streaks deletion fails
         }
 
@@ -164,7 +161,6 @@ export async function POST(request: Request) {
           .eq('user_id', user.id)
 
         if (deleteEloHistoryError) {
-          console.error('ELO history deletion error:', deleteEloHistoryError)
           // Don't fail the whole operation if ELO history deletion fails
         }
 
@@ -175,7 +171,6 @@ export async function POST(request: Request) {
         const { error: deleteAuthError } = await serviceClient.auth.admin.deleteUser(user.id)
 
         if (deleteAuthError) {
-          console.error('Auth deletion error:', deleteAuthError)
           return NextResponse.json({ error: 'Failed to delete account' }, { status: 500 })
         }
 
@@ -186,7 +181,6 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Invalid request type' }, { status: 400 })
     }
   } catch (error) {
-    console.error('Settings API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

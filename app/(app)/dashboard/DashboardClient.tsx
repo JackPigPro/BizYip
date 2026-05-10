@@ -126,20 +126,17 @@ export default function DashboardClient({ initialProfile, initialStats, todayBat
         setActivityPage(page)
       } else if (response.status === 500 || response.status === 401) {
         // Handle server errors gracefully - just set empty notifications
-        console.log('Activity feed temporarily unavailable')
         if (reset) {
           setNotifications([])
         }
         setHasMoreActivity(false)
       } else {
-        console.error('Unexpected response status:', response.status)
         if (reset) {
           setNotifications([])
         }
         setHasMoreActivity(false)
       }
     } catch (error) {
-      console.error('Failed to fetch activity:', error)
       // Set empty state on error to prevent infinite loading
       if (reset) {
         setNotifications([])

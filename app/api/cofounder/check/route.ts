@@ -47,7 +47,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ data: { canMessage: true } })
   } catch (error) {
-    console.error('Error in GET /api/cofounder/check:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

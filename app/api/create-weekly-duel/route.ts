@@ -49,24 +49,19 @@ export async function POST(request: Request) {
     }
 
     // Call the updated Supabase function with new parameters
-    console.log('Calling create_weekly_duel function with prompt:', prompt.trim(), 'start_date:', start_date, 'end_date:', end_date)
     const { data, error } = await supabase.rpc('create_weekly_duel', {
       prompt_text: prompt.trim(),
       start_date: start_date,
       end_date: end_date
     })
 
-    console.log('Supabase response - data:', data)
-    console.log('Supabase response - error:', error)
 
     if (error) {
-      console.error('Error creating weekly duel:', error)
       return NextResponse.json({ success: false, error: 'Failed to create weekly duel', details: error }, { status: 500 })
     }
 
     // The function returns a JSON object with success, duel_id, etc.
     if (data && data.success) {
-      console.log('Duel created successfully with ID:', data.duel_id)
       return NextResponse.json({ 
         success: true, 
         duel_id: data.duel_id,
@@ -80,11 +75,9 @@ export async function POST(request: Request) {
         }
       }, { status: 200 })
     } else {
-      console.log('No success returned from create_weekly_duel function:', data)
       return NextResponse.json({ success: false, error: data?.error || 'Failed to create duel' }, { status: 500 })
     }
   } catch (error) {
-    console.error('Error in create-weekly-duel API:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

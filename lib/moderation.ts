@@ -331,7 +331,6 @@ function initializeCache() {
     
     cacheInitialized = true;
   } catch (error) {
-    console.error('Failed to load banned words:', error);
     bannedWords = [];
   }
 }
@@ -374,7 +373,6 @@ export async function logModerationAttempt(
       created_at: new Date().toISOString()
     });
   } catch (error) {
-    console.error('Failed to log moderation attempt:', error);
   }
 }
 

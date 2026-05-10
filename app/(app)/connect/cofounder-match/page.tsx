@@ -33,7 +33,6 @@ export default async function CoFounderMatchPage() {
     .eq('open_to_cofounder', true)
 
   if (profilesError) {
-    console.error('Error fetching profiles:', profilesError)
   }
 
   // Default values for non-authenticated users
@@ -56,7 +55,6 @@ export default async function CoFounderMatchPage() {
       .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
 
     if (requestsError) {
-      console.error('Error fetching cofounder requests:', requestsError)
     } else {
       requests = requestsData || []
     }

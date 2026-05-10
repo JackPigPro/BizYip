@@ -87,7 +87,6 @@ export function useUser() {
       } catch (err: any) {
         // Don't log lock conflicts as errors - they're expected with multiple tabs
         if (!err.message?.includes('lock')) {
-          console.error('❌ [useUser] Error getting session:', err)
         }
         
         // Only retry on lock conflicts, not on general auth errors
@@ -174,7 +173,6 @@ export function useUser() {
       setProfile(newProfile)
       setElo(newElo)
     } catch (err) {
-      console.error('Error fetching user data:', err)
       setError('Failed to load user data')
     } finally {
       setLoading(false)

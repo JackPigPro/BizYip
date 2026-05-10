@@ -71,7 +71,6 @@ export default function CreateIdeaForm({ onSubmit, userId }: CreateIdeaFormProps
       setContent('')
       setIsPublic(true)
     } catch (err) {
-      console.error('Error submitting idea:', err)
       setError('Failed to create idea. Please try again.')
     } finally {
       setSubmitting(false)

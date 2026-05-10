@@ -68,7 +68,6 @@ export default function WeeklyDuelPage() {
           .eq('user_id', authUser.id)
           .maybeSingle()
 
-        console.log('Setting userSubmission to:', userSub)
         setUserSubmission(userSub)
 
         // Fetch all submissions for current duel (public data)
@@ -170,7 +169,6 @@ export default function WeeklyDuelPage() {
       setIsLoading(false)
 
     } catch (error) {
-      console.error('Error fetching data:', error)
       setIsLoading(false)
     }
   }

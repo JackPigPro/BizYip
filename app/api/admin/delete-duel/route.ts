@@ -39,7 +39,6 @@ export async function POST(request: Request) {
       .eq('duel_id', duelId)
 
     if (submissionsError) {
-      console.error('Error deleting submissions:', submissionsError)
       return NextResponse.json({ error: 'Failed to delete duel submissions' }, { status: 500 })
     }
 
@@ -50,7 +49,6 @@ export async function POST(request: Request) {
       .eq('duel_id', duelId)
 
     if (winnersError) {
-      console.error('Error deleting winners:', winnersError)
       return NextResponse.json({ error: 'Failed to delete duel winners' }, { status: 500 })
     }
 
@@ -61,7 +59,6 @@ export async function POST(request: Request) {
       .eq('id', duelId)
 
     if (duelError) {
-      console.error('Error deleting duel:', duelError)
       return NextResponse.json({ error: 'Failed to delete duel' }, { status: 500 })
     }
 
@@ -71,7 +68,6 @@ export async function POST(request: Request) {
     })
 
   } catch (error) {
-    console.error('Error in delete-duel API:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

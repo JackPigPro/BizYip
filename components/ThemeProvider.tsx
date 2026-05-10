@@ -69,7 +69,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       localStorage.setItem('bizyip-theme', finalTheme)
       document.body.setAttribute('data-theme', finalTheme)
     } catch (error) {
-      console.error('Error initializing theme:', error)
       // Fallback to dark theme as default
       setThemeState('dark')
       localStorage.setItem('bizyip-theme', 'dark')
@@ -96,7 +95,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           body: JSON.stringify({ theme_preference: newTheme }),
         })
       } catch (error) {
-        console.error('Error saving saving theme to Supabase:', error)
       }
     }
   }

@@ -84,7 +84,6 @@ export default function ResetPasswordComponent() {
         router.push('/login?mode=login')
       }, 2000)
     } catch (unexpectedError) {
-      console.error('Unexpected error during password reset:', unexpectedError)
       setError('An unexpected error occurred. Please try again.')
     } finally {
       setLoading(false)

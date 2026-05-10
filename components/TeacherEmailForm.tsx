@@ -46,7 +46,6 @@ export default function TeacherEmailForm() {
       setIsSubmitted(true)
       setEmail('')
     } catch (err) {
-      console.error('Error submitting email:', err)
       setError('Something went wrong. Please try again.')
     } finally {
       setIsSubmitting(false)
