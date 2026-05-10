@@ -238,32 +238,47 @@ export default function LoginForm({ mode }: { mode: 'login' | 'signup' }) {
         }
 
         // Sign in with password
+        console.log('🔑 Attempting password sign in for:', email)
         const { error: signInError } = await supabase.auth.signInWithPassword({
           email,
           password,
         })
 
         if (signInError) {
+          console.error('❌ Sign in error:', signInError)
           setError(signInError.message)
+          setLoading(false)
           return
         }
 
+        console.log('✅ Sign in successful, getting user data...')
         // Get current user and check onboarding
         const { data: { user }, error: userError } = await supabase.auth.getUser()
         
         if (userError || !user) {
+          console.error('❌ Error getting user after sign in:', userError)
           setError('Authentication error')
+          setLoading(false)
           return
         }
 
+        console.log('✅ User data retrieved:', user.id)
         // Check if user has completed onboarding
-        const { data: onboardingProfile } = await supabase
+        const { data: onboardingProfile, error: onboardingError } = await supabase
           .from('profiles')
           .select('onboarding_complete')
           .eq('id', user.id)
           .single()
 
+        if (onboardingError) {
+          console.error('❌ Error checking onboarding status:', onboardingError)
+          setError('Error checking profile status')
+          setLoading(false)
+          return
+        }
+
         const redirectTo = onboardingProfile?.onboarding_complete ? '/' : '/onboarding'
+        console.log('🔄 Redirecting to:', redirectTo, 'onboarding_complete:', onboardingProfile?.onboarding_complete)
         router.push(redirectTo)
         router.refresh()
       }
