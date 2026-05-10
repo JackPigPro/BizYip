@@ -16,7 +16,7 @@ interface Notification {
 }
 
 interface DashboardClientProps {
-  initialProfile: { username: string, display_name: string | null, created_at: string } | null
+  initialProfile: { username: string, created_at: string } | null
   initialStats: { elo: number, rank: string } | null
   todayBattle: any | null
   userSubmission: any | null
@@ -284,7 +284,7 @@ export default function DashboardClient({ initialProfile, initialStats, todayBat
           
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div className="dashboard-subheader">
-          Welcome back, {display_name || username || 'User'}!
+          Welcome back, {username || 'User'}!
         </div>
             <div style={{ 
               fontSize: '18px', 
