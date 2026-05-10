@@ -75,10 +75,10 @@ export function useUser() {
           console.error('❌ [useUser] Error getting auth state:', err)
         }
         
-        retryCount++
-        
-        if (retryCount < maxRetries && mounted) {
-            setTimeout(getSessionWithRetry, 1000 * retryCount) // Exponential backoff
+        // Only retry on lock conflicts, not on general auth errors
+        if (err.message?.includes('lock') && retryCount < maxRetries && mounted) {
+          retryCount++
+          setTimeout(getSessionWithRetry, 200 * retryCount) // Shorter retry delay
         } else {
           if (mounted) {
             // On auth errors, ensure user is treated as logged out
