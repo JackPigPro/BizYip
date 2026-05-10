@@ -165,6 +165,17 @@ export default function OnboardingPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('User not authenticated')
 
+      // Determine auth method from user identities
+      let authMethod: 'email' | 'google' = 'email'
+      
+      if (user.identities && user.identities.length > 0) {
+        const hasGoogleIdentity = user.identities.some(identity => identity.provider === 'google')
+        const hasEmailIdentity = user.identities.some(identity => identity.provider === 'email')
+        
+        if (hasGoogleIdentity) authMethod = 'google'
+        else if (hasEmailIdentity) authMethod = 'email'
+      }
+
       const { data: currentProfile } = await supabase
         .from('profiles')
         .select('email, auth_method')
@@ -178,7 +189,7 @@ export default function OnboardingPage() {
           username: username.trim(),
           agreed_to_terms: agreedToTerms,
           email: currentProfile?.email || user.email?.toLowerCase() || '',
-          auth_method: currentProfile?.auth_method || 'email',
+          auth_method: authMethod,
         })
 
       if (error) {

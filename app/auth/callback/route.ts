@@ -18,23 +18,40 @@ export async function GET(request: Request) {
       const { data: { user } } = await supabase.auth.getUser()
       
       if (user) {
-        // Check if profile exists, create if not (for Google OAuth users)
+        // Determine auth method from user identities
+        let authMethod: 'email' | 'google' = 'email'
+        
+        if (user.identities && user.identities.length > 0) {
+          const hasGoogleIdentity = user.identities.some(identity => identity.provider === 'google')
+          const hasEmailIdentity = user.identities.some(identity => identity.provider === 'email')
+          
+          if (hasGoogleIdentity) authMethod = 'google'
+          else if (hasEmailIdentity) authMethod = 'email'
+        }
+        
+        // Check if profile exists, create if not
         const { data: existingProfile } = await supabase
           .from('profiles')
-          .select('id, onboarding_complete')
+          .select('id, onboarding_complete, auth_method')
           .eq('id', user.id)
           .single()
 
         if (!existingProfile) {
-          // Create profile for Google OAuth user
+          // Create profile with correct auth method
           await supabase
             .from('profiles')
             .upsert({
               id: user.id,
               email: user.email?.toLowerCase() || '',
-              auth_method: 'google',
+              auth_method: authMethod,
               onboarding_complete: false,
             })
+        } else if (existingProfile.auth_method !== authMethod) {
+          // Update auth method if it's incorrect
+          await supabase
+            .from('profiles')
+            .update({ auth_method: authMethod })
+            .eq('id', user.id)
         }
 
         const redirectTo = existingProfile?.onboarding_complete ? next : '/onboarding'

@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createServiceClient } from '@/utils/supabase/service'
 import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
@@ -10,20 +10,26 @@ export async function GET(request: Request) {
   }
   
   try {
-    const supabase = await createClient()
+    const supabase = createServiceClient()
     
     // Try to get user by email from Supabase auth
     const { data: { users }, error: listError } = await supabase.auth.admin.listUsers()
     
     if (!listError && users) {
-      const user = users.find(u => u.email?.toLowerCase() === email.toLowerCase())
-      if (user && user.identities && user.identities.length > 0) {
-        // Check if any identity is from Google provider
-        const hasGoogleIdentity = user.identities.some(identity => identity.provider === 'google')
-        const hasEmailIdentity = user.identities.some(identity => identity.provider === 'email')
-        
-        if (hasGoogleIdentity) return NextResponse.json({ authMethod: 'google' })
-        if (hasEmailIdentity) return NextResponse.json({ authMethod: 'email' })
+      const user = users.find((u: any) => u.email?.toLowerCase() === email.toLowerCase())
+      if (user) {
+        // If user has identities, check them
+        if (user.identities && user.identities.length > 0) {
+          const hasGoogleIdentity = user.identities.some((identity: any) => identity.provider === 'google')
+          const hasEmailIdentity = user.identities.some((identity: any) => identity.provider === 'email')
+          
+          if (hasGoogleIdentity) return NextResponse.json({ authMethod: 'google' })
+          if (hasEmailIdentity) return NextResponse.json({ authMethod: 'email' })
+        } else {
+          // User exists but has NO identities - default to 'email'
+          // This handles the case where profiles table data might be wrong
+          return NextResponse.json({ authMethod: 'email' })
+        }
       }
     }
     
