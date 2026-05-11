@@ -378,10 +378,10 @@ export default function ProfilePage({ profile: initialProfile, userStats, ideas,
                   )}
                 </div>
 
-                {/* Location */}
+                {/* Country */}
                 <div>
                   <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text)', fontWeight: '500' }}>
-                    Location
+                    Country
                   </label>
                   <CountryDropdown
                     value={editData.country}

@@ -48,12 +48,12 @@ BEGIN
   END
   WHERE duel_id = duel_id_param AND final_rank IS NOT NULL;
   
-  -- Update user_stats for winners
-  UPDATE user_stats 
+  -- Update profiles for winners
+  UPDATE profiles 
   SET elo = elo + elo_awarded
   FROM duel_submissions
   WHERE duel_submissions.duel_id = duel_id_param 
-    AND duel_submissions.user_id = user_stats.user_id
+    AND duel_submissions.user_id = profiles.id
     AND duel_submissions.elo_awarded > 0;
   
   -- Log ELO changes to history
@@ -63,10 +63,10 @@ BEGIN
   SELECT 
     duel_submissions.user_id, 
     elo_awarded, 
-    user_stats.elo + elo_awarded,
+    profiles.elo + elo_awarded,
     'weekly_duel_prize'
   FROM duel_submissions
-  JOIN user_stats ON duel_submissions.user_id = user_stats.user_id
+  JOIN profiles ON duel_submissions.user_id = profiles.id
   WHERE duel_submissions.duel_id = duel_id_param 
     AND duel_submissions.elo_awarded > 0;
   

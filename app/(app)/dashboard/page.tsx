@@ -19,12 +19,30 @@ export default async function DashboardPage() {
     day: '2-digit'
   })
 
-  const [{ data: profile }, { data: stats }, { data: todayBattle }, { data: userStreak }] = await Promise.all([
+  const [{ data: profile }, { data: eloData }, { data: todayBattle }, { data: userStreak }] = await Promise.all([
     supabase.from('profiles').select('username, created_at').eq('id', user.id).single(),
-    supabase.from('user_stats').select('elo, rank').eq('user_id', user.id).single(),
+    supabase.from('profiles').select('elo').eq('id', user.id).single(),
     supabase.from('daily_battle').select('*').eq('date', todayStr).single(),
     supabase.from('daily_streaks').select('current_streak, longest_streak, last_submission_date').eq('user_id', user.id).single()
   ])
+
+  // Calculate rank from ELO
+  const getRankByElo = (elo?: number) => {
+    if (!elo) return 'Builder'
+    if (elo < 500) return 'Trainee'
+    if (elo >= 500 && elo < 750) return 'Builder'
+    if (elo >= 750 && elo < 1000) return 'Creator'
+    if (elo >= 1000 && elo < 1250) return 'Founder'
+    if (elo >= 1250 && elo < 1500) return 'Visionary'
+    if (elo >= 1500 && elo < 1750) return 'Icon'
+    if (elo >= 1750 && elo < 2000) return 'Titan'
+    return 'Unicorn'
+  }
+
+  const stats = eloData ? {
+    elo: eloData.elo || 500,
+    rank: getRankByElo(eloData.elo || 500)
+  } : null
 
   // Check if user submitted for today's battle
   let userSubmission = null

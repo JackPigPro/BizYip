@@ -11,7 +11,7 @@ interface Profile {
   created_at: string
   bio?: string
   skills?: string[]
-  cofounder_stage?: string
+  project_stage?: string
 }
 
 interface CofounderRequest {

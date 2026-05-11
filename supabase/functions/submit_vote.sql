@@ -18,8 +18,8 @@ DECLARE
 BEGIN
   -- Get voter's current ELO
   SELECT elo INTO voter_elo 
-  FROM user_stats 
-  WHERE user_id = voter_id_param;
+  FROM profiles 
+  WHERE id = voter_id_param;
   
   -- If voter has no ELO, default to 0
   IF voter_elo IS NULL THEN
@@ -41,12 +41,12 @@ BEGIN
   
   -- Get current ELO of both participants
   SELECT elo INTO winner_elo 
-  FROM user_stats 
-  WHERE user_id = (SELECT user_id FROM duel_submissions WHERE id = winner_submission_id);
+  FROM profiles 
+  WHERE id = (SELECT user_id FROM duel_submissions WHERE id = winner_submission_id);
   
   SELECT elo INTO loser_elo 
-  FROM user_stats 
-  WHERE user_id = (SELECT user_id FROM duel_submissions WHERE id = loser_submission_id);
+  FROM profiles 
+  WHERE id = (SELECT user_id FROM duel_submissions WHERE id = loser_submission_id);
   
   -- If participants have no ELO, default to 0
   IF winner_elo IS NULL THEN winner_elo := 0; END IF;
@@ -86,9 +86,9 @@ BEGIN
     voter_id_param, 1, voter_elo + 1, 'duel_vote'
   );
   
-  UPDATE user_stats 
+  UPDATE profiles 
   SET elo = elo + 1
-  WHERE user_id = voter_id_param;
+  WHERE id = voter_id_param;
   
   RETURN jsonb_build_object('success', true, 'message', 'Vote submitted successfully');
 END;

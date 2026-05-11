@@ -83,41 +83,68 @@ export interface Database {
         Row: {
           id: string
           username: string
+          email: string
+          auth_method: 'google' | 'email'
+          onboarding_complete: boolean
+          agreed_to_terms: boolean
           bio?: string
-          project_stage?: string
           skills?: string[]
           status_tags?: string[]
           twitter?: string
           linkedin?: string
+          discord?: string
+          open_to_cofounder: boolean
           theme_preference?: 'light' | 'dark'
-          onboarding_complete?: boolean
+          avatar?: string
+          elo: number
+          country?: string
+          project_stage?: string
           created_at: string
+          updated_at: string
         }
         Insert: {
           id?: string
           username: string
+          email: string
+          auth_method: 'google' | 'email'
+          onboarding_complete?: boolean
+          agreed_to_terms?: boolean
           bio?: string
-          project_stage?: string
           skills?: string[]
           status_tags?: string[]
           twitter?: string
           linkedin?: string
+          discord?: string
+          open_to_cofounder?: boolean
           theme_preference?: 'light' | 'dark'
-          onboarding_complete?: boolean
+          avatar?: string
+          elo?: number
+          country?: string
+          project_stage?: string
           created_at?: string
+          updated_at?: string
         }
         Update: {
           id?: string
           username?: string
+          email?: string
+          auth_method?: 'google' | 'email'
+          onboarding_complete?: boolean
+          agreed_to_terms?: boolean
           bio?: string
-          project_stage?: string
           skills?: string[]
           status_tags?: string[]
           twitter?: string
           linkedin?: string
+          discord?: string
+          open_to_cofounder?: boolean
           theme_preference?: 'light' | 'dark'
-          onboarding_complete?: boolean
+          avatar?: string
+          elo?: number
+          country?: string
+          project_stage?: string
           created_at?: string
+          updated_at?: string
         }
       }
     }
