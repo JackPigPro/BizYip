@@ -118,7 +118,7 @@ export function useUser() {
         // Notify other tabs of auth state change
         broadcastChannel.postMessage({ type: 'AUTH_STATE_CHANGED' })
         
-        if (user && event !== 'INITIAL_SESSION') {
+        if (user) {
           await fetchUserData(user.id)
         } else if (!user) {
           // Clear user data on logout
