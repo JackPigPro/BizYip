@@ -6,6 +6,7 @@ import { SupabaseProvider } from '@/components/SupabaseProvider'
 import PageLayout from '@/components/PageLayout'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import ScrollToTop from '@/components/ScrollToTop'
+import { UserProvider } from '@/contexts/UserContext'
 
 export const metadata: Metadata = {
   title: 'BizYip — Where founders get good.',
@@ -26,15 +27,17 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <SupabaseProvider>
-            <AppStateProvider>
-              <ScrollToTop />
-              <TopNav />
-              <div style={{ paddingTop: '68px' }}>
-                <PageLayout>
-                  {children}
-                </PageLayout>
-              </div>
-            </AppStateProvider>
+            <UserProvider>
+              <AppStateProvider>
+                <ScrollToTop />
+                <TopNav />
+                <div style={{ paddingTop: '68px' }}>
+                  <PageLayout>
+                    {children}
+                  </PageLayout>
+                </div>
+              </AppStateProvider>
+            </UserProvider>
           </SupabaseProvider>
         </ThemeProvider>
       </body>
