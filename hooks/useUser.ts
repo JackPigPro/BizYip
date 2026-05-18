@@ -77,6 +77,8 @@ export function useUser() {
     }
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('onAuthStateChange subscription created')
+      console.log('onAuthStateChange fired:', event, session?.user?.id)
       if (!mounted) return
 
       const currentUser = session?.user ?? null
