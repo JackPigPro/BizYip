@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useUser } from '@/hooks/useUser'
+import { useUser } from '@/contexts/UserContext'
 import { signOut } from '@/app/actions/auth'
 import { useTheme } from '@/components/ThemeProvider'
 import { containsBannedWord } from '@/lib/moderation'

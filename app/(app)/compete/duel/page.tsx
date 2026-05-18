@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useUser } from '@/hooks/useUser'
+import { useUser } from '@/contexts/UserContext'
 import { useAppState } from '../../../../components/AppStateProvider'
 
 export default function DuelPage() {

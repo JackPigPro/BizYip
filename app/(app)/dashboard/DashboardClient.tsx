@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useSupabase } from '@/components/SupabaseProvider'
-import { useUser } from '@/hooks/useUser'
+import { useUser } from '@/contexts/UserContext'
 import { createClient } from '@/utils/supabase/client'
 
 interface Notification {

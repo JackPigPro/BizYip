@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useUser } from '@/hooks/useUser'
+import { useUser } from '@/contexts/UserContext'
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'

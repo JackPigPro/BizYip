@@ -1,6 +1,6 @@
 'use client'
 
-import { useUser } from '@/hooks/useUser'
+import { useUser } from '@/contexts/UserContext'
 import Link from 'next/link'
 
 export default function NotFound() {

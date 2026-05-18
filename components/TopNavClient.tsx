@@ -14,7 +14,7 @@ import { signOut } from '@/app/actions/auth'
 
 import { useTheme } from '@/components/ThemeProvider'
 import { useAppState } from '@/components/AppStateProvider'
-import { useUser } from '@/hooks/useUser'
+import { useUser } from '@/contexts/UserContext'
 
 
 

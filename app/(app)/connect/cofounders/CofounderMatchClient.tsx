@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
-import { useUser } from '@/hooks/useUser'
+import { useUser } from '@/contexts/UserContext'
 
 interface Profile {
   id: string
