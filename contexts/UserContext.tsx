@@ -108,6 +108,19 @@ export function UserProvider({ children }: { children: ReactNode }) {
       }
     })
 
+    // Also check session immediately on mount
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('getSession on mount:', session?.user?.id)
+      if (session?.user && mounted) {
+        setUser(session.user)
+        setAuthLoading(false)
+        fetchUserData(session.user.id)
+      } else if (mounted) {
+        setAuthLoading(false)
+        setLoading(false)
+      }
+    })
+
     return () => {
       mounted = false
       subscription.unsubscribe()
