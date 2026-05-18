@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getAuthStateClient, type UserProfile } from '@/utils/auth-client'
 import { createClient } from '@/utils/supabase/client'
 import type { User } from '@supabase/supabase-js'
+import type { UserProfile } from '@/utils/auth-client'
 
 interface UserElo {
   elo?: number
@@ -15,7 +15,7 @@ interface UserCache {
   timestamp: number
 }
 
-const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
+const CACHE_TTL = 5 * 60 * 1000
 const userCache = new Map<string, UserCache>()
 
 export function useUser() {
@@ -25,202 +25,105 @@ export function useUser() {
   const [loading, setLoading] = useState(true)
   const [authLoading, setAuthLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const supabase = createClient()
 
-  // Combined loading state for convenience
   const isLoading = loading || authLoading
-  // Use the same logic as server-side - user is only authenticated if onboarding is complete
-  // Treat null/undefined onboarding_complete as true for backwards compatibility
   const isAuthenticated = !!user && !!profile && (profile.onboarding_complete === true || profile.onboarding_complete == null)
-
-  // Convenience properties
   const username = profile?.username
   const status_tags = profile?.status_tags
 
   useEffect(() => {
     let mounted = true
-    let retryCount = 0
-    const maxRetries = 3
     const supabase = createClient()
 
-    // Listen for auth state changes from other tabs
-    const broadcastChannel = new BroadcastChannel('auth-sync')
-    
-    broadcastChannel.onmessage = (event) => {
-      if (event.data.type === 'AUTH_STATE_CHANGED' && mounted) {
-        // Force refresh when another tab changes auth state
-        getSessionWithRetry()
-      }
-    }
-
-    const getSessionWithRetry = async () => {
+    const fetchUserData = async (userId: string) => {
       try {
-        // First try getSession() for initial load - reads directly from cookie storage
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-        
-        if (sessionError) {
-          throw sessionError
+        setLoading(true)
+        setError(null)
+
+        const cached = userCache.get(userId)
+        if (cached && Date.now() - cached.timestamp < CACHE_TTL && cached.profile) {
+          setProfile(cached.profile)
+          setElo(cached.elo)
+          setLoading(false)
+          return
         }
 
-        if (session?.user) {
-          // Session exists, set user and fetch profile
-          if (mounted) {
-            setUser(session.user)
-            setAuthLoading(false)
-            await fetchUserData(session.user.id)
-          }
-        } else {
-          // No session, fall back to getAuthStateClient()
-          if (mounted) {
-            const authState = await getAuthStateClient()
-            setUser(authState.user)
-            setProfile(authState.profile)
-            setAuthLoading(false)
-            
-            if (authState.user) {
-              await fetchUserData(authState.user.id)
-            } else {
-              setLoading(false)
-            }
-          }
-        }
-      } catch (err: any) {
-        // Don't log lock conflicts as errors - they're expected with multiple tabs
-        if (!err.message?.includes('lock')) {
-        }
-        
-        // Only retry on lock conflicts, not on general auth errors
-        if (err.message?.includes('lock') && retryCount < maxRetries && mounted) {
-          retryCount++
-          setTimeout(getSessionWithRetry, 200 * retryCount)
-        } else {
-          if (mounted) {
-            // On auth errors, ensure user is treated as logged out
-            setUser(null)
-            setProfile(null)
-            setAuthLoading(false)
-            setLoading(false)
-          }
-        }
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('id, username, status_tags, onboarding_complete, created_at, elo')
+          .eq('id', userId)
+          .single()
+
+        if (!mounted) return
+
+        const newProfile = profileData || null
+        const newElo = newProfile?.elo ? { elo: newProfile.elo } : null
+
+        userCache.set(userId, {
+          profile: newProfile,
+          elo: newElo,
+          timestamp: Date.now()
+        })
+
+        setProfile(newProfile)
+        setElo(newElo)
+      } catch (err) {
+        if (mounted) setError('Failed to load user data')
+      } finally {
+        if (mounted) setLoading(false)
       }
     }
 
-    // Initial session check
-    getSessionWithRetry()
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (!mounted) return
 
-    // Listen for future auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: any, session: any) => {
-      if (mounted) {
-        const user = session?.user ?? null
-        setUser(user)
-        setAuthLoading(false)
-        
-        // Notify other tabs of auth state change
-        broadcastChannel.postMessage({ type: 'AUTH_STATE_CHANGED' })
-        
-        if (user) {
-          await fetchUserData(user.id)
-        } else if (!user) {
-          // Clear user data on logout
-          setProfile(null)
-          setElo(null)
-          setLoading(false)
-          // Clear all cache on logout
-          userCache.clear()
-        }
+      const currentUser = session?.user ?? null
+      setUser(currentUser)
+      setAuthLoading(false)
+
+      if (currentUser) {
+        await fetchUserData(currentUser.id)
+      } else {
+        setProfile(null)
+        setElo(null)
+        setLoading(false)
+        userCache.clear()
       }
     })
 
     return () => {
       mounted = false
       subscription.unsubscribe()
-      broadcastChannel.close()
     }
   }, [])
 
-  const fetchUserData = async (userId: string) => {
-    try {
-      setLoading(true)
-      setError(null)
-
-      // Check cache first - only use if all values are non-null
-      const cached = userCache.get(userId)
-      if (cached && Date.now() - cached.timestamp < CACHE_TTL && cached.profile && cached.elo) {
-        setProfile(cached.profile)
-        setElo(cached.elo)
-        setLoading(false)
-        return
-      }
-
-      // Fetch fresh data
-      const profileResult = await supabase
-        .from('profiles')
-        .select('id, username, status_tags, onboarding_complete, created_at, elo')
-        .eq('id', userId)
-        .single()
-
-      const newProfile = profileResult.data || null
-      const newElo = newProfile?.elo ? { elo: newProfile.elo } : null
-
-      // Update cache
-      userCache.set(userId, {
-        profile: newProfile,
-        elo: newElo,
-        timestamp: Date.now()
-      })
-
-      // Update state
-      setProfile(newProfile)
-      setElo(newElo)
-    } catch (err) {
-      setError('Failed to load user data')
-    } finally {
-      setLoading(false)
-    }
-  }
-
   const refresh = async () => {
     if (user) {
-      // Clear cache for this user
       userCache.delete(user.id)
-      await fetchUserData(user.id)
+      const supabase = createClient()
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('id, username, status_tags, onboarding_complete, created_at, elo')
+        .eq('id', user.id)
+        .single()
+      const newProfile = profileData || null
+      const newElo = newProfile?.elo ? { elo: newProfile.elo } : null
+      userCache.set(user.id, { profile: newProfile, elo: newElo, timestamp: Date.now() })
+      setProfile(newProfile)
+      setElo(newElo)
     }
   }
 
   const invalidateCache = () => {
-    if (user) {
-      userCache.delete(user.id)
-    }
+    if (user) userCache.delete(user.id)
   }
 
   return {
-    // Core data
-    user,
-    profile,
-    elo,
-    
-    // Convenience properties
-    username,
-    status_tags,
-    
-    // State
-    loading,
-    authLoading,
-    isLoading,
-    isAuthenticated,
-    error,
-    
-    // Actions
-    refresh,
-    invalidateCache
+    user, profile, elo, username, status_tags,
+    loading, authLoading, isLoading, isAuthenticated, error,
+    refresh, invalidateCache
   }
 }
 
-// Helper functions for cache management
-export function clearUserCache() {
-  userCache.clear()
-}
-
-export function invalidateUserCache(userId: string) {
-  userCache.delete(userId)
-}
+export function clearUserCache() { userCache.clear() }
+export function invalidateUserCache(userId: string) { userCache.delete(userId) }
