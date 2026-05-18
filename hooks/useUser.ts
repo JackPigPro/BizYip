@@ -54,6 +54,8 @@ export function useUser() {
           .eq('id', userId)
           .single()
 
+        console.log('useUser fetchUserData - profileData:', profileData)
+
         if (!mounted) return
 
         const newProfile = profileData || null
