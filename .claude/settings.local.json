@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\SET31\\\\pitchrival\" -Force | Select-Object Name, @{Name=\"Type\";Expression={if\\($_.PSIsContainer\\){\"DIR\"}else{\"FILE\"}}} | Format-Table -AutoSize)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\SET31\\\\pitchrival\\\\app\" -Recurse -Depth 2 | Select-Object @{Name=\"Path\";Expression={$_.FullName.Replace\\(\"C:\\\\Users\\\\SET31\\\\pitchrival\\\\\", \"\"\\)}} | ForEach-Object { $_.Path })",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\SET31\\\\pitchrival\" -File | Where-Object {$_.Name -match \"\\\\.md$|\\\\.local$|\\\\.env\"} | Select-Object Name)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\SET31\\\\pitchrival\\\\public\" -Recurse -File | Select-Object @{Name=\"File\";Expression={$_.FullName.Replace\\(\"C:\\\\Users\\\\SET31\\\\pitchrival\\\\public\", \"\"\\).TrimStart\\('\\\\'\\)}})",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\SET31\\\\pitchrival\\\\supabase\" -Recurse -File | Select-Object @{Name=\"File\";Expression={$_.FullName.Replace\\(\"C:\\\\Users\\\\SET31\\\\pitchrival\\\\supabase\", \"\"\\).TrimStart\\('\\\\'\\)}})",
+      "Bash(npx tsc *)",
+      "Bash(git add *)"
+    ]
+  }
+}

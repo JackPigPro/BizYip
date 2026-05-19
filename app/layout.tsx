@@ -7,6 +7,7 @@ import PageLayout from '@/components/PageLayout'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import ScrollToTop from '@/components/ScrollToTop'
 import { UserProvider } from '@/contexts/UserContext'
+import { getAuthState } from '@/utils/auth'
 
 export const metadata: Metadata = {
   title: 'BizYip — Where founders get good.',
@@ -17,11 +18,13 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const { user, profile } = await getAuthState()
+
   return (
     <html lang="en">
       <body>
@@ -30,7 +33,7 @@ export default function RootLayout({
             <UserProvider>
               <AppStateProvider>
                 <ScrollToTop />
-                <TopNav />
+                <TopNav initialUser={user} initialProfile={profile} />
                 <div style={{ paddingTop: '68px' }}>
                   <PageLayout>
                     {children}

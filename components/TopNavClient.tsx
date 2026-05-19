@@ -24,11 +24,15 @@ export default function TopNavClient({
 
   forceLoggedOut,
 
+  initialProfile,
+
 }: {
 
   user: { email?: string | null; name?: string | null; username?: string | null } | null
 
   forceLoggedOut?: boolean
+
+  initialProfile?: { username?: string | null; onboarding_complete?: boolean } | null
 
 }) {
 
@@ -37,7 +41,12 @@ export default function TopNavClient({
   const router = useRouter()
 
   const supabase = createClient()
-  const { username, isLoading, isAuthenticated } = useUser()
+  const { username: contextUsername, isLoading, isAuthenticated: contextIsAuthenticated } = useUser()
+
+  // Use server-rendered values for initial render to prevent flash of logged-out state.
+  // Once the client context resolves, switch to it for live updates (e.g. sign-out).
+  const username = isLoading ? (initialProfile?.username ?? initialUser?.username ?? undefined) : contextUsername
+  const isAuthenticated = isLoading ? !!initialUser : contextIsAuthenticated
 
   const [open, setOpen] = useState<'connect' | 'compete' | 'create' | 'settings' | null>(null)
 
