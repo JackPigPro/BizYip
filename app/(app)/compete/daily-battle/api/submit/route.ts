@@ -13,9 +13,9 @@ export async function POST(request: Request) {
       )
     }
 
-    if (content.length > 500) {
+    if (content.length > 300) {
       return NextResponse.json(
-        { error: 'Content must be 500 characters or less' },
+        { error: 'Content must be 300 characters or less' },
         { status: 400 }
       )
     }
@@ -82,16 +82,14 @@ export async function POST(request: Request) {
     }
 
     // Update daily streak and get ELO gained
-    const { data: eloGained, error: streakError } = await supabase.rpc('update_daily_streak', {
+    const { data: rpcEloGained, error: streakError } = await supabase.rpc('update_daily_streak', {
       p_user_id: user.id
     })
-    
 
-    if (streakError) {
-      // Don't fail the submission if streak update fails
-    }
+    // Guarantee minimum 1 ELO — first-ever submission can return 0/null from the RPC
+    const eloGained = (!rpcEloGained || rpcEloGained < 1) ? 1 : rpcEloGained
 
-    // Query daily_streaks table to verify the row was created/updated
+    // Query daily_streaks table for updated values
     const { data: streak } = await supabase
       .from('daily_streaks')
       .select('current_streak, longest_streak')

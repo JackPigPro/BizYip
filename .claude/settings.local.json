@@ -11,7 +11,9 @@
       "Bash(git add *)",
       "Bash(git commit *)",
       "Bash(git push *)",
-      "Bash(git remote *)"
+      "Bash(git remote *)",
+      "Bash(Get-ChildItem -Path C:\\\\Users\\\\SET31\\\\pitchrival -Recurse -Directory -Depth 3)",
+      "Bash(Select-Object FullName)"
     ]
   }
 }

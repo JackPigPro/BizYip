@@ -81,7 +81,7 @@ export default function DailyBattleClient({ battle, userSubmission, userStreak, 
   }
 
   const handleSubmit = async () => {
-    if (!submission.trim() || submission.length > 500) return
+    if (!submission.trim() || submission.length > 300) return
 
     // Check for banned words
     if (containsBannedWord(submission)) {
@@ -174,8 +174,8 @@ export default function DailyBattleClient({ battle, userSubmission, userStreak, 
   }
 
   const getStreakMessage = () => {
-    if (!userStreak) return "Start your streak today!"
-    if (userSubmission) return "Streak maintained! ✅"
+    if (!localUserStreak) return "Start your streak today!"
+    if (localUserSubmission) return "Streak maintained! ✅"
     return "Submit today to keep your streak!"
   }
 
@@ -566,11 +566,11 @@ export default function DailyBattleClient({ battle, userSubmission, userStreak, 
               <textarea
                 value={submission}
                 onChange={(e) => {
-                  setSubmission(e.target.value.slice(0, 500))
+                  setSubmission(e.target.value.slice(0, 300))
                   setModerationError(null) // Clear error when user types
                 }}
                 placeholder="Share your response..."
-                maxLength={500}
+                maxLength={300}
                 style={{
                   width: '100%',
                   minHeight: '120px',
@@ -594,7 +594,7 @@ export default function DailyBattleClient({ battle, userSubmission, userStreak, 
                 fontSize: '14px',
                 color: 'var(--text-secondary)'
               }}>
-                {submission.length}/500
+                {submission.length}/300
               </div>
             </div>
             <button

@@ -32,13 +32,8 @@ export async function GET(request: Request) {
       }
     )
 
-    // Get authenticated user (optional for likes)
+    // Get authenticated user (optional — unauthenticated users see submissions without like state)
     const { data: { user } } = await supabase.auth.getUser()
-
-    // If no user, return empty array - allow public access to page
-    if (!user) {
-      return NextResponse.json([])
-    }
 
     // Fetch submissions
     const { data: submissions, error: submissionsError } = await supabase
