@@ -42,8 +42,9 @@ export default async function DashboardPage() {
     weeklyDuelResult,
     recentIdeasResult,
     queueResult,
+    onlineResult,
   ] = await Promise.all([
-    supabase.from('profiles').select('username, created_at, bio, skills, elo').eq('id', user.id).single(),
+    supabase.from('profiles').select('username, created_at, bio, skills, elo, avatar_url').eq('id', user.id).single(),
     supabase.from('daily_battle').select('id, prompt, date').eq('date', todayStr).maybeSingle(),
     supabase.from('daily_streaks').select('current_streak, longest_streak, last_submission_date').eq('user_id', user.id).maybeSingle(),
     supabase.from('elo_history').select('elo_change').eq('user_id', user.id).gte('created_at', todayStartISO),
@@ -53,6 +54,7 @@ export default async function DashboardPage() {
     supabase.from('weekly_duel').select('id, prompt, status, end_date').in('status', ['active', 'voting']).order('start_date', { ascending: false }).limit(1).maybeSingle(),
     supabase.from('ideas').select('id, title, content, user_id').eq('is_public', true).order('created_at', { ascending: false }).limit(3),
     supabase.from('matches').select('*', { count: 'exact', head: true }).eq('status', 'waiting'),
+    supabase.from('matches').select('*', { count: 'exact', head: true }).eq('status', 'active'),
   ])
 
   const profile = profileResult.data
@@ -117,6 +119,7 @@ export default async function DashboardPage() {
         created_at: profile.created_at || '',
         bio: profile.bio || null,
         skills: profile.skills || null,
+        avatar_url: (profile as { avatar_url?: string | null }).avatar_url || null,
       } : null}
       initialStats={{ elo: userElo, rank: getRankByElo(userElo) }}
       todayBattle={todayBattle || null}
@@ -137,7 +140,8 @@ export default async function DashboardPage() {
       hasSubmittedWeekly={!!weeklySubResult.data}
       recentIdeas={recentIdeas}
       queueCount={queueResult.count || 0}
-      needsProfileNudge={!profile?.bio || !(profile?.skills?.length)}
+      onlineCount={onlineResult.count || 0}
+      needsProfileNudge={!profile?.bio || !(profile?.skills?.length) || !(profile as { avatar_url?: string | null })?.avatar_url}
       userId={user.id}
     />
   )
