@@ -280,13 +280,13 @@ export default function DashboardClient({ initialProfile, initialStats, todayBat
           
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div className="dashboard-subheader">
-          {isLoading ? (
-            <div style={{ 
-              background: '#ccc', 
-              borderRadius: '8px', 
-              height: '20px', 
-              width: '200px', 
-              marginBottom: '8px' 
+          {isLoading && !username ? (
+            <div style={{
+              background: '#ccc',
+              borderRadius: '8px',
+              height: '20px',
+              width: '200px',
+              marginBottom: '8px'
             }} />
           ) : (
             `Welcome back, ${username || ''}!`
@@ -377,7 +377,7 @@ export default function DashboardClient({ initialProfile, initialStats, todayBat
             
             <div style={{ fontSize: '14px', color: 'var(--text2)', fontFamily: 'var(--font-body)' }}>
               <div style={{ marginBottom: '8px' }}>
-                <strong>Username:</strong> {isLoading ? (
+                <strong>Username:</strong> {isLoading && !username ? (
                   <span style={{
                     display: 'inline-block',
                     height: '14px',

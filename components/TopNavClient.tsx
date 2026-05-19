@@ -801,7 +801,7 @@ export default function TopNavClient({
 
               }}>
 
-                {isLoading ? (
+                {isLoading && !username ? (
                   <span style={{
                     display: 'inline-block',
                     height: '14px',
@@ -1488,7 +1488,7 @@ export default function TopNavClient({
 
                         <span style={{ fontSize: '13px', color: 'var(--text2)', fontWeight: 700 }}>
 
-              {isLoading ? (
+              {isLoading && !username ? (
                 <span style={{
                   display: 'inline-block',
                   height: '13px',
