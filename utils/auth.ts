@@ -76,10 +76,11 @@ export async function getAuthState(): Promise<AuthResult> {
       .select('id, username, status_tags, onboarding_complete, created_at')
       .eq('id', user.id)
       .single()
-    
+
+    console.log('[getAuthState] profile query result:', { data: result.data, error: result.error })
     profile = result.data
   } catch (err) {
-    // Profile fetch failed, continue with null profile
+    console.error('[getAuthState] profile query threw:', err)
   }
 
   const isFullyAuthenticated = !!(profile?.onboarding_complete === true)

@@ -8,7 +8,10 @@
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\SET31\\\\pitchrival\\\\public\" -Recurse -File | Select-Object @{Name=\"File\";Expression={$_.FullName.Replace\\(\"C:\\\\Users\\\\SET31\\\\pitchrival\\\\public\", \"\"\\).TrimStart\\('\\\\'\\)}})",
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\SET31\\\\pitchrival\\\\supabase\" -Recurse -File | Select-Object @{Name=\"File\";Expression={$_.FullName.Replace\\(\"C:\\\\Users\\\\SET31\\\\pitchrival\\\\supabase\", \"\"\\).TrimStart\\('\\\\'\\)}})",
       "Bash(npx tsc *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git remote *)"
     ]
   }
 }

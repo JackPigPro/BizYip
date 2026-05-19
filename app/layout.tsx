@@ -24,6 +24,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const { user, profile } = await getAuthState()
+  console.log('[RootLayout] getAuthState:', { userId: user?.id, profile })
 
   return (
     <html lang="en">
