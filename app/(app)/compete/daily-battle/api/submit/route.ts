@@ -38,9 +38,8 @@ export async function POST(request: Request) {
       }
     )
 
-    // Get authenticated user
     const { data: { user }, error: authError } = await supabase.auth.getUser()
-    
+
     if (authError || !user) {
       return NextResponse.json(
         { error: 'Authentication required' },
@@ -51,7 +50,7 @@ export async function POST(request: Request) {
     // Check if user already submitted today
     const { data: existingSubmission } = await supabase
       .from('daily_submissions')
-      .select('*')
+      .select('id')
       .eq('battle_id', battleId)
       .eq('user_id', user.id)
       .single()
@@ -81,26 +80,68 @@ export async function POST(request: Request) {
       )
     }
 
-    // Update daily streak and get ELO gained
-    const { data: rpcEloGained, error: streakError } = await supabase.rpc('update_daily_streak', {
-      p_user_id: user.id
-    })
+    // Calculate streak directly — more reliable than RPC
+    const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' })
+    const yesterdayStr = new Date(Date.now() - 86400000).toLocaleDateString('en-CA', { timeZone: 'America/New_York' })
 
-    // Guarantee minimum 1 ELO — first-ever submission can return 0/null from the RPC
-    const eloGained = (!rpcEloGained || rpcEloGained < 1) ? 1 : rpcEloGained
-
-    // Query daily_streaks table for updated values
-    const { data: streak } = await supabase
+    const { data: existingStreak } = await supabase
       .from('daily_streaks')
-      .select('current_streak, longest_streak')
+      .select('current_streak, longest_streak, last_submission_date')
       .eq('user_id', user.id)
       .single()
+
+    let newCurrentStreak: number
+    let newLongestStreak: number
+
+    if (!existingStreak) {
+      newCurrentStreak = 1
+      newLongestStreak = 1
+    } else {
+      const lastDate = existingStreak.last_submission_date
+      if (lastDate === yesterdayStr) {
+        newCurrentStreak = (existingStreak.current_streak || 0) + 1
+      } else if (lastDate === todayStr) {
+        newCurrentStreak = existingStreak.current_streak || 1
+      } else {
+        newCurrentStreak = 1
+      }
+      newLongestStreak = Math.max(newCurrentStreak, existingStreak.longest_streak || 0)
+    }
+
+    await supabase
+      .from('daily_streaks')
+      .upsert(
+        {
+          user_id: user.id,
+          current_streak: newCurrentStreak,
+          longest_streak: newLongestStreak,
+          last_submission_date: todayStr,
+          updated_at: new Date().toISOString()
+        },
+        { onConflict: 'user_id' }
+      )
+
+    // ELO matches the streak breakdown shown in the UI
+    const eloGained = newCurrentStreak === 1 ? 1 : newCurrentStreak <= 6 ? 3 : 5
+
+    // Update profiles.elo directly
+    const { data: profileData } = await supabase
+      .from('profiles')
+      .select('elo')
+      .eq('id', user.id)
+      .single()
+
+    const currentElo = profileData?.elo ?? 500
+    await supabase
+      .from('profiles')
+      .update({ elo: currentElo + eloGained })
+      .eq('id', user.id)
 
     return NextResponse.json({
       success: true,
       submission,
       eloGained,
-      streak
+      streak: { current_streak: newCurrentStreak, longest_streak: newLongestStreak }
     })
 
   } catch (error) {

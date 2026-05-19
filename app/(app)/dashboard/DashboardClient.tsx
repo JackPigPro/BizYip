@@ -573,7 +573,7 @@ export default function DashboardClient({ initialProfile, initialStats, todayBat
                 </div>
                 
                 <Link
-                  href="/compete/daily-battle"
+                  href="/compete/daily"
                   prefetch={true}
                   style={{
                     display: 'block',
