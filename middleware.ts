@@ -94,13 +94,14 @@ export async function middleware(request: NextRequest) {
   const publicPages = [
     '/leaderboard',
     '/compete/daily',
+    '/compete/daily-battle/api/',
     '/compete/weekly',
     '/compete/live',
     '/create/ideas',
     '/connect/cofounders',
   ]
-  
-  const isPublicPage = publicPages.includes(pathname)
+
+  const isPublicPage = publicPages.some(p => pathname.startsWith(p))
   
   // Allow access to /leaderboard without authentication
   const isLeaderboardRoute = pathname === '/leaderboard'
