@@ -7,7 +7,8 @@ import PageLayout from '@/components/PageLayout'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import ScrollToTop from '@/components/ScrollToTop'
 import { UserProvider } from '@/contexts/UserContext'
-import { getAuthState } from '@/utils/auth'
+import { createClient } from '@/utils/supabase/server'
+import { createAdminClient } from '@/utils/supabase/admin'
 
 export const metadata: Metadata = {
   title: 'BizYip — Where founders get good.',
@@ -23,8 +24,20 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const { user, profile } = await getAuthState()
-  console.log('[RootLayout] getAuthState:', { userId: user?.id, profile })
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  let profile = null
+  if (user) {
+    const admin = createAdminClient()
+    const { data } = await admin
+      .from('profiles')
+      .select('id, username, status_tags, onboarding_complete, created_at')
+      .eq('id', user.id)
+      .single()
+    profile = data
+    console.log('[RootLayout] admin profile fetch:', { userId: user.id, profile })
+  }
 
   return (
     <html lang="en">
