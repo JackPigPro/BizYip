@@ -132,10 +132,21 @@ export async function POST(request: Request) {
       .single()
 
     const currentElo = profileData?.elo ?? 500
+    const newElo = currentElo + eloGained
+
     await supabase
       .from('profiles')
-      .update({ elo: currentElo + eloGained })
+      .update({ elo: newElo })
       .eq('id', user.id)
+
+    await supabase
+      .from('elo_history')
+      .insert({
+        user_id: user.id,
+        elo_change: eloGained,
+        new_elo: newElo,
+        reason: 'daily_bellringer'
+      })
 
     return NextResponse.json({
       success: true,
